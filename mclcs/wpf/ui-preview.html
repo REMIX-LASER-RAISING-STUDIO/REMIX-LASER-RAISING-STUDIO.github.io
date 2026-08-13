@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCLCS — Minecraft 启动器</title>
+<style>
+:root{
+  --titlebar-h:52px;
+  --statusbar-h:30px;
+  --tab-h:34px;
+  --trans:200ms;
+}
+/* ============ 主题令牌（与 WPF Themes 一致） ============ */
+html[data-theme="dark"]{
+  --window-bg:#0F1115;
+  --control-bg:#1A1D24;
+  --control-border:#2A2F3A;
+  --control-hover:#252830;
+  --card-bg:rgba(26,29,36,.70);
+  --card-border-hover:#3B82F6;
+  --toggle-off:#3A3F4A;
+  --primary-fg:#FFFFFF;
+  --secondary-fg:#C8CDD6;
+  --accent:#3B82F6;
+  --accent-hover:#2B6FE0;
+  --danger:#E74C3C;
+  --input-bg:#14161C;
+  --input-fg:#E6E6E6;
+  --input-border:#2A2F3A;
+  --input-focus:#3B82F6;
+  --progress-bg:#2A2F3A;
+  --progress-fg:#3B82F6;
+  --list-bg:#14161C;
+  --status-fg:#C8CDD6;
+  --scrim:rgba(0,0,0,.5);
+  --card-shadow:rgba(0,0,0,.28);
+}
+html[data-theme="light"]{
+  --window-bg:#F5F5F5;
+  --control-bg:#FFFFFF;
+  --control-border:#D1D5DB;
+  --control-hover:#F0F0F0;
+  --card-bg:rgba(255,255,255,.90);
+  --card-border-hover:#2563EB;
+  --toggle-off:#D1D5DB;
+  --primary-fg:#1A1A1A;
+  --secondary-fg:#6B7280;
+  --accent:#2563EB;
+  --accent-hover:#1D4ED8;
+  --danger:#DC2626;
+  --input-bg:#FFFFFF;
+  --input-fg:#1A1A1A;
+  --input-border:#D1D5DB;
+  --input-focus:#2563EB;
+  --progress-bg:#D1D5DB;
+  --progress-fg:#2563EB;
+  --list-bg:#FFFFFF;
+  --status-fg:#6B7280;
+  --scrim:rgba(0,0,0,.35);
+  --card-shadow:rgba(0,0,0,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+html,body{height:100%}
+body{
+  font-family:"Segoe UI","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  font-size:13px;
+  color:var(--primary-fg);
+  background:#000;
+  overflow:hidden;
+  user-select:none;
+}
+button{font-family:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--control-border);border-radius:6px;border:2px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:var(--secondary-fg)}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ============ 应用窗口 ============ */
+.app{display:flex;flex-direction:column;height:100vh;width:100vw;background:var(--window-bg)}
+
+/* ============ 标题栏 ============ */
+.titlebar{
+  height:var(--titlebar-h);flex:0 0 var(--titlebar-h);
+  display:flex;align-items:center;
+  background:var(--titlebar-color,#4CAF50);
+  transition:background var(--trans) ease;
+  padding-right:10px;
+  position:relative;z-index:40;
+}
+.brand{
+  color:#fff;font-size:17px;font-weight:700;margin-left:16px;margin-right:12px;
+  letter-spacing:.5px;white-space:nowrap;text-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+.gsearch-wrap{width:272px;display:flex;align-items:center;margin-right:12px;flex:0 0 272px}
+.gsearch{
+  flex:1;height:30px;background:rgba(255,255,255,.19);color:#fff;
+  border:1px solid rgba(255,255,255,.25);border-radius:4px;padding:0 8px;font-size:12px;
+  outline:none;caret-color:#fff;
+}
+.gsearch::placeholder{color:rgba(255,255,255,.75)}
+.gsearch:focus{background:rgba(255,255,255,.28)}
+.gsearch-btn{
+  width:40px;height:30px;margin-left:6px;background:rgba(255,255,255,.19);border:none;
+  border-radius:4px;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;position:relative;
+}
+.gsearch-btn:hover{background:rgba(255,255,255,.32)}
+.badge{
+  position:absolute;top:-6px;right:-8px;min-width:14px;height:14px;background:#E53935;
+  border-radius:7px;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  padding:0 3px;
+}
+
+/* ============ 索引贴主标签 ============ */
+.tabs{display:flex;align-items:center;margin-left:auto;margin-right:8px}
+.tab{
+  height:var(--tab-h);display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;cursor:pointer;position:relative;
+  transition:width var(--trans) ease, background-color 150ms ease, margin-left var(--trans) ease;
+  overflow:hidden;white-space:nowrap;flex:0 0 auto;
+}
+.tab .label{padding:0 14px;pointer-events:none}
+.tab .underline{
+  position:absolute;bottom:0;left:0;right:0;height:3px;opacity:0;
+  transition:opacity var(--trans) ease;
+}
+.tab.selected .underline{opacity:1}
+.tab:not(.selected) .label{opacity:0;width:0;padding:0}
+
+/* ============ 窗口控制 ============ */
+.winctl{display:flex;align-items:center;margin-left:6px}
+.winbtn{
+  width:36px;height:30px;background:transparent;border:none;color:#fff;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;border-radius:4px;
+}
+.winbtn:hover{background:rgba(255,255,255,.2)}
+.winbtn.close:hover{background:#E74C3C}
+
+/* ============ 主体 ============ */
+.body{flex:1;display:flex;min-height:0;position:relative}
+
+/* ============ 侧边栏 ============ */
+.sidebar{
+  flex:0 0 auto;width:56px;background:var(--control-bg);
+  border-right:1px solid var(--control-border);
+  transition:width var(--trans) cubic-bezier(.4,0,.2,1);
+  overflow-x:hidden;overflow-y:auto;padding:8px 6px;z-index:20;
+}
+.sidebar .sgroup{margin:10px 0 4px;padding:0 8px;font-size:10px;color:var(--secondary-fg);opacity:.7;
+  white-space:nowrap;letter-spacing:.5px;display:none}
+.sidebar.expanded .sgroup{display:block}
+.sitem{
+  height:40px;margin:2px 0;display:flex;align-items:center;cursor:pointer;
+  border-radius:6px;position:relative;padding-left:11px;color:var(--secondary-fg);
+  white-space:nowrap;transition:background 120ms ease;
+}
+.sitem:hover{background:var(--control-hover)}
+.sitem.active{background:var(--control-hover);color:#fff}
+.sitem .indicator{
+  position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:0 2px 2px 0;
+  background:var(--sidebar-indicator,#4CAF50);opacity:0;transition:opacity 150ms ease;
+}
+.sitem.active .indicator{opacity:1}
+.sitem svg{flex:0 0 auto;width:18px;height:18px}
+.sitem .txt{margin-left:10px;font-size:13px;opacity:0;transition:opacity 120ms ease;pointer-events:none}
+.sidebar.expanded .sitem .txt{opacity:1}
+
+/* ============ 内容宿主 ============ */
+.page-host{flex:1;min-width:0;position:relative;overflow:hidden;background:var(--window-bg)}
+.page-tint{position:absolute;inset:0;pointer-events:none;z-index:0;transition:opacity var(--trans) ease}
+.page{
+  position:absolute;inset:0;z-index:1;overflow-y:auto;overflow-x:hidden;
+  animation:pageIn var(--trans) ease;
+}
+@keyframes pageIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============ 通用组件 ============ */
+.card{
+  background:var(--card-bg);border:1px solid var(--control-border);border-radius:12px;
+  padding:14px;box-shadow:0 2px 10px var(--card-shadow);
+  transition:transform 150ms ease,border-color 150ms ease;
+}
+.card:hover{transform:translateY(-6px);border-color:var(--card-border-hover)}
+.hflow{display:flex;gap:14px;overflow-x:auto;padding:6px 2px}
+.hflow .card{flex:0 0 auto}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:18px 0 6px}
+.section-title h3{font-size:14px;font-weight:700}
+.hint{color:var(--secondary-fg);font-size:12px;margin:6px 2px 0}
+
+.btn{
+  background:var(--control-bg);color:var(--primary-fg);border:1px solid var(--control-border);
+  border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;transition:border-color 120ms ease,opacity 120ms ease;
+  white-space:nowrap;
+}
+.btn:hover{border-color:var(--accent)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.primary{background:var(--accent);color:#fff;border:none;padding:8px 16px}
+.btn.primary:hover{background:var(--accent-hover)}
+.btn.ghost{background:transparent;border:1px solid var(--control-border)}
+.btn.ghost:hover{border-color:var(--accent)}
+.btn.sm{padding:4px 10px}
+
+.input{
+  background:var(--input-bg);color:var(--input-fg);border:1px solid var(--input-border);
+  border-radius:8px;padding:6px 8px;font-size:12px;outline:none;min-height:30px;
+}
+.input:focus{border-color:var(--input-focus)}
+select.input{cursor:pointer}
+select.input option{background:var(--control-bg);color:var(--primary-fg)}
+
+/* 滑动开关 */
+.switch{
+  width:44px;height:24px;flex:0 0 44px;border-radius:12px;background:var(--toggle-off);
+  cursor:pointer;position:relative;transition:background 150ms ease;border:none;
+}
+.switch::after{
+  content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;
+  background:#fff;transition:transform 150ms ease;
+}
+.switch.on{background:var(--accent)}
+.switch.on::after{transform:translateX(20px)}
+.switch:disabled{opacity:.5}
+.row{display:flex;align-items:center}
+.switch-row{display:flex;align-items:center;margin:8px 0}
+.switch-row .txt{margin-left:8px}
+
+/* 弹窗 */
+.scrim{
+  position:absolute;inset:0;background:var(--scrim);display:flex;align-items:center;justify-content:center;
+  z-index:100;animation:scrimIn 150ms ease;
+}
+@keyframes scrimIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--control-bg);border:1px solid var(--control-border);border-radius:14px;
+  padding:22px;max-width:560px;width:calc(100% - 60px);max-height:88%;overflow-y:auto;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.modal h4{font-size:16px;font-weight:700;margin-bottom:12px}
+.modal .btnrow{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+
+/* ============ 状态栏 ============ */
+.statusbar{
+  height:var(--statusbar-h);flex:0 0 var(--statusbar-h);background:var(--control-bg);
+  border-top:1px solid var(--control-border);display:flex;align-items:center;padding:0 12px;
+  font-size:12px;color:var(--status-fg);gap:14px;overflow:hidden;white-space:nowrap;
+}
+.statusbar .spacer{flex:1}
+.sbar-progress{width:120px;height:10px;background:var(--progress-bg);border-radius:5px;overflow:hidden}
+.sbar-progress>div{height:100%;background:var(--progress-fg);width:0;transition:width .3s ease}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot.green{background:#4CAF50}.dot.yellow{background:#FFC107}.dot.red{background:#E74C3C}
+.music-mini{display:flex;align-items:center;gap:6px}
+.music-mini button{width:24px;height:22px;background:transparent;border:none;color:var(--status-fg);cursor:pointer;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.music-mini button:hover{background:var(--control-hover)}
+
+/* Toast */
+.toasts{position:absolute;right:16px;bottom:40px;width:330px;z-index:200;display:flex;flex-direction:column;gap:6px}
+.toast{
+  background:var(--control-bg);border:1px solid var(--control-border);border-radius:8px;
+  box-shadow:0 8px 24px rgba(0,0,0,.45);display:flex;overflow:hidden;
+  animation:toastIn 200ms ease;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.toast .bar{width:4px;flex:0 0 4px;background:var(--accent)}
+.toast .body{padding:10px 8px 10px 12px;flex:1}
+.toast .body b{font-size:13px}
+.toast .body p{font-size:12px;color:var(--secondary-fg);margin-top:3px}
+.toast .body .tbtn{margin-top:7px;padding:3px 10px;font-size:12px}
+.toast .x{width:26px;flex:0 0 26px;background:transparent;border:none;color:var(--secondary-fg);cursor:pointer;font-size:12px}
+
+/* ============ 页面级样式 ============ */
+.page-pad{padding:20px}
+.dl-header{padding:12px 12px 8px;border-bottom:1px solid var(--control-border)}
+.dl-cards{overflow-y:auto;height:calc(100% - 78px);padding:8px 12px}
+.dl-grid{display:flex;flex-wrap:wrap;gap:0}
+.dl-card{
+  width:196px;margin:6px;background:var(--card-bg);border:1px solid var(--control-border);
+  border-radius:10px;overflow:hidden;display:flex;flex-direction:column;
+  transition:transform 150ms ease,border-color 150ms ease;
+}
+.dl-card:hover{transform:translateY(-4px);border-color:var(--card-border-hover)}
+.dl-cover{height:110px;background:var(--control-bg);display:flex;align-items:center;justify-content:center;color:var(--secondary-fg);position:relative}
+.dl-card .t{font-weight:700;margin:8px 10px 2px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dl-card .a{font-size:11px;opacity:.7;margin:0 10px 2px}
+.dl-card .v{font-size:11px;color:var(--accent);margin:0 10px 2px}
+.dl-card .s{font-size:11px;opacity:.7;margin:0 10px 2px;height:32px;overflow:hidden}
+.dl-card .ops{display:flex;gap:6px;margin:6px 10px 8px}
+.dl-card .ops .btn{padding:3px 8px;font-size:12px}
+.dl-badge{position:absolute;top:8px;right:8px;background:var(--accent);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px}
+.expander{margin:4px 8px}
+.expander-head{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:700;padding:6px 8px;background:var(--control-bg);border:1px solid var(--control-border);border-radius:8px}
+.toolbox-scroll{height:100%;overflow-y:auto;padding:16px}
+.meta-tag{font-size:11px;color:var(--secondary-fg)}
+
+/* 日志 / 代码区 */
+.console{font-family:Consolas,Monaco,monospace;font-size:12px;background:var(--input-bg);border:1px solid var(--input-border);border-radius:8px;padding:8px;overflow-y:auto}
+.console .line{white-space:pre-wrap;padding:1px 0}
+.console .err{color:#E74C3C}.console .warn{color:#FFC107}.console .info{color:#8AB4F8}.console .ok{color:#4CAF50}
+
+/* 图标按钮 */
+.ibtn{width:26px;height:26px;background:transparent;border:none;color:var(--secondary-fg);cursor:pointer;border-radius:4px;display:inline-flex;align-items:center;justify-content:center}
+.ibtn:hover{background:var(--control-hover);color:var(--primary-fg)}
+
+/* 卡片流迷你卡 */
+.mini-card{width:230px;height:116px;display:flex;flex-direction:column;justify-content:space-between}
+.mini-card .end{align-self:flex-end}
+.lat-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.tag-red{background:#E74C3C;color:#fff;font-size:10px;padding:1px 6px;border-radius:4px;margin-left:8px}
+
+/* 皮肤编辑器网格示意 */
+.skin-grid{display:grid;grid-template-columns:repeat(6,36px);grid-template-rows:repeat(6,36px);gap:1px;background:var(--control-border);border:1px solid var(--control-border);width:fit-content}
+.skin-grid div{background:var(--control-bg)}
+.skin-grid div.filled{background:var(--accent)}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- 标题栏 -->
+  <div class="titlebar" id="titlebar">
+    <div class="brand">MCLCS</div>
+    <div class="gsearch-wrap">
+      <input class="gsearch" id="gsearch" placeholder="搜索 Mod、光影、材质包..." />
+      <button class="gsearch-btn" id="dlQueueBtn" title="下载队列 / 进度">
+        <span id="qBadge" class="badge" style="display:none">2</span>
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+      </button>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="winctl">
+      <button class="winbtn" title="最小化"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+      <button class="winbtn close" title="关闭"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+
+  <!-- 主体 -->
+  <div class="body">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="page-host" id="pageHost">
+      <div class="page-tint" id="pageTint"></div>
+      <div class="page" id="page"></div>
+      <!-- 全局弹层 -->
+      <div id="modalRoot"></div>
+      <div class="toasts" id="toasts"></div>
+    </div>
+  </div>
+
+  <!-- 状态栏 -->
+  <div class="statusbar" id="statusbar"></div>
+</div>
+
+<script>
+/* ============ 图标库（stroke 风格，与 PNG 图标语义对齐） ============ */
+const I = {};
+const ic = (name, inner, vb=24) => I[name] = `<svg viewBox="0 0 ${vb} ${vb}" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${inner}</svg>`;
+ic('download','<path d="M12 3v11"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/>');
+ic('mod','<rect x="4" y="9" width="16" height="10" rx="1.5"/><path d="M8 9V6h2v3M14 9V6h2v3"/>');
+ic('shader','<path d="M12 4l2.5 5.5L20 12l-5.5 2.5L12 20l-2.5-5.5L4 12l5.5-2.5z"/>');
+ic('tex','<path d="M12 3l8 4.5-8 4.5-8-4.5z"/><path d="M4 12l8 4.5 8-4.5"/><path d="M4 16.5l8 4.5 8-4.5"/>');
+ic('pack','<path d="M4 9h16v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3 9l9-6 9 6"/><path d="M12 9v11"/>');
+ic('map','<path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/>');
+ic('minecraft','<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/><path d="M12 3v3M9 4.5l2 2M15 4.5l-2 2"/>');
+ic('log','<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>');
+ic('bug','<path d="M12 3l10 18H2z"/><path d="M12 10v5M12 18h.01"/>');
+ic('perf','<path d="M3 12h4l2-6 4 12 2-6h6"/>');
+ic('net','<path d="M5 12a10 10 0 0 1 14 0"/><path d="M8.5 15.5a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1.2"/>');
+ic('fcd','<path d="M3 6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>');
+ic('dp','<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 3 3v6.5"/>');
+ic('save','<path d="M3 18L9 8l4 6 3-3 5 7z"/><path d="M3 18h18"/>');
+ic('backup','<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>');
+ic('shot','<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 15l-5-5-9 9"/>');
+ic('clean','<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>');
+ic('music','<path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/>');
+ic('dev','<path d="M8 6L2 12l6 6M16 6l6 6-6 6"/>');
+ic('skin','<circle cx="12" cy="5" r="2"/><rect x="8" y="9" width="8" height="12" rx="2"/>');
+ic('shortcut','<path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/>');
+ic('flowchart','<rect x="3" y="4" width="8" height="6" rx="1.5"/><rect x="13" y="14" width="8" height="6" rx="1.5"/><path d="M7 10v4h6"/><path d="M11 7h9"/><path d="M20 7v4"/>');
+ic('ai','<path d="M12 3l1.8 4.8L18.5 9l-4.7 1.2L12 15l-1.8-4.8L5.5 9l4.7-1.2z"/><path d="M18 14l.9 2.4L21.5 17l-2.6.6L18 20l-.9-2.4L14.5 17l2.6-.6z"/>');
+ic('general','<path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h8M16 18h4"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="14" cy="18" r="2"/>');
+ic('launch','<circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4z"/>');
+ic('recommend','<path d="M12 3l2.7 5.6 6.3.9-4.5 4.4 1.1 6.2L12 17l-5.6 3.1 1.1-6.2L3 9.5l6.3-.9z"/>');
+ic('account','<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/>');
+ic('appearance','<path d="M12 3a9 9 0 1 0 0 18c1.7 0 2.5-1 2.5-2.2 0-1.5-1-2-1-3.2 0-1.3 1-1.6 1.6-1.6H17A4 4 0 0 0 21 10c0-4-3.6-7-9-7z"/><circle cx="7.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16.5" cy="10" r="1"/>');
+ic('about','<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>');
+ic('search','<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>');
+ic('add','<path d="M12 5v14M5 12h14"/>');
+ic('refresh','<path d="M20 11a8 8 0 1 0-2.3 6.2"/><path d="M20 5v6h-6"/>');
+ic('close','<path d="M6 6l12 12M18 6L6 18"/>');
+ic('play','<path d="M8 5l11 7-11 7z"/>');
+ic('pause','<path d="M9 5v14M15 5v14"/>');
+ic('next','<path d="M5 5l9 7-9 7z"/><path d="M19 5v14"/>');
+ic('previous','<path d="M19 5l-9 7 9 7z"/><path d="M5 5v14"/>');
+ic('mic','<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>');
+ic('fold','<path d="M15 6l-6 6 6 6"/>');
+ic('unfold','<path d="M9 6l6 6-6 6"/>');
+const icon = (n,s=18)=>`<span style="width:${s}px;height:${s}px;display:inline-flex;flex:0 0 auto;color:inherit">${I[n]||I['download']}</span>`;
+
+/* ============ 四色索引贴 ============ */
+const TABDEF = {
+  game:{label:'游戏',color:'#4CAF50',always:true},
+  download:{label:'下载',color:'#2196F3'},
+  toolbox:{label:'工具箱',color:'#FF9800'},
+  settings:{label:'设置',color:'#607D8B'}
+};
+const TABORDER=['game','download','toolbox','settings'];
+let tabColors = {};
+function brighten(hex,f){
+  let s=hex.replace('#',''); if(s.length===8)s=s.slice(2);
+  const r=Math.min(255,Math.round(parseInt(s.slice(0,2),16)*f));
+  const g=Math.min(255,Math.round(parseInt(s.slice(2,4),16)*f));
+  const b=Math.min(255,Math.round(parseInt(s.slice(4,6),16)*f));
+  return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function resetTabColors(){TABORDER.forEach(k=>tabColors[k]=TABDEF[k].color)}
+resetTabColors();
+
+let currentTab='game';
+
+/* ============ 侧边栏定义（对齐 SidebarModel.cs） ============ */
+const SIDEBAR={
+  game:[],
+  download:[
+    {id:'minecraft',label:'Minecraft',icon:'minecraft'},
+    {id:'mod',label:'Mod',icon:'mod'},
+    {id:'shader',label:'光影',icon:'shader'},
+    {id:'resourcepack',label:'材质包',icon:'tex'},
+    {id:'modpack',label:'整合包',icon:'pack'},
+    {id:'map',label:'地图',icon:'map'},
+  ],
+  toolbox:[
+    {id:'log',label:'日志管理器',icon:'log',group:'诊断与排障'},
+    {id:'crash',label:'崩溃分析',icon:'bug',group:'诊断与排障'},
+    {id:'perf',label:'性能监控',icon:'perf',group:'诊断与排障'},
+    {id:'network',label:'网络诊断',icon:'net',group:'诊断与排障'},
+    {id:'filewatch',label:'文件变更检测',icon:'fcd',group:'诊断与排障'},
+    {id:'datapack',label:'数据包冲突检测',icon:'dp',group:'诊断与排障'},
+    {id:'saves',label:'存档管理器',icon:'save',group:'资源与内容'},
+    {id:'backup',label:'备份管理器',icon:'backup',group:'资源与内容'},
+    {id:'screenshot',label:'截图管理器',icon:'shot',group:'资源与内容'},
+    {id:'clean',label:'清理冗余文件',icon:'clean',group:'资源与内容'},
+    {id:'modpackio',label:'整合包导入导出',icon:'pack',group:'资源与内容'},
+    {id:'music',label:'音乐播放器',icon:'music',group:'资源与内容'},
+    {id:'moddev',label:'Mod 开发环境',icon:'dev',group:'开发工具'},
+    {id:'packmaker',label:'资源包创建器',icon:'dev',group:'开发工具'},
+    {id:'nbt',label:'NBT 编辑器',icon:'dev',group:'开发工具'},
+    {id:'command',label:'命令语法表',icon:'dev',group:'开发工具'},
+    {id:'skin',label:'皮肤编辑器',icon:'skin',group:'开发工具'},
+    {id:'shortcut',label:'快捷方式生成器',icon:'shortcut',group:'开发工具'},
+    {id:'afk',label:'挂机工作流',icon:'flowchart',group:'其他'},
+    {id:'aichat',label:'AI 助手',icon:'ai',group:'其他'},
+  ],
+  settings:[
+    {id:'general',label:'通用',icon:'general'},
+    {id:'launch',label:'启动',icon:'launch'},
+    {id:'download',label:'下载',icon:'download'},
+    {id:'recommend',label:'推荐',icon:'recommend'},
+    {id:'account',label:'账号',icon:'account'},
+    {id:'ai',label:'AI',icon:'ai'},
+    {id:'appearance',label:'外观',icon:'appearance'},
+    {id:'about',label:'关于',icon:'about',bottom:true},
+  ]
+};
+let selectedSide='minecraft';
+
+/* ============ 渲染标题栏标签 ============ */
+function renderTabs(){
+  const el=document.getElementById('tabs'); el.innerHTML='';
+  TABORDER.forEach((k,i)=>{
+    const def=TABDEF[k];
+    const sel = k===currentTab;
+    const expanded = sel || def.always;
+    const w = expanded?130:56;
+    const neighborExpanded = i>0 && (TABORDER[i-1]===currentTab || TABDEF[TABORDER[i-1]].always);
+    const overlap = neighborExpanded?10:20;
+    const ml = i===0?0:-overlap;
+    const cr = i===0?'8px 0 0 8px':(i===3?'0 8px 8px 0':'0');
+    const solid=tabColors[k];
+    const bg = sel?brighten(solid,1.12):solid;
+    const ul = brighten(solid,1.45);
+    const t=document.createElement('div');
+    t.className='tab'+(sel?' selected':'');
+    t.dataset.kind=k;
+    t.style.width=w+'px';
+    t.style.marginLeft=ml+'px';
+    t.style.background=bg;
+    t.style.zIndex=4-i;
+    t.style.borderRadius=cr;
+    t.innerHTML=`<span class="label">${def.label}</span><span class="underline" style="background:${ul}"></span>`;
+    t.addEventListener('mouseenter',()=>{ if(!sel) t.style.background=brighten(solid,1.2); });
+    t.addEventListener('mouseleave',()=>{ t.style.background=sel?brighten(solid,1.12):solid; });
+    t.addEventListener('click',()=>switchTab(k));
+    el.appendChild(t);
+  });
+}
+
+/* ============ 渲染侧边栏 ============ */
+let sidebarExpanded=false;
+function renderSidebar(){
+  const el=document.getElementById('sidebar');
+  const items=SIDEBAR[currentTab];
+  el.innerHTML='';
+  if(!items.length){ el.style.width='0px'; el.style.borderRight='none'; return; }
+  el.style.width=(sidebarExpanded?152:56)+'px';
+  el.style.borderRight='1px solid var(--control-border)';
+  let lastGroup=null;
+  items.forEach(it=>{
+    if(it.group && it.group!==lastGroup){
+      const g=document.createElement('div'); g.className='sgroup'; g.textContent=it.group; el.appendChild(g);
+      lastGroup=it.group;
+    }
+    const row=document.createElement('div');
+    row.className='sitem'+(it.id===selectedSide?' active':'');
+    row.dataset.id=it.id;
+    row.innerHTML=`<span class="indicator"></span>${icon(it.icon,18)}<span class="txt">${it.label}</span>`;
+    row.addEventListener('click',()=>selectSide(it.id));
+    el.appendChild(row);
+  });
+}
+function selectSide(id){
+  selectedSide=id;
+  document.querySelectorAll('.sitem').forEach(n=>n.classList.toggle('active',n.dataset.id===id));
+  routeContent();
+}
+
+/* 侧边栏悬停展开/收起（150ms 展开 / 300ms 收起） */
+let expandTimer=null,collapseTimer=null;
+const sidebarEl=()=>document.getElementById('sidebar');
+function sidebarHoverEnter(){
+  clearTimeout(collapseTimer);clearTimeout(expandTimer);
+  if(sidebarExpanded) return;
+  expandTimer=setTimeout(()=>{sidebarExpanded=true;renderSidebar();},150);
+}
+function sidebarHoverLeave(){
+  clearTimeout(expandTimer);clearTimeout(collapseTimer);
+  if(!sidebarExpanded) return;
+  collapseTimer=setTimeout(()=>{sidebarExpanded=false;renderSidebar();},300);
+}
+
+/* ============ 主标签切换 ============ */
+function switchTab(kind){
+  if(kind===currentTab) return;
+  currentTab=kind;
+  const solid=tabColors[kind];
+  document.getElementById('titlebar').style.setProperty('--titlebar-color',solid);
+  document.getElementById('pageTint').style.background=`linear-gradient(180deg, ${solid} 0%, ${solid} 10%, var(--window-bg) 55%, var(--window-bg) 100%)`;
+  renderTabs();
+  // 重置副标签选中
+  const items=SIDEBAR[kind];
+  selectedSide = items.length?items[0].id:null;
+  renderSidebar();
+  routeContent();
+}
+function routeContent(){
+  renderPage();
+}
+
+/* ============ 页面渲染 ============ */
+const page=()=>document.getElementById('page');
+function renderPage(){
+  const host=page();
+  // 用替换整个 .page 元素的方式重播页面过渡动画
+  const parent=host.parentNode, next=host.nextSibling;
+  const fresh=document.createElement('div');
+  fresh.className='page'; fresh.id='page';
+  let html='';
+  if(currentTab==='game') html=gamePage();
+  else if(currentTab==='download') html=downloadPage();
+  else if(currentTab==='toolbox') html=toolboxPage();
+  else if(currentTab==='settings') html=settingsPage();
+  fresh.innerHTML=html;
+  parent.replaceChild(fresh,host);
+}
+
+/* ============ 游戏页 ============ */
+function gamePage(){
+  return `
+  <div class="page-pad">
+    <div class="card" style="margin-bottom:18px">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:12px">快速启动</h3>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <select class="input" style="flex:1;min-width:180px">
+          <option>1.21.4</option><option>1.20.4</option><option>1.19.2</option><option>1.18.2</option><option>1.16.5</option>
+        </select>
+        <input class="input" style="width:160px" value="Steve" placeholder="用户名"/>
+        <input class="input" style="width:110px" value="4096" placeholder="内存(MB)"/>
+        <button class="btn primary" style="min-width:96px;height:34px">启动</button>
+      </div>
+    </div>
+
+    <div class="section-title"><h3>局域网游戏</h3><button class="btn ghost sm">刷新</button></div>
+    <div class="hflow">
+      ${lanCard('我的世界 · 生存', '192.168.1.8:25565', 4)}
+      ${lanCard('Redstone 实验室', '192.168.1.23:25565', 2)}
+    </div>
+
+    <div class="section-title"><h3>服务器列表</h3><div style="display:flex;gap:8px"><button class="btn ghost sm">刷新</button><button class="btn ghost sm">添加</button></div></div>
+    <div class="hflow">
+      ${serverCard('Hypixel', 'mc.hypixel.net', 0)}
+      ${serverCard('我的小服', 'play.example.com:25565', 1)}
+      ${serverCard('友联服', 'mc.friends.net', 3)}
+    </div>
+
+    <div class="section-title"><h3>智能推荐</h3><button class="btn ghost sm">刷新推荐</button></div>
+    <div class="hflow">
+      ${recoCard('Sodium', '大幅提升渲染性能的优化模组，支持高清光影与大量区块。', '根据你常用的 Fabric 1.20+ 推荐', true)}
+      ${recoCard('Iris Shaders', '与 Sodium 搭配的光影加载器，带来真实光照与体积云。', '光影玩法 · 本周热榜', false)}
+      ${recoCard('JourneyMap', '实时小地图与大地图，支持航点标记。', '生存探索玩法', false)}
+      ${recoCard('Create', '机械动力：齿轮与传送带的自动化沙盒模组。', '科技玩法 · 总榜', false)}
+    </div>
+
+    <div class="section-title"><h3>统计</h3></div>
+    <div class="hflow">
+      <div class="card" style="width:180px;height:96px"><div class="meta-tag">最近版本</div><div style="font-size:16px;font-weight:700;margin-top:8px">1.21.4</div></div>
+      <div class="card" style="width:180px;height:96px"><div class="meta-tag">本周时长</div><div style="font-size:16px;font-weight:700;margin-top:8px">6 小时 32 分</div></div>
+      <div class="card" style="width:180px;height:96px"><div class="meta-tag">崩溃次数（年）</div><div style="font-size:16px;font-weight:700;margin-top:8px">3</div></div>
+      <div class="card" style="width:180px;height:96px;cursor:pointer"><div class="meta-tag">年度报告</div><div style="font-size:16px;font-weight:700;margin-top:8px;color:var(--accent)">查看</div><div class="meta-tag" style="margin-top:4px">今日可查看年度游玩统计</div></div>
+    </div>
+  </div>`;
+}
+function lanCard(name,ep,players){
+  return `<div class="card mini-card" style="width:230px;height:116px">
+    <div><div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+    <div class="meta-tag" style="margin-top:4px">${ep}</div>
+    <div class="meta-tag" style="margin-top:2px">${players} 人 · 生存</div></div>
+    <button class="btn primary sm end">加入</button>
+  </div>`;
+}
+function serverCard(name,addr,lat){
+  const c=['#4CAF50','#FFC107','#FF9800','#9AA0A6'][lat]||'#4CAF50';
+  return `<div class="card mini-card" style="width:240px;height:120px">
+    <div><div style="display:flex;align-items:center;gap:6px"><span class="lat-dot" style="background:${c}"></span><span style="font-weight:700">${name}</span></div>
+    <div class="meta-tag" style="margin:4px 0 0 14px">${addr}</div></div>
+    <button class="btn primary sm end">加入</button>
+  </div>`;
+}
+function recoCard(title,desc,reason,deps){
+  return `<div class="card" style="width:250px;height:150px;display:flex;flex-direction:column">
+    <div style="display:flex;align-items:center"><span style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${title}</span>${deps?'<span class="tag-red">依赖</span>':''}</div>
+    <div class="meta-tag" style="margin-top:6px;flex:1">${desc}</div>
+    <div style="font-size:11px;color:var(--accent);margin-top:6px">${reason}</div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+      <button class="btn primary sm">一键安装</button><button class="btn ghost sm">不感兴趣</button>
+    </div>
+  </div>`;
+}
+
+/* ============ 下载页 ============ */
+const DL_DATA={
+  minecraft:[{t:'Minecraft 1.21.4',a:'Mojang',v:'正式版',s:'Trails & Tales 之后的最新稳定版本。'},
+             {t:'Minecraft 1.21.3',a:'Mojang',v:'正式版',s:'修复若干问题。'},
+             {t:'Minecraft 24w45a',a:'Mojang',v:'快照',s:'冬季更新快照。'},
+             {t:'Minecraft 1.20.4',a:'Mojang',v:'正式版',s:'1.20 系列最终稳定版。'},
+             {t:'Minecraft 1.16.5',a:'Mojang',v:'旧版',s:'经典旧版本。'},
+             {t:'Minecraft 1.12.2',a:'Mojang',v:'旧版',s:'模组生态最丰富的旧版。'}],
+  mod:[{t:'Sodium',a:'jellysquid3',v:'12.4万 下载',s:'现代渲染引擎，显著提升帧率。'},
+       {t:'Lithium',a:'jellysquid3',v:'8.9万 下载',s:'通用游戏逻辑优化。'},
+       {t:'Create',a:'simibubi',v:'6.7万 下载',s:'机械动力，自动化与齿轮。'},
+       {t:'JourneyMap',a:'techbrew',v:'5.1万 下载',s:'实时地图与航点。'},
+       {t:'JEI',a:'mezz',v:'4.8万 下载',s:'物品合成配方查询。'},
+       {t:'Xaero\'s Minimap',a:'xaero96',v:'4.2万 下载',s:'轻量小地图。'}],
+  shader:[{t:'BSL Shaders',a:'capttatsu',v:'9.6万 下载',s:'均衡画质与性能的光影。'},
+          {t:'Complementary',a:'EminGT',v:'8.3万 下载',s:'真实光照与体积云。'},
+          {t:'SEUS PTGI',a:'Sonic Ether',v:'5.9万 下载',s:'路径追踪级光影。'},
+          {t:'Sildur\'s',a:'Sildur',v:'4.7万 下载',s:'多档位可选的光影。'}],
+  resourcepack:[{t:'Faithful 32x',a:'Faithful Team',v:'3.2万 下载',s:'保持原版风格的 32x 材质。'},
+                {t:'Bare Bones',a:'RobotPants',v:'2.8万 下载',s:'简约扁平化材质。'},
+                {t:'Stay True',a:'StayTrue',v:'2.1万 下载',s:'精细自然纹理。'}],
+  modpack:[{t:'RLCraft',a:'Shivaxi',v:'Forge · 1.12.2 · 8.9万下载',s:'高难度生存整合包。'},
+           {t:'ATM9',a:'ATM Team',v:'Forge · 1.20.1 · 7.2万下载',s:'All The Mods 9。'},
+           {t:'FTB StoneBlock 3',a:'FTB',v:'Forge · 1.19.2 · 5.4万下载',s:'地心生存空岛。'}],
+  map:[{t:'天空之城',a:'SkyBuilder',v:'1.2万 浏览',s:'浮空岛屿冒险地图。',extra:true},
+       {t:'深海遗迹',a:'OceanCraft',v:'8.6千 浏览',s:'海底探索解谜地图。'},
+       {t:'红石实验室',a:'RedstoneLab',v:'5.2千 浏览',s:'红石教学地图。',extra:true},
+       {t:'中世纪城堡',a:'CastleTeam',v:'9.1千 浏览',s:'建筑展示地图。'}]
+};
+function dlCoverIcon(){
+  const m={minecraft:'minecraft',mod:'mod',shader:'shader',resourcepack:'tex',modpack:'pack',map:'map'};
+  return m[selectedSide]||'mod';
+}
+function downloadPage(){
+  const isMinecraft=selectedSide==='minecraft';
+  const isModpack=selectedSide==='modpack';
+  const isMap=selectedSide==='map';
+  let filter='';
+  if(isMinecraft) filter=`<select class="input" style="width:160px"><option>全部</option><option>正式版</option><option>快照</option><option>旧版</option></select>`;
+  else if(isModpack) filter=`<select class="input" style="width:140px"><option>1.20.1</option><option>1.19.2</option></select>
+    <select class="input" style="width:120px;margin-left:8px"><option>Forge</option><option>Fabric</option></select>
+    <select class="input" style="width:150px;margin-left:8px"><option>Modrinth</option><option>CurseForge</option></select>`;
+  else if(isMap) filter=`<select class="input" style="width:150px"><option>全部</option><option>冒险</option><option>解谜</option><option>建筑</option></select>
+    <select class="input" style="width:120px;margin-left:8px"><option>1.20+</option><option>1.16-1.19</option></select>
+    <select class="input" style="width:120px;margin-left:8px"><option>最新发布</option><option>最多浏览</option></select>
+    <button class="btn sm" style="margin-left:8px">上一页</button><button class="btn sm" style="margin-left:8px">下一页</button>
+    <span class="meta-tag" style="margin-left:8px">第 1 页</span>`;
+  else filter=`<select class="input" style="width:140px"><option>1.21.x</option><option>1.20.x</option><option>1.19.x</option></select>
+    <select class="input" style="width:120px;margin-left:8px"><option>全部</option><option>Forge</option><option>Fabric</option><option>Quilt</option></select>`;
+  const cards=(DL_DATA[selectedSide]||[]).map(c=>dlCard(c)).join('');
+  return `
+  <div class="dl-header">
+    <div style="display:flex;align-items:center">
+      <input class="input" style="width:240px" placeholder="搜索关键词" value="${selectedSide==='map'?'':''}"/>
+      <button class="btn primary" style="margin-left:8px;padding:6px 14px">搜索</button>
+      <span class="meta-tag" style="margin-left:12px">共 ${(DL_DATA[selectedSide]||[]).length} 个结果</span>
+    </div>
+    <div style="display:flex;align-items:center;margin-top:8px">${filter}</div>
+  </div>
+  <div class="dl-cards">
+    <div class="dl-grid">${cards}</div>
+  </div>`;
+}
+function dlCard(c){
+  const isMc=selectedSide==='minecraft';
+  const isMap=selectedSide==='map';
+  const badge=c.extra?'<span class="dl-badge">含附加资源</span>':'';
+  const op1=isMc?`<button class="btn primary" style="padding:3px 8px">安装</button>`:`<button class="btn primary" style="padding:3px 8px">加入队列</button>`;
+  const op2=isMc?``:`<button class="btn" style="padding:3px 8px" onclick="openMapDetail('${c.t}')">详情</button>`;
+  return `<div class="dl-card">
+    <div class="dl-cover" style="background:linear-gradient(135deg,${tabColors.download}33,${tabColors.download}66)">${badge}${icon(dlCoverIcon(),40)}</div>
+    <div class="t" title="${c.t}">${c.t}</div>
+    <div class="a">${c.a}</div>
+    <div class="v">${c.v||''}</div>
+    <div class="s">${c.s}</div>
+    <div class="ops">${op1}${op2}</div>
+  </div>`;
+}
+
+/* ============ 工具箱页 ============ */
+function toolboxPage(){
+  const P={
+    log:toolLog(),crash:toolCrash(),perf:toolPerf(),network:toolNetwork(),
+    filewatch:toolFilewatch(),datapack:toolDatapack(),saves:toolSaves(),backup:toolBackup(),
+    screenshot:toolScreenshot(),clean:toolClean(),modpackio:toolModpackIO(),music:toolMusic(),
+    moddev:toolModdev(),packmaker:toolPackmaker(),nbt:toolNbt(),command:toolCommand(),
+    skin:toolSkin(),shortcut:toolShortcut(),afk:toolAfk(),aichat:toolAi()
+  };
+  return `<div class="toolbox-scroll">${P[selectedSide]||''}</div>`;
+}
+function panelTitle(t,sub){return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">${t}</h3>${sub||''}`;}
+function toolLog(){
+  return panelTitle('日志管理器')+`
+  <div style="display:flex;gap:12px">
+    <div style="width:240px;flex:0 0 240px">
+      <div style="display:flex;gap:8px;margin-bottom:8px"><button class="btn sm">刷新</button><button class="btn sm">导出</button></div>
+      <div class="console" style="height:360px">
+        <div class="line ok">latest.log</div><div class="line ok">· 12.4 KB</div>
+        <div class="line" style="opacity:.6">2026-08-14-1.log</div><div class="line" style="opacity:.6">· 48.1 KB</div>
+        <div class="line" style="opacity:.6">debug.log</div><div class="line" style="opacity:.6">· 1.2 MB</div>
+      </div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <input class="input" style="width:200px" placeholder="搜索日志"/>
+        <button class="switch on" id="onlyErr"></button><span>仅错误</span>
+        <button class="btn sm" style="margin-left:auto">刷新</button>
+      </div>
+      <div class="console" style="flex:1;height:360px">
+        <div class="line info">[08:30:11] [main/INFO]: Loading Minecraft 1.21.4</div>
+        <div class="line info">[08:30:12] [main/INFO]: Loading 47 mods</div>
+        <div class="line ok">[08:30:13] [main/INFO]: Sodium initialized</div>
+        <div class="line warn">[08:30:14] [Worker/WARN]: Missing translation key</div>
+        <div class="line err">[08:30:15] [Render/ERROR]: Failed to load shader</div>
+        <div class="line info">[08:30:16] [main/INFO]: Done (3.421s)!</div>
+      </div>
+    </div>
+  </div>`;
+}
+function toolCrash(){
+  return panelTitle('崩溃分析')+`
+  <textarea class="input" style="width:100%;height:180px;font-family:Consolas,monospace" placeholder="粘贴崩溃报告…">java.lang.OutOfMemoryError: Java heap space
+    at net.minecraft.client.main.Main.main(Main.java:230)</textarea>
+  <button class="btn primary" style="margin-top:10px;padding:6px 16px">分析</button>
+  <div class="card" style="margin-top:12px">
+    <b>检测到：内存不足（OutOfMemoryError）</b>
+    <p class="meta-tag" style="margin-top:6px">建议：当前分配 2048MB 偏小，推荐调整至 4096MB 并重启游戏。<button class="btn primary sm" style="margin-left:8px">尝试自动修复</button></p>
+    <p class="meta-tag" style="margin-top:6px">所有修复操作均不会删除或修改游戏原文件。</p>
+  </div>`;
+}
+function toolPerf(){
+  return panelTitle('性能监控')+`
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <div class="card" style="flex:1;min-width:220px"><div class="meta-tag">实时 FPS</div><div style="font-size:28px;font-weight:700">120</div><svg viewBox="0 0 200 60" style="width:100%;height:60px"><polyline points="0,50 20,40 40,45 60,20 80,30 100,15 120,25 140,10 160,18 180,8 200,12" fill="none" stroke="var(--accent)" stroke-width="2"/></svg></div>
+    <div class="card" style="flex:1;min-width:220px"><div class="meta-tag">内存使用</div><div style="font-size:28px;font-weight:700">2.1 GB</div><div class="sbar-progress" style="width:100%;height:10px"><div style="width:52%"></div></div><div class="meta-tag" style="margin-top:6px">已分配 4096 MB</div></div>
+    <div class="card" style="flex:1;min-width:220px"><div class="meta-tag">CPU / GC</div><div style="font-size:28px;font-weight:700">38%</div><svg viewBox="0 0 200 60" style="width:100%;height:60px"><polyline points="0,30 20,25 40,50 60,20 80,35 100,15 120,40 140,22 160,30 180,18 200,28" fill="none" stroke="#FF9800" stroke-width="2"/></svg></div>
+  </div>
+  <div class="card" style="margin-top:14px"><b>GC 调优建议</b><p class="meta-tag" style="margin-top:6px">当前使用 G1GC，暂停时间良好。可将 JVM 参数 <code>-Xms</code> 与 <code>-Xmx</code> 设为一致以减少堆扩容抖动。</p></div>`;
+}
+function toolNetwork(){
+  return panelTitle('网络诊断')+`
+  <div class="card" style="max-width:520px">
+    ${netRow('Mojang 官方','launchermeta.mojang.com',42,'green')}
+    ${netRow('Modrinth','api.modrinth.com',88,'green')}
+    ${netRow('CurseForge','api.curseforge.com',210,'yellow')}
+    ${netRow('BMCLAPI 镜像','bmclapi2.bangbang93.com',36,'green')}
+    <div style="margin-top:10px"><button class="btn primary sm">重新检测</button></div>
+  </div>`;
+}
+function netRow(name,host,ms,color){
+  const c={green:'#4CAF50',yellow:'#FFC107',red:'#E74C3C'}[color];
+  return `<div style="display:flex;align-items:center;padding:7px 0;border-bottom:1px solid var(--control-border)">
+    <span class="dot" style="background:${c}"></span><b style="margin-left:8px;flex:1">${name}</b>
+    <span class="meta-tag">${host}</span><span style="margin-left:12px;width:60px;text-align:right">${ms} ms</span></div>`;
+}
+function toolFilewatch(){
+  return panelTitle('文件变更检测','<p class="meta-tag" style="margin-bottom:10px">启动或焦点回归时检测手动丢入 mods / resourcepacks / shaderpacks 的新文件。</p>')+`
+  <div class="console" style="height:200px">
+    <div class="line ok">[新] mods/sodium-fabric-0.5.8.jar</div>
+    <div class="line ok">[新] shaderpacks/Complementary.zip</div>
+    <div class="line warn">[兼容性] fabric-api 缺失（Sodium 依赖）</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <button class="btn primary sm">一键修复</button><button class="btn sm">忽略并启动</button><button class="btn sm">稍后处理</button>
+  </div>`;
+}
+function toolDatapack(){
+  return panelTitle('数据包冲突检测')+`
+  <div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn sm">扫描当前版本</button><button class="btn ghost sm">更新规则库</button></div>
+  <div class="card" style="max-width:640px">
+    <div style="padding:7px 0;border-bottom:1px solid var(--control-border)"><b>namespace 冲突</b><span class="meta-tag"> · 2 个数据包都声明了 minecraft:custom/recipe</span></div>
+    <div style="padding:7px 0"><b>同名文件覆盖</b><span class="meta-tag"> · pack_a/data/foo/functions/main.mcfunction</span></div>
+  </div>`;
+}
+function toolSaves(){
+  return panelTitle('存档管理器')+`
+  <div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn sm">备份</button><button class="btn sm">恢复</button><button class="btn sm">复制</button><button class="btn danger sm" style="border-color:var(--danger);color:var(--danger)">删除</button></div>
+  <div class="card" style="max-width:640px">
+    ${saveRow('新世界','1.21.4','128.4 MB','12 小时')}
+    ${saveRow('红石测试','1.20.4','86.2 MB','3 小时')}
+    ${saveRow('创造模式','1.21.4','64.8 MB','1 小时')}
+  </div>`;
+}
+function saveRow(n,v,s,t){return `<div style="display:flex;align-items:center;padding:8px 0;border-bottom:1px solid var(--control-border)"><b style="flex:1">${n}</b><span class="meta-tag">${v}</span><span class="meta-tag" style="margin-left:12px">${s}</span><span class="meta-tag" style="margin-left:12px">${t}</span></div>`;}
+function toolBackup(){
+  return panelTitle('备份管理器')+`
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <div class="card" style="flex:1;min-width:260px">
+      <b>定时备份</b>
+      <div class="switch-row"><button class="switch on"></button><span class="txt">启用自动备份</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span class="meta-tag">频率：</span><select class="input" style="width:120px"><option>每天</option><option>每周</option><option>每月</option></select></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px"><span class="meta-tag">保留：</span><input class="input" style="width:80px" value="5"/> 份</div>
+    </div>
+    <div class="card" style="flex:1;min-width:260px">
+      <b>手动操作</b>
+      <div style="display:flex;gap:8px;margin-top:10px"><button class="btn primary sm">立即备份</button><button class="btn sm">恢复</button></div>
+      <p class="meta-tag" style="margin-top:10px">恢复前会自动备份当前状态。仅备份存档（打包 zip）。</p>
+    </div>
+  </div>`;
+}
+function toolScreenshot(){
+  return panelTitle('截图管理器')+`
+  <div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn sm">打包分享</button><button class="btn sm">批量删除</button></div>
+  <div class="hflow">
+    ${shotCard('2026-08-13_20.15.32')}${shotCard('2026-08-12_18.40.11')}${shotCard('2026-08-10_09.02.47')}
+  </div>`;
+}
+function shotCard(n){return `<div class="card" style="width:200px;height:150px;display:flex;flex-direction:column;justify-content:space-between"><div style="flex:1;border-radius:8px;background:linear-gradient(135deg,var(--control-hover),var(--control-bg));display:flex;align-items:center;justify-content:center;color:var(--secondary-fg)">${icon('shot',32)}</div><div class="meta-tag" style="margin-top:8px">${n}</div></div>`;}
+function toolClean(){
+  return panelTitle('清理冗余文件')+`
+  <div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn primary sm">扫描</button></div>
+  <div class="card" style="max-width:640px">
+    <div style="padding:7px 0;border-bottom:1px solid var(--control-border)"><b>libraries</b><span class="meta-tag"> · 未引用的旧版本库</span><span class="meta-tag" style="float:right">386.2 MB</span></div>
+    <div style="padding:7px 0"><b>assets/objects</b><span class="meta-tag"> · 孤儿资源文件</span><span class="meta-tag" style="float:right">1.1 GB</span></div>
+  </div>`;
+}
+function toolModpackIO(){
+  return panelTitle('整合包导入导出')+`
+  <div style="display:flex;gap:14px;flex-wrap:wrap">
+    <div class="card" style="flex:1;min-width:260px"><b>导出</b><p class="meta-tag" style="margin-top:8px">将当前环境（版本 + Mod + 配置）打包为整合包 zip。</p><button class="btn primary sm" style="margin-top:10px">导出环境</button></div>
+    <div class="card" style="flex:1;min-width:260px"><b>导入</b><p class="meta-tag" style="margin-top:8px">从外部 .mrpack / .zip 导入整合包并自动安装。</p><button class="btn sm" style="margin-top:10px">导入外部包</button></div>
+  </div>`;
+}
+function toolMusic(){
+  return panelTitle('音乐播放器')+`
+  <div style="display:flex;gap:6px;margin-bottom:10px"><span class="meta-tag" style="align-self:center">音源：</span><button class="btn sm primary">本地文件夹</button><button class="btn sm">在线流媒体</button><button class="btn sm">MC 原声</button></div>
+  <div class="card" style="max-width:640px">
+    <div style="font-weight:700">C418 - Sweden</div><div class="meta-tag" style="margin:2px 0 8px">MC 原声 · 音乐</div>
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="btn" style="width:38px;height:34px">⏮</button>
+      <button class="btn primary" style="width:46px;height:34px">▶</button>
+      <button class="btn" style="width:38px;height:34px">⏭</button>
+      <button class="btn" style="width:38px;height:34px">🔁</button>
+      <span style="margin-left:12px">🔊</span><div class="sbar-progress" style="width:140px"><div style="width:55%"></div></div>
+    </div>
+  </div>
+  <div class="console" style="height:200px;margin-top:10px;max-width:640px">
+    <div class="line ok">▶ C418 - Sweden</div>
+    <div class="line">C418 - Subwoofer Lullaby</div>
+    <div class="line">C418 - Wet Hands</div>
+    <div class="line">Lena Raine - Pigstep</div>
+  </div>`;
+}
+function toolModdev(){
+  return panelTitle('Mod 开发环境')+`
+  <div class="card" style="max-width:560px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="meta-tag" style="width:70px">加载器：</span><select class="input" style="width:140px"><option>Fabric</option><option>Forge</option><option>NeoForge</option><option>Quilt</option></select></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="meta-tag" style="width:70px">版本：</span><select class="input" style="width:140px"><option>1.21.4</option><option>1.20.4</option></select></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="meta-tag" style="width:70px">项目名：</span><input class="input" style="width:220px" value="example-mod"/></div>
+    <button class="btn primary sm">一键生成项目骨架</button>
+  </div>`;
+}
+function toolPackmaker(){
+  return panelTitle('资源包 / 数据包创建器','<p class="meta-tag" style="margin-bottom:10px">模板卡片式入口，引导创建并自动生成 JSON。</p>')+`
+  <div class="hflow">
+    ${tplCard('资源包','tex','pack.mcmeta + 纹理目录')}${tplCard('数据包','dp','pack.mcmeta + data 目录')}${tplCard('合成配方','mod','JSON recipe 模板')}
+  </div>`;
+}
+function tplCard(t,icn,d){return `<div class="card" style="width:220px;height:130px;cursor:pointer"><div style="display:flex;align-items:center;gap:8px"><span style="color:var(--accent)">${icon(icn,20)}</span><b>${t}</b></div><p class="meta-tag" style="margin-top:10px">${d}</p></div>`;}
+function toolNbt(){
+  return panelTitle('NBT 编辑器','<p class="meta-tag" style="margin-bottom:10px">树状编辑，保存时自动备份原文件。</p>')+`
+  <div class="console" style="height:260px;font-family:Consolas,monospace">
+    <div class="line ok">▾ level.dat (root)</div>
+    <div class="line" style="padding-left:18px">▾ Data</div>
+    <div class="line" style="padding-left:36px">LevelName : "New World"</div>
+    <div class="line" style="padding-left:36px">GameType : 0</div>
+    <div class="line" style="padding-left:36px">▾ Player</div>
+    <div class="line" style="padding-left:54px">Health : 20.0</div>
+    <div class="line" style="padding-left:54px">Pos : [0.0, 64.0, 0.0]</div>
+  </div>`;
+}
+function toolCommand(){
+  return panelTitle('命令语法表','<p class="meta-tag" style="margin-bottom:10px">原版命令速查，分类 / 搜索 / 收藏。</p>')+`
+  <div style="display:flex;gap:8px;margin-bottom:10px"><input class="input" style="width:240px" placeholder="搜索命令"/><select class="input" style="width:120px"><option>全部</option><option>玩家</option><option>世界</option><option>方块</option></select></div>
+  <div class="card" style="max-width:640px">
+    ${cmdRow('/gamemode','切换游戏模式','/gamemode creative @p')}
+    ${cmdRow('/give','给予物品','/give @p diamond 64')}
+    ${cmdRow('/tp','传送实体','/tp @p 0 64 0')}
+    ${cmdRow('/time','设置时间','/time set day')}
+  </div>`;
+}
+function cmdRow(n,d,s){return `<div style="padding:7px 0;border-bottom:1px solid var(--control-border)"><b style="color:var(--accent)">${n}</b><span class="meta-tag"> · ${d}</span><div class="meta-tag" style="margin-top:2px;font-family:Consolas,monospace">${s}</div></div>`;}
+function toolSkin(){
+  return panelTitle('皮肤编辑器','<p class="meta-tag" style="margin-bottom:10px">6 部位 × 6 面 = 36 面独立编辑，网格辅助，对称绘制，实时预览 64×64 展开图。</p>')+`
+  <div style="display:flex;gap:20px;flex-wrap:wrap">
+    <div class="skin-grid">
+      ${'<div class="filled"></div>'.repeat(8)+'<div></div>'.repeat(28)}
+    </div>
+    <div>
+      <div class="card" style="width:180px;height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px">
+        <span style="color:var(--accent)">${icon('skin',48)}</span>
+        <span class="meta-tag">64×64 展开图预览</span>
+      </div>
+      <button class="btn primary sm" style="margin-top:10px">导出 PNG</button>
+    </div>
+  </div>`;
+}
+function toolShortcut(){
+  return panelTitle('快捷方式生成器')+`
+  <div class="card" style="max-width:520px">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="meta-tag" style="width:70px">名称：</span><input class="input" style="width:220px" value="MCLCS"/></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span class="meta-tag" style="width:70px">图标：</span><input class="input" style="width:220px" placeholder=".ico 路径"/><button class="btn sm" style="margin-left:8px">浏览</button></div>
+    <button class="btn primary sm">生成桌面快捷方式</button>
+  </div>`;
+}
+function toolAfk(){
+  return panelTitle('挂机工作流')+`
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <div style="flex:1;min-width:320px">
+      <div style="display:flex;gap:4px;margin-bottom:6px"><button class="btn sm">+ 添加动作</button><button class="btn sm">删除</button><button class="btn sm">↑</button><button class="btn sm">↓</button></div>
+      <div class="console" style="height:200px">
+        <div class="line"><span style="background:var(--accent);color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-right:8px">F</span>帧率限制 10</div>
+        <div class="line"><span style="background:var(--accent);color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-right:8px">D</span>渲染距离 4</div>
+        <div class="line"><span style="background:var(--accent);color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-right:8px">L</span>视角朝向 3</div>
+        <div class="line"><span style="background:var(--accent);color:#fff;font-size:10px;padding:1px 5px;border-radius:3px;margin-right:8px">*</span>循环 0（无限）</div>
+      </div>
+      <div class="card" style="margin-top:8px;padding:10px"><b>Token：</b><span style="color:var(--accent);font-size:12px">v1F10;D4;L3;*0</span><button class="btn sm" style="margin-left:12px">复制</button></div>
+    </div>
+    <div style="width:220px;flex:0 0 220px">
+      <b>保存工作流</b><input class="input" style="width:100%;margin-top:6px" placeholder="名称"/><button class="btn primary sm" style="margin-top:6px">保存</button>
+      <div style="margin-top:16px"><b>导入 Token</b><textarea class="input" style="width:100%;height:48px;margin-top:6px">v1F10;D4;L3;*0</textarea><button class="btn primary sm" style="margin-top:6px">从 Token 导入</button></div>
+    </div>
+  </div>`;
+}
+function toolAi(){
+  return panelTitle('AI 助手')+`
+  <div style="display:flex;gap:12px">
+    <div style="width:140px;flex:0 0 140px;background:var(--control-bg);border:1px solid var(--control-border);border-radius:8px;padding:6px">
+      ${aiFn('💥','崩溃解读',true)}${aiFn('⭐','推荐理由')}${aiFn('🌐','Mod 翻译')}${aiFn('🎤','语音助手')}${aiFn('📊','年度总结')}
+    </div>
+    <div style="flex:1;min-width:320px">
+      <textarea class="input" style="width:100%;height:180px" placeholder="粘贴崩溃报告或输入 Mod 描述…">java.lang.NullPointerException
+  at com.example.mod.init</textarea>
+      <button class="btn primary" style="margin-top:10px;padding:6px 16px">解读</button>
+      <div class="card" style="margin-top:12px"><b>AI 解读</b><p class="meta-tag" style="margin-top:6px">该崩溃由示例 Mod 初始化阶段的空指针引起，建议更新或移除该 Mod 后重试。</p></div>
+    </div>
+  </div>`;
+}
+function aiFn(e,l,on){return `<div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 6px;border-radius:6px;cursor:pointer;${on?'background:var(--control-hover)':''}"><span style="font-size:14px">${e}</span><span style="font-size:12px">${l}</span></div>`;}
+
+/* ============ 设置页 ============ */
+function settingsPage(){
+  const P={
+    general:sGeneral(),launch:sLaunch(),download:sDownload(),recommend:sRecommend(),
+    account:sAccount(),ai:sAi(),appearance:sAppearance(),about:sAbout()
+  };
+  return `<div class="page-pad" style="max-width:760px">${P[selectedSide]||''}<button class="btn primary" style="margin-top:18px">保存设置</button><span class="meta-tag" style="margin-left:10px">已保存</span></div>`;
+}
+function sw(on=true){return `<button class="switch ${on?'on':''}" onclick="this.classList.toggle('on')"></button>`;}
+function sGeneral(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">通用</h3>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">语言</span><select class="input" style="width:140px"><option>简体中文</option><option>English</option></select></div>
+  <div class="switch-row">${sw()}<span class="txt">开机自启</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">最小化到托盘</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">动画效果</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">游戏启动时音乐自动降音量</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">文件变更检测</span></div>`;
+}
+function sLaunch(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">启动</h3>
+  <div class="switch-row" style="flex-wrap:wrap"><span class="meta-tag" style="width:90px">游戏目录</span><input class="input" style="width:300px" value="C:\\Users\\me\\.minecraft"/><button class="btn sm" style="margin-left:8px">浏览…</button><button class="btn sm" style="margin-left:6px">打开</button></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">Java 路径</span><input class="input" style="width:300px" value="C:\\Program Files\\Eclipse Adoptium\\jdk-21\\bin\\javaw.exe"/><button class="btn sm" style="margin-left:8px">自动检测</button></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">内存(MB)</span><input class="input" style="width:120px" value="4096"/></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">离线用户名</span><input class="input" style="width:200px" value="Steve"/></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">JVM 参数</span><input class="input" style="width:300px" value="-XX:+UseG1GC"/></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">崩溃自动修复</span><select class="input" style="width:150px"><option>始终开启</option><option>每次询问</option><option>始终拒绝</option></select></div>
+  <div class="switch-row" style="flex-wrap:wrap"><span class="meta-tag" style="width:90px">Java 源</span><select class="input" style="width:150px"><option>自动</option><option>Temurin</option><option>Oracle</option></select><span class="meta-tag" style="width:70px;margin-left:12px">缺失前置</span><select class="input" style="width:120px"><option>开启</option><option>询问</option><option>关闭</option></select></div>
+  <div class="switch-row">${sw(true)}<span class="txt">启动预热</span></div>
+  <div class="switch-row">${sw()}<span class="txt">HUD 叠加显示</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">启动前存档兼容性检测</span></div>`;
+}
+function sDownload(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">下载</h3>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">下载源优先</span><select class="input" style="width:150px"><option>镜像优先</option><option>官方优先</option></select></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">最大并发下载</span><input class="input" style="width:80px" value="4"/></div>
+  <div class="switch-row">${sw(true)}<span class="txt">进服时自动修复资源包问题</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">服务器资源包缓存</span></div>`;
+}
+function sRecommend(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">推荐</h3>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">推荐总开关</span><select class="input" style="width:150px"><option>启用推荐</option><option>仅本地</option><option>禁用</option></select></div>
+  <b style="display:block;margin:12px 0 6px">玩法偏好</b>
+  <div style="display:flex;flex-wrap:wrap;gap:0 18px">
+    <div class="switch-row">${sw(true)}<span class="txt">生存</span></div>
+    <div class="switch-row">${sw()}<span class="txt">创造</span></div>
+    <div class="switch-row">${sw(true)}<span class="txt">光影</span></div>
+    <div class="switch-row">${sw(true)}<span class="txt">科技</span></div>
+    <div class="switch-row">${sw()}<span class="txt">魔法</span></div>
+    <div class="switch-row">${sw()}<span class="txt">探索</span></div>
+  </div>`;
+}
+function sAccount(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">账号管理</h3>
+  <div class="console" style="height:140px">
+    <div class="line ok">Steve <span class="meta-tag">· 离线</span></div>
+    <div class="line">Player123 <span class="meta-tag">· Microsoft</span></div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:8px"><button class="btn sm">设为当前</button><button class="btn sm">删除</button><button class="btn sm">登录微软</button></div>
+  <div style="display:flex;gap:8px;margin-top:8px"><input class="input" style="width:160px" placeholder="玩家名"/><button class="btn sm">添加离线账号</button></div>
+  <b style="display:block;margin:14px 0 6px">Authlib-Injector 账号</b>
+  <div style="display:flex;gap:8px"><input class="input" style="width:220px" placeholder="服务器地址"/><input class="input" style="width:140px" placeholder="邮箱"/><input class="input" style="width:120px" type="password" placeholder="密码"/><button class="btn sm">添加</button></div>`;
+}
+function sAi(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">AI 助手</h3>
+  <div class="switch-row">${sw()}<span class="txt">启用 AI 助手</span></div>
+  <p class="meta-tag" style="margin:6px 0">开启后可选本地部署或外部 API，用于崩溃分析、Mod 推荐翻译等场景。</p>
+  <div style="margin:12px 0"><b>部署方式</b>
+    <div style="margin:6px 0"><label style="display:flex;align-items:center;gap:8px"><input type="radio" name="ai" checked/>外部 API（填 Key 即用，零下载、零占用）</label></div>
+    <div style="margin:6px 0"><label style="display:flex;align-items:center;gap:8px"><input type="radio" name="ai"/>本地部署（自动安装 Ollama + 轻量模型，约 1-3 GB 磁盘）</label></div>
+  </div>
+  <b>外部 API</b>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">API 地址</span><input class="input" style="width:320px" value="https://api.openai.com/v1"/></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">API Key</span><input class="input" style="width:320px" type="password" value="sk-****"/></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">模型</span><input class="input" style="width:160px" value="gpt-4o-mini"/></div>
+  <button class="btn sm" style="margin:6px 0 0 90px">测试连接</button>
+  <div style="margin:14px 0"><b>AI 功能</b>
+    <div class="switch-row">${sw(true)}<span class="txt">崩溃解读</span></div>
+    <div class="switch-row">${sw(true)}<span class="txt">推荐理由生成</span></div>
+    <div class="switch-row">${sw(true)}<span class="txt">Mod 描述翻译</span></div>
+  </div>`;
+}
+function sAppearance(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">外观</h3>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">主题</span><select class="input" style="width:120px" id="themeSel" onchange="setTheme(this.value)"><option value="dark" selected>暗色</option><option value="light">亮色</option></select></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">主题色</span><input class="input" style="width:100px" value="#3B82F6"/><span style="width:24px;height:24px;border-radius:4px;background:#3B82F6;margin-left:8px"></span></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">背景图片</span><input class="input" style="width:240px" placeholder="图片路径"/><button class="btn sm" style="margin-left:8px">浏览</button></div>
+  <div class="switch-row"><span class="meta-tag" style="width:90px">字体缩放</span><input type="range" min="0.8" max="1.5" step="0.1" value="1.0" style="width:200px"/><span class="meta-tag" style="margin-left:8px">1.0x</span></div>
+  <div class="switch-row">${sw(true)}<span class="txt">适配高分辨率屏幕（启用 2x 图标）</span></div>
+  <b style="display:block;margin:14px 0 8px">索引贴颜色（四色独立设置）</b>
+  <div style="display:flex;flex-wrap:wrap;gap:12px">
+    ${tabColorPicker('game','游戏标签')}${tabColorPicker('download','下载标签')}${tabColorPicker('toolbox','工具箱标签')}${tabColorPicker('settings','设置标签')}
+  </div>`;
+}
+function tabColorPicker(kind,label){
+  return `<div style="display:flex;align-items:center;gap:8px"><span class="meta-tag">${label}</span><input type="color" value="${tabColors[kind]}" onchange="setTabColor('${kind}',this.value)"/></div>`;
+}
+function sAbout(){
+  return `<h3 style="font-size:16px;font-weight:700;margin-bottom:10px">关于</h3>
+  <div style="margin:6px 0">版本 <b>2.5.4</b></div>
+  <div class="switch-row">${sw(true)}<span class="txt">启动时自动检查更新</span></div>
+  <button class="btn sm" style="margin-top:8px">检查更新</button>
+  <div class="meta-tag" style="margin-top:12px;color:var(--accent);cursor:pointer">开源许可 · CNB 仓库（cnb.cool/RLRS-Studio/MCLCS-WPF）</div>`;
+}
+function setTheme(t){document.documentElement.setAttribute('data-theme',t);}
+function setTabColor(kind,hex){
+  tabColors[kind]=hex.toUpperCase();
+  renderTabs();
+  if(kind===currentTab){
+    document.getElementById('titlebar').style.setProperty('--titlebar-color',hex);
+    document.getElementById('pageTint').style.background=`linear-gradient(180deg, ${hex} 0%, ${hex} 10%, var(--window-bg) 55%, var(--window-bg) 100%)`;
+  }
+  document.getElementById('sidebar').style.setProperty('--sidebar-indicator',tabColors[currentTab]);
+}
+
+/* ============ 状态栏 ============ */
+function renderStatus(){
+  document.getElementById('statusbar').innerHTML=`
+    <span>Java: 21.0.7 (Temurin)</span>
+    <span>已安装 3 个版本</span>
+    <span>运行 1 个实例</span>
+    <div class="sbar-progress"><div style="width:12%"></div></div>
+    <span>下载中 12%</span>
+    <div class="music-mini">
+      <button title="播放/暂停">${icon('pause',12)}</button>
+      <span style="max-width:160px;overflow:hidden;text-overflow:ellipsis">C418 - Sweden</span>
+      <button title="展开播放列表" onclick="toggleMusicList()">${icon('unfold',12)}</button>
+    </div>
+    <span class="spacer"></span>
+    <span class="dot green"></span><span>网络正常</span>`;
+}
+
+/* ============ 弹窗与通知 ============ */
+function openMapDetail(title){
+  const el=document.getElementById('modalRoot');
+  el.innerHTML=`<div class="scrim" onclick="if(event.target===this)closeModal()"><div class="modal">
+    <div style="display:flex;align-items:center;justify-content:space-between"><h4>${title}</h4><button class="ibtn" onclick="closeModal()">${icon('close',14)}</button></div>
+    <div style="height:200px;border-radius:8px;background:linear-gradient(135deg,var(--control-hover),var(--control-bg));display:flex;align-items:center;justify-content:center;color:var(--secondary-fg);margin:12px 0">${icon('map',56)}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px 14px"><span class="meta-tag">作者 <b>SkyBuilder</b></span><span class="meta-tag">浏览 1.2 万</span><span class="meta-tag">点赞 3.4 千</span><span class="meta-tag">评分 4.8</span></div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:4px"><span class="meta-tag">版本 1.20+</span><span class="meta-tag">分类 冒险</span></div>
+    <p class="meta-tag" style="margin-top:12px;line-height:20px">一座漂浮在云端之上的冒险地图，包含隐藏宝箱、解谜机关与 BOSS 战。下载后自动解压至 saves 目录。</p>
+    <div class="btnrow">
+      <button class="btn ghost" onclick="closeModal()">地图站页面</button>
+      <button class="btn" onclick="closeModal()">附加资源</button>
+      <button class="btn primary" onclick="toast('已加入下载队列','天空之城 · 地图', 'accent');closeModal()">下载到存档</button>
+    </div>
+  </div></div>`;
+}
+function closeModal(){document.getElementById('modalRoot').innerHTML='';}
+function toggleQueuePopup(){
+  const el=document.getElementById('modalRoot');
+  if(el.innerHTML){closeModal();return;}
+  el.innerHTML=`<div class="scrim" style="justify-content:flex-end;align-items:flex-start;padding:64px 20px 0 0" onclick="if(event.target===this)closeModal()">
+    <div class="modal" style="width:420px;max-width:90vw">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><h4 style="margin:0">下载队列</h4><span class="meta-tag">共 2 项</span><button class="btn primary sm">开始下载队列</button></div>
+      ${qItem('Sodium 0.5.8 (Fabric 1.21.4)','下载中 42%',42)}
+      ${qItem('BSL Shaders v8.3','等待中',0)}
+    </div>
+  </div>`;
+}
+function qItem(t,s,p){return `<div style="padding:8px 0;border-bottom:1px solid var(--control-border)"><div style="font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${t}</div><div class="sbar-progress" style="width:100%;height:8px;margin:4px 0"><div style="width:${p}%"></div></div><div style="display:flex;justify-content:space-between"><span class="meta-tag">${s}</span><span><button class="btn sm">暂停</button> <button class="btn sm">取消</button></span></div></div>`;}
+function toggleMusicList(){
+  const el=document.getElementById('modalRoot');
+  if(el.innerHTML){closeModal();return;}
+  el.innerHTML=`<div class="scrim" style="justify-content:flex-end;align-items:flex-end;padding:0 16px 40px 0" onclick="if(event.target===this)closeModal()">
+    <div class="modal" style="width:320px">
+      <h4 style="margin-bottom:6px">播放列表</h4>
+      <div class="console" style="height:200px">
+        <div class="line ok">C418 - Sweden</div><div class="line">C418 - Wet Hands</div><div class="line">Lena Raine - Pigstep</div><div class="line">C418 - Subwoofer Lullaby</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;margin-top:8px">
+        <button class="ibtn">${icon('previous',12)}</button><button class="ibtn">${icon('pause',12)}</button><button class="ibtn">${icon('next',12)}</button>
+        <span class="meta-tag" style="margin-left:6px">55%</span><div class="sbar-progress" style="width:90px"><div style="width:55%"></div></div>
+      </div>
+    </div>
+  </div>`;
+}
+function toast(title,msg,accent){
+  const el=document.getElementById('toasts');
+  const t=document.createElement('div');t.className='toast';
+  t.innerHTML=`<span class="bar" style="background:${accent==='danger'?'#E74C3C':'var(--accent)'}"></span><div class="body"><b>${title}</b><p>${msg}</p></div><button class="x" onclick="this.parentElement.remove()">✕</button>`;
+  el.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300)},5000);
+}
+
+/* ============ 全局搜索 ============ */
+function initSearch(){
+  document.getElementById('gsearch').addEventListener('keydown',e=>{
+    if(e.key!=='Enter')return;
+    const v=e.target.value.trim(); if(!v)return;
+    const lower=v.toLowerCase();
+    const kwMap=[['appearance',['主题','外观','背景','字体','颜色']],['account',['账号','账户','登录','微软','microsoft']],['launch',['启动','内存','java','路径']],['download',['下载','源','镜像','并发']],['recommend',['推荐']],['ai',['ai','助手','ollama']],['general',['语言','自启','托盘','通用']],['about',['关于','更新','版本']]];
+    let target=null;
+    for(const [id,keys] of kwMap){if(keys.some(k=>lower.includes(k))){target=id;break;}}
+    if(target){ switchTab('settings'); selectedSide=target; renderSidebar(); renderPage(); }
+    else { switchTab('download'); selectedSide='mod'; renderSidebar(); renderPage(); }
+  });
+}
+
+/* ============ 事件绑定 ============ */
+function init(){
+  resetTabColors();
+  document.getElementById('titlebar').style.setProperty('--titlebar-color',tabColors.game);
+  document.getElementById('sidebar').style.setProperty('--sidebar-indicator',tabColors.game);
+  document.getElementById('pageTint').style.background=`linear-gradient(180deg, ${tabColors.game} 0%, ${tabColors.game} 10%, var(--window-bg) 55%, var(--window-bg) 100%)`;
+  renderTabs();
+  renderSidebar();
+  renderPage();
+  renderStatus();
+  document.getElementById('sidebar').addEventListener('mouseenter',sidebarHoverEnter);
+  document.getElementById('sidebar').addEventListener('mouseleave',sidebarHoverLeave);
+  document.getElementById('dlQueueBtn').addEventListener('click',toggleQueuePopup);
+  initSearch();
+  // 文件变更检测演示 Toast
+  setTimeout(()=>toast('文件变更检测','检测到 mods 目录新增 2 个文件，点击查看详情','accent'),1800);
+}
+init();
+</script>
+</body>
+</html>
