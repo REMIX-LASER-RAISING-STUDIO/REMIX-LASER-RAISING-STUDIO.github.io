@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>崩坏：星穹铁道 | 全角色·全光锥双池模拟器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #0a0f1e, #03060c);
+            font-family: 'Segoe UI', 'Poppins', 'Noto Sans CJK SC', system-ui, -apple-system, 'Microsoft YaHei', sans-serif;
+            padding: 20px;
+            color: #f0f3fa;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(2px 2px at 30% 40%, rgba(255,215,150,0.2) 1px, transparent 1px),
+                              radial-gradient(1px 1px at 70% 85%, rgba(210,180,240,0.2) 1px, transparent 1px);
+            background-size: 50px 50px, 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 200, 100, 0); }
+            50% { box-shadow: 0 0 30px 15px rgba(255, 200, 100, 0.6); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 200, 100, 0); }
+        }
+        .star5-flash {
+            animation: glowPulse 0.6s ease-out;
+        }
+
+        .detail-modal, .lc-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(12px);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+        .detail-modal.active, .lc-modal.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background: linear-gradient(145deg, #1e1a2f, #12101f);
+            border-radius: 48px;
+            max-width: 90vw;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 24px;
+            border: 1px solid #ffd966;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+        .modal-content h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #FFE6B0, #FFC78B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .detail-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .detail-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 24px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid;
+        }
+        /* 五星卡片强化金色 */
+        .detail-card.star-5-card strong {
+            color: #ffd966;
+        }
+        .detail-card.star-5-card {
+            border-left-color: #ffcc66;
+            background: rgba(255, 204, 102, 0.1);
+        }
+        /* 四星卡片紫色 */
+        .detail-card.star-4-card strong {
+            color: #d9b4ff;
+        }
+        .detail-card.star-4-card {
+            border-left-color: #b77cff;
+            background: rgba(183, 124, 255, 0.1);
+        }
+        /* 三星卡片灰色 */
+        .detail-card.star-3-card strong {
+            color: #9aa9b9;
+        }
+        .detail-card.star-3-card {
+            border-left-color: #5f7f9e;
+        }
+        .close-modal {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            background: #b87cff;
+            border: none;
+            padding: 10px;
+            border-radius: 40px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .toast-notify {
+            pointer-events: none;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        .title-section {
+            text-align: center;
+            margin-bottom: 30px;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 60px;
+            padding: 16px 24px;
+            border: 1px solid rgba(210, 180, 200, 0.3);
+        }
+        .title-section h1 {
+            font-size: 2rem;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #E6E9FF, #C0B9FF, #9F8EFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+        .card-pool {
+            flex: 2;
+            min-width: 280px;
+            background: rgba(15, 20, 35, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(210, 180, 255, 0.3);
+            padding: 20px;
+        }
+        .stats-panel {
+            flex: 1.2;
+            min-width: 260px;
+            background: rgba(15, 20, 35, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .up-character {
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(145deg, rgba(50, 35, 70, 0.6), rgba(20, 12, 40, 0.7));
+            border-radius: 28px;
+            padding: 16px;
+        }
+        .up-badge {
+            font-size: 0.8rem;
+            background: #ffb347;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            color: #1e1a2f;
+            font-weight: bold;
+        }
+        .up-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFE6B0, #FFC78B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .up-selector {
+            background: rgba(0, 0, 0, 0.45);
+            border-radius: 24px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+        .up-selector select {
+            width: 100%;
+            background: #2a2345;
+            border: 1px solid #9f8eff;
+            border-radius: 40px;
+            padding: 10px 16px;
+            color: #f0e6ff;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto !important;
+            appearance: menulist !important;
+            -webkit-appearance: menulist !important;
+        }
+        .counter-group {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+        .counter-card {
+            background: rgba(0,0,0,0.5);
+            border-radius: 24px;
+            padding: 12px;
+            flex: 1;
+            text-align: center;
+            border-left: 3px solid #b48cff;
+        }
+        .counter-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .counter-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f5cb5c;
+        }
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            font-weight: bold;
+            border-radius: 48px;
+            font-size: 1rem;
+            cursor: pointer;
+            background: linear-gradient(145deg, #2c2a4a, #1f1b38);
+            color: #e9e2ff;
+            border: 1px solid rgba(255,215,150,0.5);
+        }
+        .btn-primary {
+            background: linear-gradient(145deg, #b87cff, #8f5ae8);
+            color: white;
+        }
+        .btn-reset { background: #2a1f3a; }
+        .btn-sync { background: #1e3a4a; }
+        .history-section {
+            background: rgba(8, 12, 22, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .history-list {
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .history-item {
+            background: rgba(25, 30, 50, 0.7);
+            border-radius: 40px;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid;
+        }
+        .star-5 { border-left-color: #ffcc66; background: rgba(255, 204, 102, 0.1); }
+        .star-5 strong { color: #ffd966; }
+        .star-4 { border-left-color: #c98eff; background: rgba(183, 124, 255, 0.1); }
+        .star-4 strong { color: #d9b4ff; }
+        .star-3 { border-left-color: #5f7f9e; }
+        .star-3 strong { color: #9aa9b9; }
+        .item-detail {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        .total-stats {
+            display: flex;
+            justify-content: space-between;
+            background: #00000040;
+            border-radius: 28px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .stat-num {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: #f3cd81;
+        }
+        .collection-section {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 24px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+        .collection-title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #7f6b9e;
+            padding-bottom: 5px;
+        }
+        .collection-list {
+            max-height: 200px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .collection-item {
+            background: rgba(25, 30, 50, 0.6);
+            border-radius: 20px;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            border-left: 3px solid #ffcc66;
+        }
+        .collection-name {
+            font-weight: bold;
+            color: #ffecb3;
+        }
+        .collection-detail {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+        .collection-empty {
+            text-align: center;
+            opacity: 0.5;
+            font-size: 0.75rem;
+            padding: 12px;
+        }
+        .badge-limited {
+            background: #ffb347;
+            color: #1e1a2f;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 20px;
+            margin-left: 6px;
+        }
+        .pity-status {
+            background: #2a2342;
+            border-radius: 20px;
+            padding: 8px;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 25px;
+            opacity: 0.5;
+        }
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            pointer-events: none;
+        }
+        .toast-notify {
+            position: relative;
+            top: auto;
+            left: auto;
+            transform: none;
+            white-space: nowrap;
+            margin: 0;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 修复 Edge 下拉框 */
+        .lc-select {
+            width: 100%;
+            background: #2a2345;
+            border: 1px solid #9f8eff;
+            border-radius: 40px;
+            padding: 10px 16px;
+            color: #f0e6ff;
+            font-weight: bold;
+            cursor: pointer;
+            pointer-events: auto !important;
+            appearance: menulist !important;
+            -webkit-appearance: menulist !important;
+        }
+        @media (max-width: 760px) {
+            .counter-value { font-size: 1.2rem; }
+            .up-name { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="title-section">
+        <h1>✨ 铭心之萃 · 光锥与星穹双界 ✨</h1>
+        <div style="font-size:0.8rem;">角色池 · 专属光锥池 | 五星全图鉴 52光锥精准收录 | 保底同步官方机制</div>
+    </div>
+
+    <!-- 角色抽取区域 -->
+    <div class="dashboard">
+        <div class="card-pool">
+            <div class="up-character">
+                <div class="up-badge">⭐ 角色跃迁 · 全UP角色库 ⭐</div>
+                <div class="up-name" id="currentUpName">银狼LV.999</div>
+                <div id="upDetail" style="font-size:0.75rem; margin-top:5px;">虚数 · 欢愉</div>
+            </div>
+            <div class="up-selector">
+                <label>🎯 选择任意UP角色（所有限定五星）</label>
+                <select id="upCharacterSelect"></select>
+            </div>
+            <div class="counter-group">
+                <div class="counter-card"><div class="counter-label">距上次⭐5</div><div class="counter-value" id="pity5Counter">0</div></div>
+                <div class="counter-card"><div class="counter-label">距上次⭐4+</div><div class="counter-value" id="pity4Counter">0</div></div>
+                <div class="counter-card"><div class="counter-label">大保底</div><div class="counter-value" id="guaranteeStatus">❌</div></div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" id="singlePullBtn">✨ 单抽</button>
+                <button class="btn btn-primary" id="tenPullBtn">🌟 十连</button>
+                <button class="btn btn-reset" id="resetBtn">♻️ 重置角色</button>
+            </div>
+        </div>
+        <div class="stats-panel">
+            <div style="font-size:1.1rem; font-weight:bold;">📊 拓荒履历（角色）</div>
+            <div class="total-stats">
+                <div>总抽数<br><span class="stat-num" id="totalPulls">0</span></div>
+                <div>⭐5<br><span class="stat-num" id="total5">0</span></div>
+                <div>⭐4<br><span class="stat-num" id="total4">0</span></div>
+            </div>
+            <div class="pity-status">💫 下次五星：<span id="nextFiveDesc">小保底 (50% UP)</span></div>
+            <div class="collection-section">
+                <div class="collection-title"><span>抽卡记录 ⭐5 (角色)</span></div>
+                <div id="fiveStarCollectionList" class="collection-list"><div class="collection-empty">✨ 尚未获得任何五星角色 ✨</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 光锥抽取区域 -->
+    <div class="dashboard">
+        <div class="card-pool">
+            <div class="up-character">
+                <div class="up-badge">⚡ 光锥跃迁 · 全UP光锥库 ⚡</div>
+                <div class="up-name" id="currentLcName">欢迎来到银河城</div>
+                <div id="lcUpDetail" style="font-size:0.75rem; margin-top:5px;">欢愉 · 限定光锥</div>
+            </div>
+            <div class="up-selector">
+                <label>🎯 选择UP光锥（59张五星全收录）</label>
+                <select id="lcUpSelect" class="lc-select"></select>
+            </div>
+            <div class="counter-group">
+                <div class="counter-card"><div class="counter-label">距上次⭐5光锥</div><div class="counter-value" id="lcPity5">0</div></div>
+                <div class="counter-card"><div class="counter-label">距上次⭐4光锥</div><div class="counter-value" id="lcPity4">0</div></div>
+                <div class="counter-card"><div class="counter-label">光锥大保底</div><div class="counter-value" id="lcGuaranteeStatus">❌</div></div>
+            </div>
+            <div class="button-group">
+                <button class="btn btn-primary" id="lcSingleBtn">📿 光锥单抽</button>
+                <button class="btn btn-primary" id="lcTenBtn">🌀 光锥十连</button>
+                <button class="btn btn-reset" id="lcResetBtn">🔄 重置光锥</button>
+            </div>
+        </div>
+        <div class="stats-panel">
+            <div style="font-size:1.1rem; font-weight:bold;">📊 光锥拓荒履历</div>
+            <div class="total-stats">
+                <div>总抽数<br><span class="stat-num" id="lcTotalPull">0</span></div>
+                <div>⭐5<br><span class="stat-num" id="lcTotal5">0</span></div>
+                <div>⭐4<br><span class="stat-num" id="lcTotal4">0</span></div>
+            </div>
+            <div class="pity-status">💫 下次五星：<span id="lcNextDesc">小保底 (75% UP)</span></div>
+            <div class="collection-section">
+                <div class="collection-title"><span>📖 光锥奇藏 · 五星收集图鉴 (52张)</span></div>
+                <div id="lcCollectionList" class="collection-list"><div class="collection-empty">✨ 尚未获得任何五星光锥 ✨</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 角色历史记录区 -->
+    <div class="history-section">
+        <div class="history-header" style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span>📜 角色跃迁记录 (含命途·属性)</span>
+            <button id="clearHistoryBtn" style="background:none; border:1px solid #7f6b9e; padding:4px 12px; border-radius:40px; color:#ddd; cursor:pointer;">清空记录</button>
+        </div>
+        <div class="history-list" id="historyList"><div style="text-align:center; opacity:0.6;">✨ 抽卡记录 ✨</div></div>
+    </div>
+
+    <!-- 光锥历史记录区 -->
+    <div class="history-section">
+        <div class="history-header" style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span>🎴 光锥跃迁记录 (含命途/星级)</span>
+            <button id="clearLcHistoryBtn" style="background:none; border:1px solid #7f6b9e; padding:4px 12px; border-radius:40px; color:#ddd; cursor:pointer;">清空记录</button>
+        </div>
+        <div class="history-list" id="lcHistoryList"><div style="text-align:center; opacity:0.6;">✨ 光锥抽卡记录 ✨</div></div>
+    </div>
+
+    <footer>※ 光锥池独立: 5星概率0.8% / 74抽后软保底 / 小保底75%不歪, 大保底必UP | 五星光锥共计52张(常驻7+限定45) 完全真实数据 ※</footer>
+</div>
+
+<!-- 共用模态框 -->
+<div id="detailModal" class="detail-modal"><div class="modal-content"><h3 id="modalTitle">🎉 跃迁结果</h3><div id="modalDetailList" class="detail-list"></div><button class="close-modal" onclick="closeModal()">关闭</button></div></div>
+<div id="lcModal" class="lc-modal"><div class="modal-content"><h3 id="lcModalTitle">✨ 光锥跃迁结果</h3><div id="lcModalList" class="detail-list"></div><button class="close-modal" onclick="closeLcModal()">关闭</button></div></div>
+
+<script>
+    let isSyncing = false;
+    // ======================= 角色数据 =======================
+    const STANDARD_5_STARS = [
+    { name:"姬子",element:"火",path:"智识"},
+    { name:"瓦尔特·杨",element:"虚数",path:"虚无"},
+    { name:"布洛妮娅",element:"风",path:"同谐"},
+    { name:"杰帕德",element:"冰",path:"存护"},
+    { name:"克拉拉",element:"物理",path:"毁灭"},
+    { name:"彦卿",element:"冰",path:"巡猎"},
+    { name:"白露",element:"雷",path:"丰饶"}];
+    const OFFICIAL_FOUR_STARS = [
+    { name:"停云",element:"雷",path:"同谐"},
+    { name:"青雀",element:"量子",path:"智识"},
+    { name:"希露瓦",element:"雷",path:"智识"},
+    { name:"三月七",element:"冰",path:"存护"},
+    { name:"丹恒",element:"风",path:"巡猎"},
+    { name:"佩拉",element:"冰",path:"虚无"},
+    { name:"艾丝妲",element:"火",path:"同谐"},
+    { name:"虎克",element:"火",path:"毁灭"},
+    { name:"娜塔莎",element:"物理",path:"丰饶"},
+    { name:"桑博",element:"风",path:"虚无"},
+    { name:"卢卡",element:"物理",path:"虚无"},
+    { name:"驭空",element:"虚数",path:"同谐"},
+    { name:"阿兰",element:"雷",path:"毁灭"},
+    { name:"桂乃芬",element:"火",path:"虚无"},
+    { name:"玲可",element:"量子",path:"丰饶"},
+    { name:"寒鸦",element:"物理",path:"同谐"},
+    { name:"雪衣",element:"量子",path:"毁灭"},
+    { name:"米沙",element:"冰",path:"毁灭"},
+    { name:"加拉赫",element:"火",path:"丰饶"},
+    { name:"貊泽",element:"雷",path:"巡猎"},
+    { name:"素裳",element:"物理",path:"巡猎"}];
+    const THREE_STARS_LIGHT_CONES = ["锋镝","轮契","嗤笑","残泪","焚影","溯忆","蕃息","琥珀","戍御","开疆","灵钥","智库","睿见","天倾","俱殁","离弦","相抗","嘉果","物穰","渊环","幽邃","匿影","齐颂","调和","乐圮"];
+    const ALL_LIMITED_5_STARS = [
+  { "name": "希儿", "element": "量子", "path": "巡猎" },
+  { "name": "景元", "element": "雷", "path": "智识" },
+  { "name": "银狼", "element": "量子", "path": "虚无" },
+  { "name": "罗刹", "element": "虚数", "path": "丰饶" },
+  { "name": "刃", "element": "风", "path": "毁灭" },
+  { "name": "卡芙卡", "element": "雷", "path": "虚无" },
+  { "name": "丹恒·饮月", "element": "虚数", "path": "毁灭" },
+  { "name": "符玄", "element": "量子", "path": "存护" },
+  { "name": "镜流", "element": "冰", "path": "毁灭" },
+  { "name": "托帕&账账", "element": "火", "path": "巡猎" },
+  { "name": "藿藿", "element": "风", "path": "丰饶" },
+  { "name": "银枝", "element": "物理", "path": "智识" },
+  { "name": "阮·梅", "element": "冰", "path": "同谐" },
+  { "name": "真理医生", "element": "虚数", "path": "巡猎" },
+  { "name": "黑天鹅", "element": "风", "path": "虚无" },
+  { "name": "花火", "element": "量子", "path": "同谐" },
+  { "name": "黄泉", "element": "雷", "path": "虚无" },
+  { "name": "砂金", "element": "虚数", "path": "存护" },
+  { "name": "知更鸟", "element": "物理", "path": "同谐" },
+  { "name": "波提欧", "element": "物理", "path": "巡猎" },
+  { "name": "流萤", "element": "火", "path": "毁灭" },
+  { "name": "翡翠", "element": "量子", "path": "智识" },
+  { "name": "云璃", "element": "物理", "path": "毁灭" },
+  { "name": "椒丘", "element": "火", "path": "虚无" },
+  { "name": "飞霄", "element": "风", "path": "巡猎" },
+  { "name": "灵砂", "element": "火", "path": "丰饶" },
+  { "name": "乱破", "element": "虚数", "path": "智识" },
+  { "name": "星期日", "element": "虚数", "path": "同谐" },
+  { "name": "忘归人", "element": "火", "path": "虚无" },
+  { "name": "大黑塔", "element": "冰", "path": "智识" },
+  { "name": "阿格莱雅", "element": "雷", "path": "记忆" },
+  { "name": "缇宝", "element": "量子", "path": "同谐" },
+  { "name": "万敌", "element": "虚数", "path": "毁灭" },
+  { "name": "遐蝶", "element": "量子", "path": "记忆" },
+  { "name": "那刻夏", "element": "风", "path": "智识" },
+  { "name": "风堇", "element": "风", "path": "记忆" },
+  { "name": "赛飞儿", "element": "量子", "path": "虚无" },
+  { "name": "白厄", "element": "物理", "path": "毁灭" },
+  { "name": "Saber", "element": "风", "path": "毁灭" },
+  { "name": "Archer", "element": "量子", "path": "巡猎" },
+  { "name": "海瑟音", "element": "物理", "path": "虚无" },
+  { "name": "刻律德拉", "element": "风", "path": "同谐" },
+  { "name": "长夜月", "element": "冰", "path": "记忆" },
+  { "name": "丹恒·腾荒", "element": "物理", "path": "存护" },
+  { "name": "昔涟", "element": "冰", "path": "记忆" },
+  { "name": "大丽花", "element": "火", "path": "虚无" },
+  { "name": "爻光", "element": "物理", "path": "欢愉" },
+  { "name": "火花", "element": "火", "path": "欢愉" },
+  { "name": "银狼LV.999", "element": "虚数", "path": "欢愉" },
+  { "name": "绯英", "element": "物理", "path": "欢愉" },
+  { "name": "不死途", "element": "雷", "path": "巡猎" },
+  { "name": "千冶·刃", "element": "火", "path": "虚无" }];
+    
+    // ======================= 光锥数据 =======================
+    const STANDARD_LC = [
+        { name:"银河铁道之夜", path:"智识", isLimited:false },
+        { name:"但战斗还未结束", path:"同谐", isLimited:false },
+        { name:"时节不居", path:"丰饶", isLimited:false },
+        { name:"以世界之名", path:"虚无", isLimited:false },
+        { name:"制胜的瞬间", path:"存护", isLimited:false },
+        { name:"如泥酣眠", path:"巡猎", isLimited:false },
+        { name:"无可取代的东西", path:"毁灭", isLimited:false }];
+    const LIMITED_LC_MAP = [
+        { name:"于夜色中", path:"巡猎" },{ name:"拂晓之前", path:"智识" },{ name:"雨一直下", path:"虚无" },{ name:"棺的回响", path:"丰饶" },{ name:"到不了的彼岸", path:"毁灭" },
+        { name:"只需等待", path:"虚无" },{ name:"比阳光更明亮的", path:"毁灭" },{ name:"她已闭上双眼", path:"存护" },{ name:"此身为剑", path:"毁灭" },{ name:"烦恼着，幸福着", path:"巡猎" },
+        { name:"惊魂夜", path:"丰饶" },{ name:"片刻，留在眼底", path:"智识" },{ name:"镜中故我", path:"同谐" },{ name:"纯粹思维的洗礼", path:"巡猎" },{ name:"重塑时光之忆", path:"虚无" },
+        { name:"游戏尘寰", path:"同谐" },{ name:"行于流逝的岸", path:"虚无" },{ name:"命运从未公平", path:"存护" },{ name:"夜色流光溢彩", path:"同谐" },{ name:"驶向第二次生命", path:"巡猎" },
+        { name:"梦应归于何处", path:"毁灭" },{ name:"偏偏希望无价", path:"智识"},{ name:"落日时起舞", path:"毁灭" },{ name:"那无数个春天", path:"虚无" },{ name:"我将，巡征追猎", path:"巡猎" },
+        { name:"唯有香如故", path:"丰饶" },{ name:"缭乱忍法帖", path:"智识" },{ name:"回到大地的飞行", path:"同谐" },{ name:"长路终有归途", path:"虚无" },{ name:"向着不可追问处", path:"智识" },
+        { name:"将光阴织成黄金", path:"记忆" },{ name:"如果时间是一朵花", path:"同谐" },{ name:"血火啊，燃烧前路", path:"毁灭" },{ name:"让告别，更美一些", path:"记忆" },{ name:"生命当付之一炬", path:"智识" },
+        { name:"愿虹光永驻天空", path:"记忆" },{ name:"谎言在空中飘荡", path:"虚无" },{ name:"黎明恰如此燃烧", path:"毁灭" },{ name:"没有回报的加冕", path:"毁灭" },{ name:"理想燃烧的地狱", path:"巡猎" },
+        { name:"海洋为何而歌", path:"虚无" },{ name:"金血铭刻的时代", path:"同谐" },{ name:"致长夜的星光", path:"记忆" },{ name:"纵然山河万程", path:"存护" },{ name:"爱如此刻永恒", path:"记忆" },
+        { name:"勿忘她的火焰", path:"虚无" },{ name:"当她决定看见", path:"欢愉" },{ name:"花花世界迷人眼", path:"欢愉" },{ name:"欢迎来到银河城", path:"欢愉" },{ name:"邂逅于下一个花季", path:"欢愉" },
+        { name:"一场谎言的终幕", path:"巡猎" },{ name:"灼尽炼狱的新骸", path:"虚无" }];
+    const ALL_FIVE_STAR_LIGHT_CONES = [...STANDARD_LC, ...LIMITED_LC_MAP];
+    const FOUR_STAR_LC = [
+        { name:"晚安与睡颜", path:"虚无" },{ name:"决心如汗珠般闪耀", path:"虚无" },{ name:"舞！舞！舞！", path:"同谐" },{ name:"镂月裁云之意", path:"同谐" },
+        { name:"天才们的休憩", path:"智识" },{ name:"秘密誓心", path:"毁灭" },{ name:"在蓝天下", path:"毁灭" },{ name:"余生的第一天", path:"存护" },
+        { name:"这就是我啦！", path:"存护" },{ name:"一场术后对话", path:"丰饶" },{ name:"同一种心情", path:"丰饶" },{ name:"唯有沉默", path:"巡猎" },
+        { name:"论剑", path:"巡猎" },{ name:"猎物的视线", path:"虚无" },{ name:"记忆中的模样", path:"记忆" },{ name:"芳华待灼", path:"记忆" }];
+    
+    // ========== 角色抽卡逻辑 ==========
+    let pity5 = 0, pity4 = 0, guaranteeUp = false;
+    let totalPullCount = 0, total5Count = 0, total4Count = 0;
+    let historyRecords = [];
+    let collectedFiveStars = new Map();
+    let currentUpCharacter = { name:"银狼LV.999", element:"虚数", path:"欢愉" };
+    
+    function addToCollectedFiveStars(char){ let key=char.name; let isLimited=ALL_LIMITED_5_STARS.some(l=>l.name===char.name); let ex=collectedFiveStars.get(key); if(ex){ex.count++;collectedFiveStars.set(key,ex);}else{collectedFiveStars.set(key,{...char,count:1,isLimited});} renderCollected(); }
+    function renderCollected(){ let div=document.getElementById('fiveStarCollectionList'); if(collectedFiveStars.size===0){div.innerHTML='<div class="collection-empty">✨ 尚未获得任何五星角色 ✨</div>';return;} let arr=Array.from(collectedFiveStars.values()).sort((a,b)=>a.name.localeCompare(b.name)); div.innerHTML=arr.map(s=>`<div class="collection-item"><div><span class="collection-name">${s.name}</span>${s.isLimited?'<span class="badge-limited">限定</span>':'<span class="badge-limited" style="background:#5f7f9e;">常驻</span>'}<div class="collection-detail">${s.element}·${s.path}</div></div><div>✖${s.count}</div></div>`).join('');}
+    function updateRoleUI(){ document.getElementById('pity5Counter').innerText=pity5; document.getElementById('pity4Counter').innerText=pity4; document.getElementById('guaranteeStatus').innerText=guaranteeUp?"⭐大保底":"⚖️小保底"; document.getElementById('nextFiveDesc').innerText=guaranteeUp?`大保底：必定「${currentUpCharacter.name}」`:`小保底 50% 「${currentUpCharacter.name}」`; document.getElementById('totalPulls').innerText=totalPullCount; document.getElementById('total5').innerText=total5Count; document.getElementById('total4').innerText=total4Count; }
+    function renderHistoryRole(){ let cont=document.getElementById('historyList'); if(historyRecords.length===0){cont.innerHTML='<div style="text-align:center;opacity:0.6;">✨ 抽卡记录 ✨</div>';return;} cont.innerHTML=historyRecords.map(rec=>`<div class="history-item ${rec.star===5?'star-5':(rec.star===4?'star-4':'star-3')}"><div><strong>${rec.name}</strong>${rec.isUp?' ✨UP':''}<br><span class="item-detail">${rec.element||'光锥'}·${rec.path||'三星'}</span></div><div>${rec.star===5?'⭐5':(rec.star===4?'💜4':'🔵3')}</div></div>`).join('');}
+    function performCharacterPull(){ let isFiveStar=false; if(pity5>=89) isFiveStar=true; else{ let prob=0.006; if(pity5>=73){ let inc=(pity5-72)*0.065; prob=Math.min(0.98,0.006+inc); if(pity5===89) prob=1;} if(Math.random()<prob) isFiveStar=true;} let result; if(isFiveStar){ let isUp=guaranteeUp?true:(Math.random()<0.5); let charData; if(isUp){charData={name:currentUpCharacter.name,element:currentUpCharacter.element,path:currentUpCharacter.path,isUp:true}; guaranteeUp=false;}else{let idx=Math.floor(Math.random()*STANDARD_5_STARS.length); let std=STANDARD_5_STARS[idx]; charData={name:std.name,element:std.element,path:std.path,isUp:false}; guaranteeUp=true;} result={...charData,star:5}; addToCollectedFiveStars({name:result.name,element:result.element,path:result.path}); pity5=0; total5Count++; pity4=0;}else{ let forceFour=(pity4>=9); let isFour=forceFour?true:(Math.random()<0.051); if(isFour){ let idx=Math.floor(Math.random()*OFFICIAL_FOUR_STARS.length); let four=OFFICIAL_FOUR_STARS[idx]; result={name:four.name,element:four.element,path:four.path,star:4,isUp:false}; total4Count++; pity4=0;}else{ let idx=Math.floor(Math.random()*THREE_STARS_LIGHT_CONES.length); result={name:THREE_STARS_LIGHT_CONES[idx],element:"光锥",path:"三星",star:3,isUp:false}; pity4++;} pity5++;} totalPullCount++; return result;}
+    function addCharRecord(r){ historyRecords.unshift(r); if(historyRecords.length>150) historyRecords.pop(); renderHistoryRole(); updateRoleUI(); showToast(`${r.star}★ · ${r.name}${r.isUp?'(UP)':''}`,r.star); if(r.star===5) document.body.classList.add('star5-flash'),setTimeout(()=>document.body.classList.remove('star5-flash'),600);}
+    
+    // ========== 光锥抽卡逻辑 ==========
+    let lcPity5 = 0, lcPity4 = 0, lcGuaranteeUp = false;
+    let lcTotalPull = 0, lcTotal5 = 0, lcTotal4 = 0;
+    let lcHistory = [];
+    let collectedLC = new Map();
+    let currentUpLightCone = { name: "欢迎来到银河城", path: "欢愉" };
+    
+    function renderLcCollection(){ let div=document.getElementById('lcCollectionList'); if(collectedLC.size===0){div.innerHTML='<div class="collection-empty">✨ 未获得五星光锥 ✨</div>';return;} let arr=Array.from(collectedLC.values()).sort((a,b)=>a.name.localeCompare(b.name)); div.innerHTML=arr.map(l=>`<div class="collection-item"><div><span class="collection-name">${l.name}</span>${l.isLimited?'<span class="badge-limited">限定</span>':'<span class="badge-limited" style="background:#5f7f9e;">常驻</span>'}<div class="collection-detail">${l.path}</div></div><div>✖${l.count}</div></div>`).join('');}
+    function updateLcUI(){ document.getElementById('lcPity5').innerText=lcPity5; document.getElementById('lcPity4').innerText=lcPity4; document.getElementById('lcGuaranteeStatus').innerText=lcGuaranteeUp?"⭐大保底":"⚖️小保底"; document.getElementById('lcTotalPull').innerText=lcTotalPull; document.getElementById('lcTotal5').innerText=lcTotal5; document.getElementById('lcTotal4').innerText=lcTotal4; let nextDesc=lcGuaranteeUp?`大保底「${currentUpLightCone.name}」`:`小保底 (75% UP: ${currentUpLightCone.name})`; document.getElementById('lcNextDesc').innerText=nextDesc; }
+    function renderLcHistory(){ let div=document.getElementById('lcHistoryList'); if(lcHistory.length===0){div.innerHTML='<div style="text-align:center;opacity:0.6;">✨ 光锥抽卡记录 ✨</div>';return;} div.innerHTML=lcHistory.map(r=>`<div class="history-item ${r.star===5?'star-5':(r.star===4?'star-4':'star-3')}"><div><strong>${r.name}</strong>${r.isUp?' ✨UP':''}<br><span class="item-detail">${r.path}</span></div><div>${r.star===5?'⭐5':(r.star===4?'💜4':'🔵3')}</div></div>`).join('');}
+    function performLightConePull(){ let isFiveStar=false; if(lcPity5 >= 79) isFiveStar=true; else{ let prob=0.008; if(lcPity5 >= 74){ let inc=(lcPity5-73)*0.07; prob=Math.min(0.98,0.008+inc); if(lcPity5===79) prob=1.0;} if(Math.random()<prob) isFiveStar=true;} let result; if(isFiveStar){ let isUp=lcGuaranteeUp?true:(Math.random()<0.75); let lcData; if(isUp){ lcData={name:currentUpLightCone.name,path:currentUpLightCone.path,isUp:true}; lcGuaranteeUp=false;} else{ let stdIdx=Math.floor(Math.random()*STANDARD_LC.length); let std=STANDARD_LC[stdIdx]; lcData={name:std.name,path:std.path,isUp:false}; lcGuaranteeUp=true;} result={...lcData,star:5,element:"光锥"}; let key=result.name; let isLimited=!STANDARD_LC.some(s=>s.name===result.name); if(collectedLC.has(key)){ let ex=collectedLC.get(key); ex.count++; collectedLC.set(key,ex);} else{ collectedLC.set(key,{name:result.name,path:result.path,count:1,isLimited});} renderLcCollection(); lcPity5=0; lcTotal5++; lcPity4=0;} else{ let forceFour=(lcPity4>=9); let isFour=forceFour?true:(Math.random()<0.06); if(isFour){ let idx=Math.floor(Math.random()*FOUR_STAR_LC.length); let four=FOUR_STAR_LC[idx]; result={name:four.name,path:four.path,star:4,isUp:false,element:"光锥"}; lcTotal4++; lcPity4=0;} else{ let idx=Math.floor(Math.random()*THREE_STARS_LIGHT_CONES.length); result={name:THREE_STARS_LIGHT_CONES[idx],path:"三星光锥",star:3,isUp:false,element:"光锥"}; lcPity4++;} lcPity5++;} lcTotalPull++; return result;}
+    function addLcRecord(res){ lcHistory.unshift(res); if(lcHistory.length>150) lcHistory.pop(); renderLcHistory(); updateLcUI(); showToast(`【光锥】${res.star}★ · ${res.name}${res.isUp?'(UP)':''}`,res.star); if(res.star===5) document.body.classList.add('star5-flash'),setTimeout(()=>document.body.classList.remove('star5-flash'),600);}
+    function resetLc(){ lcPity5=0; lcPity4=0; lcGuaranteeUp=false; lcTotalPull=0; lcTotal5=0; lcTotal4=0; lcHistory=[]; collectedLC.clear(); renderLcHistory(); updateLcUI(); renderLcCollection(); showToast("光锥数据已重置","4");}
+    function clearLcHistoryOnly(){ lcHistory=[]; collectedLC.clear(); renderLcHistory(); renderLcCollection(); updateLcUI(); showToast("光锥记录&图鉴已清空",3);}
+    
+    function showToast(msg, star) {
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+        let t = document.createElement('div');
+        t.className = 'toast-notify';
+        if (star === 5) t.style.borderLeft = '6px solid #ffcc66';
+        else if (star === 4) t.style.borderLeft = '6px solid #b77cff';
+        t.innerHTML = `<span>✨</span><span>${msg}</span>`;
+        t.style.background = 'rgba(0, 0, 0, 0.85)';
+        t.style.backdropFilter = 'blur(20px)';
+        t.style.borderRadius = '60px';
+        t.style.padding = '12px 28px';
+        t.style.fontWeight = 'bold';
+        t.style.fontSize = '1rem';
+        t.style.border = '1px solid rgba(255,215,0,0.5)';
+        t.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+        t.style.color = '#f0f3fa';
+        container.insertBefore(t, container.firstChild);
+        setTimeout(() => {
+            t.style.opacity = '0';
+            t.style.transform = 'translateY(-10px)';
+            setTimeout(() => t.remove(), 300);
+        }, 2500);
+    }
+    
+    function syncLightConeFromRole() {
+        let roleIndex = ALL_LIMITED_5_STARS.findIndex(c => c.name === currentUpCharacter.name);
+        if (roleIndex !== -1) {
+            let lcIndex = roleIndex % LIMITED_LC_MAP.length;
+            let targetLc = LIMITED_LC_MAP[lcIndex];
+            if (targetLc && targetLc.name !== currentUpLightCone.name) {
+                currentUpLightCone = { name: targetLc.name, path: targetLc.path };
+                let lcSelect = document.getElementById('lcUpSelect');
+                if (lcSelect) lcSelect.value = currentUpLightCone.name;
+                document.getElementById('currentLcName').innerText = currentUpLightCone.name;
+                document.getElementById('lcUpDetail').innerHTML = `${currentUpLightCone.path} · 限定光锥`;
+            }
+        }
+    }
+    function showLcModal(items,title){ 
+        let modal=document.getElementById('lcModal'); 
+        document.getElementById('lcModalTitle').innerText=title; 
+        document.getElementById('lcModalList').innerHTML=items.map(i=>{
+            let starClass = i.star===5 ? 'star-5-card' : (i.star===4 ? 'star-4-card' : 'star-3-card');
+            let starColor = i.star===5?'#ffcc66':(i.star===4?'#b77cff':'#5f7f9e');
+            return `<div class="detail-card ${starClass}" style="border-left-color:${starColor}"><div><strong>${i.name}</strong> ${i.star}★${i.isUp?'✨UP':''}</div><div>${i.path}</div></div>`;
+        }).join(''); 
+        modal.classList.add('active'); 
+        setTimeout(()=>{if(modal.classList.contains('active'))modal.classList.remove('active');},7000);
+    }
+    window.closeLcModal=()=>{document.getElementById('lcModal').classList.remove('active');};
+    window.closeModal=()=>{document.getElementById('detailModal').classList.remove('active');};
+    
+    // 初始化角色下拉框 (完全重写以保证 Edge 兼容)
+    function initRoleSelector() {
+        let sel = document.getElementById('upCharacterSelect');
+        if (!sel) return;
+        sel.innerHTML = '';
+        ALL_LIMITED_5_STARS.forEach(c => {
+            let opt = document.createElement('option');
+            opt.value = c.name;
+            opt.textContent = `${c.name} (${c.element}·${c.path})`;
+            sel.appendChild(opt);
+        });
+        sel.value = currentUpCharacter.name;
+        // 先移除旧监听器避免重复
+        sel.removeEventListener('change', roleChangeHandler);
+        sel.addEventListener('change', roleChangeHandler);
+    }
+    function roleChangeHandler(e) {
+        if (isSyncing) return;
+        let find = ALL_LIMITED_5_STARS.find(c => c.name === e.target.value);
+        if (find) {
+            currentUpCharacter = { name: find.name, element: find.element, path: find.path };
+            document.getElementById('currentUpName').innerText = currentUpCharacter.name;
+            document.getElementById('upDetail').innerText = `${currentUpCharacter.element} · ${currentUpCharacter.path}`;
+            showToast(`UP切换为「${currentUpCharacter.name}」`, 4);
+            let roleIndex = ALL_LIMITED_5_STARS.findIndex(c => c.name === find.name);
+            if (roleIndex !== -1) {
+                let lcIndex = roleIndex % LIMITED_LC_MAP.length;
+                let targetLc = LIMITED_LC_MAP[lcIndex];
+                if (targetLc && targetLc.name !== currentUpLightCone.name) {
+                    isSyncing = true;
+                    currentUpLightCone = { name: targetLc.name, path: targetLc.path };
+                    let lcSelect = document.getElementById('lcUpSelect');
+                    if (lcSelect) lcSelect.value = currentUpLightCone.name;
+                    document.getElementById('currentLcName').innerText = currentUpLightCone.name;
+                    document.getElementById('lcUpDetail').innerHTML = `${currentUpLightCone.path} · 限定光锥`;
+                    showToast(`光锥同步为「${currentUpLightCone.name}」`, 4);
+                    isSyncing = false;
+                }
+            }
+        }
+        updateRoleUI();
+        updateLcUI();
+    }
+    
+    function initLcSelector() {
+        let sel = document.getElementById('lcUpSelect');
+        if (!sel) return;
+        sel.innerHTML = '';
+        LIMITED_LC_MAP.forEach(lc => {
+            let opt = document.createElement('option');
+            opt.value = lc.name;
+            opt.textContent = `${lc.name} (${lc.path})`;
+            sel.appendChild(opt);
+        });
+        sel.value = currentUpLightCone.name;
+        sel.removeEventListener('change', lcChangeHandler);
+        sel.addEventListener('change', lcChangeHandler);
+    }
+    function lcChangeHandler(e) {
+        if (isSyncing) return;
+        let find = LIMITED_LC_MAP.find(l => l.name === e.target.value);
+        if (find) {
+            currentUpLightCone = { name: find.name, path: find.path };
+            document.getElementById('currentLcName').innerText = currentUpLightCone.name;
+            document.getElementById('lcUpDetail').innerHTML = `${currentUpLightCone.path} · 限定光锥`;
+            showToast(`光锥UP切换为「${currentUpLightCone.name}」`, 4);
+            let lcIndex = LIMITED_LC_MAP.findIndex(l => l.name === find.name);
+            if (lcIndex !== -1) {
+                let roleIndex = lcIndex % ALL_LIMITED_5_STARS.length;
+                let targetRole = ALL_LIMITED_5_STARS[roleIndex];
+                if (targetRole && targetRole.name !== currentUpCharacter.name) {
+                    isSyncing = true;
+                    currentUpCharacter = { name: targetRole.name, element: targetRole.element, path: targetRole.path };
+                    let roleSelect = document.getElementById('upCharacterSelect');
+                    if (roleSelect) roleSelect.value = currentUpCharacter.name;
+                    document.getElementById('currentUpName').innerText = currentUpCharacter.name;
+                    document.getElementById('upDetail').innerText = `${currentUpCharacter.element} · ${currentUpCharacter.path}`;
+                    showToast(`角色同步为「${currentUpCharacter.name}」`, 4);
+                    isSyncing = false;
+                }
+            }
+        }
+        updateLcUI();
+        updateRoleUI();
+    }
+    
+    // 绑定按钮事件
+    document.getElementById('singlePullBtn').onclick=async()=>{ if(window.processing) return; window.processing=true; let b1=document.getElementById('singlePullBtn'),b2=document.getElementById('tenPullBtn'); b1.disabled=b2.disabled=true; let r=performCharacterPull(); addCharRecord(r); let modal=document.getElementById('detailModal'); document.getElementById('modalTitle').innerText="✨ 单抽结果"; let starClass = r.star===5?'star-5-card':(r.star===4?'star-4-card':'star-3-card'); let starColor = r.star===5?'#ffcc66':(r.star===4?'#b77cff':'#5f7f9e'); document.getElementById('modalDetailList').innerHTML=`<div class="detail-card ${starClass}" style="border-left-color:${starColor}"><div><strong>${r.name}</strong> ${r.star}★${r.isUp?'✨UP':''}</div><div>${r.element||'光锥'}·${r.path}</div></div>`; modal.classList.add('active'); setTimeout(()=>{if(modal.classList.contains('active'))modal.classList.remove('active');},7000); setTimeout(()=>{b1.disabled=b2.disabled=false; window.processing=false;},300); };
+    document.getElementById('tenPullBtn').onclick=async()=>{ if(window.processing) return; window.processing=true; let b1=document.getElementById('singlePullBtn'),b2=document.getElementById('tenPullBtn'); b1.disabled=b2.disabled=true; let batch=[]; for(let i=0;i<10;i++)batch.push(performCharacterPull()); for(let i=batch.length-1;i>=0;i--)historyRecords.unshift(batch[i]); while(historyRecords.length>150)historyRecords.pop(); renderHistoryRole(); updateRoleUI(); renderCollected(); let five=batch.filter(r=>r.star===5).length; showToast(`十连·${five}个五星`,five>0?5:4); let modal=document.getElementById('detailModal'); document.getElementById('modalTitle').innerText="🌟 十连结果"; document.getElementById('modalDetailList').innerHTML=batch.map(i=>{ let starClass = i.star===5?'star-5-card':(i.star===4?'star-4-card':'star-3-card'); let starColor = i.star===5?'#ffcc66':(i.star===4?'#b77cff':'#5f7f9e'); return `<div class="detail-card ${starClass}" style="border-left-color:${starColor}"><div><strong>${i.name}</strong> ${i.star}★${i.isUp?'✨UP':''}</div><div>${i.element||'光锥'}·${i.path}</div></div>`; }).join(''); modal.classList.add('active'); setTimeout(()=>{if(modal.classList.contains('active'))modal.classList.remove('active');},8000); setTimeout(()=>{b1.disabled=b2.disabled=false; window.processing=false;},400);};
+    document.getElementById('resetBtn').onclick=()=>{ pity5=0;pity4=0;guaranteeUp=false;totalPullCount=0;total5Count=0;total4Count=0;historyRecords=[];collectedFiveStars.clear(); renderHistoryRole(); updateRoleUI(); renderCollected(); showToast("角色数据已重置",3);};
+    document.getElementById('clearHistoryBtn').onclick=()=>{ historyRecords=[]; collectedFiveStars.clear(); renderHistoryRole(); renderCollected(); updateRoleUI(); showToast("角色记录已清空",3);};
+    document.getElementById('lcSingleBtn').onclick=async()=>{ if(window.lcProcessing) return; window.lcProcessing=true; let btn1=document.getElementById('lcSingleBtn'),btn2=document.getElementById('lcTenBtn'); btn1.disabled=btn2.disabled=true; let res=performLightConePull(); addLcRecord(res); showLcModal([res],"🔮 光锥单抽结果"); setTimeout(()=>{btn1.disabled=btn2.disabled=false; window.lcProcessing=false;},300);};
+    document.getElementById('lcTenBtn').onclick=async()=>{ if(window.lcProcessing) return; window.lcProcessing=true; let btns=document.getElementById('lcSingleBtn'),btnt=document.getElementById('lcTenBtn'); btns.disabled=btnt.disabled=true; let batch=[]; for(let i=0;i<10;i++) batch.push(performLightConePull()); for(let i=batch.length-1;i>=0;i--) lcHistory.unshift(batch[i]); while(lcHistory.length>150) lcHistory.pop(); renderLcHistory(); updateLcUI(); renderLcCollection(); let fiveCnt=batch.filter(r=>r.star===5).length; showToast(`光锥十连·${fiveCnt}个五星`,fiveCnt>0?5:4); showLcModal(batch,"🌟 光锥十连详表"); setTimeout(()=>{btns.disabled=btnt.disabled=false; window.lcProcessing=false;},400);};
+    document.getElementById('lcResetBtn').onclick=resetLc;
+    document.getElementById('clearLcHistoryBtn').onclick=clearLcHistoryOnly;
+    
+    initRoleSelector();
+    initLcSelector();
+    syncLightConeFromRole();
+    updateRoleUI();
+    renderHistoryRole();
+    renderCollected();
+    updateLcUI();
+    renderLcHistory();
+    renderLcCollection();
+    window.processing = false;
+    window.lcProcessing = false;
+</script>
+</body>
+</html>
