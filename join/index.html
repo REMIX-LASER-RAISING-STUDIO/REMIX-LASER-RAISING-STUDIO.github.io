@@ -204,6 +204,67 @@
             transform: translateY(-3px);
         }
 
+        /* ===== 崩铁工具入口 ===== */
+        .tool-section {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 16px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            flex-wrap: wrap;
+        }
+        .tool-section a {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.5);
+            padding: 10px 28px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            display: inline-block;
+        }
+        .tool-section a:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        /* ===== 二维码区域 ===== */
+        .qrcode-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px 0 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            flex-wrap: wrap;
+        }
+        .qrcode-section .qr-item {
+            text-align: center;
+        }
+        .qrcode-section .qr-item img {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: transform 0.3s;
+        }
+        .qrcode-section .qr-item img:hover {
+            transform: scale(1.05);
+        }
+        .qrcode-section .qr-item p {
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 12px;
+            margin-top: 6px;
+            letter-spacing: 0.5px;
+        }
+
         .footer {
             text-align: center;
             color: rgba(255, 255, 255, 0.05);
@@ -241,6 +302,13 @@
                 flex-direction: column;
                 align-items: flex-start;
             }
+            .qrcode-section {
+                gap: 24px;
+            }
+            .qrcode-section .qr-item img {
+                width: 100px;
+                height: 100px;
+            }
         }
 
         @keyframes fadeUp {
@@ -272,6 +340,7 @@
             <p>REMIX激越工作室 · 一起搞点不一样的东西</p>
         </div>
 
+        <!-- 关于 RLRS -->
         <div class="card">
             <h2><span>✦</span> 关于 RLRS</h2>
             <p>
@@ -282,6 +351,7 @@
             </p>
         </div>
 
+        <!-- 招募方向 -->
         <div class="card">
             <h2><span>🧩</span> 我们在找谁</h2>
             <ul>
@@ -298,6 +368,7 @@
             </div>
         </div>
 
+        <!-- 怎么加入 -->
         <div class="card">
             <h2><span>📬</span> 怎么来</h2>
             <p>
@@ -319,6 +390,7 @@
             </p>
         </div>
 
+        <!-- 不加入也行 -->
         <div class="card">
             <h2><span>💬</span> 不加入也行</h2>
             <p>
@@ -334,6 +406,28 @@
                 <span class="tag">🐛 反馈</span>
                 <span class="tag">📖 教程</span>
                 <span class="tag">💬 安利</span>
+            </div>
+        </div>
+
+        <!-- ===== 崩铁工具入口 ===== -->
+        <div class="tool-section">
+            <a href="/sr/pages/calcu.html" target="_blank">
+                ⚔️ 总伤计算器 ↗
+            </a>
+            <a href="/sr/pages/srd2.0.html" target="_blank">
+                🎰 抽卡模拟器 ↗
+            </a>
+        </div>
+
+        <!-- ===== 二维码区域 ===== -->
+        <div class="qrcode-section">
+            <div class="qr-item">
+                <img src="/join/assets/qrcode-bilibili.png" alt="B站频道" />
+                <p>📺 B站频道</p>
+            </div>
+            <div class="qr-item">
+                <img src="/join/assets/qrcode-qq.png" alt="QQ群" />
+                <p>💬 QQ群</p>
             </div>
         </div>
 
