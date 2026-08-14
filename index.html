@@ -179,6 +179,7 @@
             gap: 20px;
             padding-top: 24px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
+            flex-wrap: wrap;
         }
         .socials a {
             color: rgba(255, 255, 255, 0.2);
@@ -301,6 +302,7 @@
         </div>
 
         <div class="socials">
+            <a href="/join/">加入我们</a>
             <a href="https://space.bilibili.com/2090624670" target="_blank">B站</a>
             <a href="mailto:bingjianremix@outlook.com">邮箱</a>
             <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank">文档</a>
@@ -346,27 +348,27 @@
                 draw() {
                     ctx.beginPath();
                     ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                    ctx.fillStyle = `rgba(255, 215, 0, ${this.alpha})`;
+                    ctx.fillStyle = 'rgba(255, 215, 0, ' + this.alpha + ')';
                     ctx.fill();
                 }
             }
 
-            for (let i = 0; i < COUNT; i++) {
+            for (var i = 0; i < COUNT; i++) {
                 particles.push(new Particle());
             }
 
             function drawLines() {
-                for (let i = 0; i < particles.length; i++) {
-                    for (let j = i + 1; j < particles.length; j++) {
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
+                for (var i = 0; i < particles.length; i++) {
+                    for (var j = i + 1; j < particles.length; j++) {
+                        var dx = particles[i].x - particles[j].x;
+                        var dy = particles[i].y - particles[j].y;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
                         if (dist < CONNECT_DIST) {
-                            const alpha = (1 - dist / CONNECT_DIST) * 0.25;
+                            var alpha = (1 - dist / CONNECT_DIST) * 0.25;
                             ctx.beginPath();
                             ctx.moveTo(particles[i].x, particles[i].y);
                             ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = `rgba(255, 215, 0, ${alpha})`;
+                            ctx.strokeStyle = 'rgba(255, 215, 0, ' + alpha + ')';
                             ctx.lineWidth = 0.6;
                             ctx.stroke();
                         }
@@ -376,9 +378,9 @@
 
             function loop() {
                 ctx.clearRect(0, 0, w, h);
-                for (const p of particles) {
-                    p.update();
-                    p.draw();
+                for (var i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
                 }
                 drawLines();
                 requestAnimationFrame(loop);
