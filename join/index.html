@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>加入我们 — RLRS 激越工作室</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0a0c10;
+            min-height: 100vh;
+            padding: 24px;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 820px;
+            width: 100%;
+            animation: fadeUp 0.8s ease-out both;
+        }
+
+        .nav-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .nav-bar a {
+            color: rgba(255, 255, 255, 0.25);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.25s;
+        }
+        .nav-bar a:hover {
+            color: #ffd700;
+        }
+        .nav-bar .brand {
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .nav-bar .brand span {
+            color: #ffd700;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header .icon {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .header h1 {
+            font-size: 40px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(135deg, #ffd700, #f7971e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header p {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 16px;
+            margin-top: 8px;
+            letter-spacing: 2px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 36px 40px 32px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(255, 215, 0, 0.06);
+        }
+        .card h2 {
+            color: #e8edf5;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 span {
+            font-size: 24px;
+        }
+        .card p {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+        .card ul {
+            list-style: none;
+            margin-top: 12px;
+        }
+        .card ul li {
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 14px;
+            line-height: 2;
+            padding-left: 24px;
+            position: relative;
+        }
+        .card ul li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: rgba(255, 215, 0, 0.2);
+        }
+
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .tag {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: rgba(255, 255, 255, 0.3);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            transition: all 0.25s;
+        }
+        .tag:hover {
+            border-color: rgba(255, 215, 0, 0.15);
+            color: rgba(255, 215, 0, 0.3);
+        }
+        .tag.highlight {
+            border-color: rgba(255, 215, 0, 0.12);
+            color: #ffd700;
+        }
+
+        .btn-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 12px 36px;
+            border-radius: 60px;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ffd700, #f7971e);
+            color: #0a0c10;
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.12);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 48px rgba(255, 215, 0, 0.25);
+        }
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.04);
+            color: #ccd6f6;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 215, 0, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.05);
+            font-size: 12px;
+            letter-spacing: 1px;
+            padding-top: 32px;
+            margin-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .footer a {
+            color: rgba(255, 255, 255, 0.08);
+            text-decoration: none;
+        }
+
+        @media (max-width: 640px) {
+            .card {
+                padding: 28px 20px 24px;
+                border-radius: 20px;
+            }
+            .header h1 {
+                font-size: 30px;
+            }
+            .header .icon {
+                font-size: 36px;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 24px;
+            }
+            .btn-row {
+                flex-direction: column;
+            }
+            .nav-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="container">
+
+        <div class="nav-bar">
+            <a href="/" class="brand">◀ <span>RLRS</span> Studio</a>
+            <a href="/mclcs/">MCLCS</a>
+        </div>
+
+        <div class="header">
+            <span class="icon">🚀</span>
+            <h1>加入我们</h1>
+            <p>REMIX激越工作室 · 一起搞点不一样的东西</p>
+        </div>
+
+        <div class="card">
+            <h2><span>✦</span> 关于 RLRS</h2>
+            <p>
+                REMIX激越工作室，由 BingJian_REMIX 创立的独立开发团体。<br />
+                目前主力项目是 <strong style="color:rgba(255,255,255,0.6);">MCLCS</strong>（Minecraft 启动器），
+                同时也在探索更多 <strong style="color:rgba(255,255,255,0.6);">工具类与创意项目</strong>。<br /><br />
+                我们不大，但足够认真。
+            </p>
+        </div>
+
+        <div class="card">
+            <h2><span>🧩</span> 我们在找谁</h2>
+            <ul>
+                <li><strong style="color:rgba(255,255,255,0.6);">UI/UX 设计师</strong> — 为 MCLCS 及未来项目打磨体验</li>
+                <li><strong style="color:rgba(255,255,255,0.6);">测试与文档</strong> — 帮忙测 Bug、写文档、做教程</li>
+                <li><strong style="color:rgba(255,255,255,0.6);">有想法的任何人</strong> — 技术、创意、运营，来聊聊都行</li>
+            </ul>
+            <div class="tag-group" style="margin-top:16px;">
+                <span class="tag highlight">🎨 设计</span>
+                <span class="tag">🖥️ C# / WPF</span>
+                <span class="tag">📱 Android</span>
+                <span class="tag">📝 文档</span>
+                <span class="tag">🧪 测试</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span>📬</span> 怎么来</h2>
+            <p>
+                没有复杂的流程。发个消息就行。
+            </p>
+            <div class="btn-row">
+                <a href="mailto:bingjianremix@outlook.com" class="btn btn-primary">
+                    ✉ 发邮件
+                </a>
+                <a href="https://space.bilibili.com/2090624670" target="_blank" class="btn btn-ghost">
+                    B站 私信
+                </a>
+                <a href="https://cnb.cool/RLRS-Studio" target="_blank" class="btn btn-ghost">
+                    cnb.cool 提 Issue
+                </a>
+            </div>
+            <p style="margin-top:16px;font-size:14px;color:rgba(255,255,255,0.15);">
+                邮件标题建议带上 <strong style="color:rgba(255,255,255,0.2);">[加入RLRS]</strong>，不容易漏。
+            </p>
+        </div>
+
+        <div class="card">
+            <h2><span>💬</span> 不加入也行</h2>
+            <p>
+                不想正式加入，但想参与进来？也欢迎！
+            </p>
+            <ul>
+                <li>⭐ 给 MCLCS 点个 Star / 推荐给朋友</li>
+                <li>🐛 提 Issue / 反馈 Bug</li>
+                <li>📖 写教程、做视频、分享你的使用体验</li>
+            </ul>
+            <div class="tag-group" style="margin-top:16px;">
+                <span class="tag">⭐ Star</span>
+                <span class="tag">🐛 反馈</span>
+                <span class="tag">📖 教程</span>
+                <span class="tag">💬 安利</span>
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2026 <a href="/">RLRS Studio</a> · 由 BingJian_REMIX 创立
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const particles = [];
+            const COUNT = 60;
+            const MAX_SPEED = 0.2;
+            const CONNECT_DIST = 130;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * w;
+                    this.y = Math.random() * h;
+                    this.vx = (Math.random() - 0.5) * MAX_SPEED * 2;
+                    this.vy = (Math.random() - 0.5) * MAX_SPEED * 2;
+                    this.r = Math.random() * 2 + 1;
+                    this.alpha = Math.random() * 0.4 + 0.1;
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > w) this.vx *= -1;
+                    if (this.y < 0 || this.y > h) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255, 215, 0, ' + this.alpha + ')';
+                    ctx.fill();
+                }
+            }
+
+            for (var i = 0; i < COUNT; i++) {
+                particles.push(new Particle());
+            }
+
+            function drawLines() {
+                for (var i = 0; i < particles.length; i++) {
+                    for (var j = i + 1; j < particles.length; j++) {
+                        var dx = particles[i].x - particles[j].x;
+                        var dy = particles[i].y - particles[j].y;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < CONNECT_DIST) {
+                            var alpha = (1 - dist / CONNECT_DIST) * 0.15;
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = 'rgba(255, 215, 0, ' + alpha + ')';
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            function loop() {
+                ctx.clearRect(0, 0, w, h);
+                for (var i = 0; i < particles.length; i++) {
+                    particles[i].update();
+                    particles[i].draw();
+                }
+                drawLines();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+    </script>
+
+</body>
+</html>
