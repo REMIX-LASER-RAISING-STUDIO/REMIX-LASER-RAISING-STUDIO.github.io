@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>崩铁 · 总伤计算器 2.6.18 · 死键修复版</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #0f0f1a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .card { background: #1a1a2e; border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid #2a2a4a; }
+        .card h2 { color: #88d0ff; margin-bottom: 12px; font-size: 18px; border-bottom: 1px solid #2a2a4a; padding-bottom: 8px; }
+        .flex { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+        .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 6px 0; }
+        .row label { min-width: 100px; color: #aaa; }
+        .row input, .row select { flex: 1; min-width: 140px; background: #252540; border: 1px solid #3a3a5a; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 14px; }
+        .row select { flex: 1; min-width: 140px; }
+        button { background: #4a6fa5; border: none; color: #fff; padding: 10px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #5a7fb5; }
+        .hidden { display: none; }
+        .total { font-size: 28px; font-weight: bold; color: #ffd700; }
+        .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+        @media (max-width: 700px) { .result-grid { grid-template-columns: 1fr; } }
+        .code-block { background: #0a0a1a; padding: 12px; border-radius: 8px; overflow-x: auto; font-size: 12px; font-family: monospace; white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto; }
+        .ally-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 4px 0; }
+        .ally-row label { min-width: 50px; color: #aaa; font-size: 14px; }
+        .ally-row .ally-select { flex: 1; min-width: 150px; background: #252540; border: 1px solid #3a3a5a; color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 14px; }
+        .ally-row .ally-star, .ally-row .ally-super { flex: 0 0 60px; min-width: 60px; background: #252540; border: 1px solid #3a3a5a; color: #fff; padding: 6px 8px; border-radius: 6px; font-size: 14px; text-align: center; }
+        .ally-row .ally-label { min-width: 20px; color: #aaa; font-size: 13px; text-align: center; }
+        .collapsible { background: #2a2a4a; color: #e0e0e0; cursor: pointer; padding: 10px; width: 100%; border: none; text-align: left; border-radius: 6px; font-size: 14px; }
+        .collapsible:hover { background: #3a3a5a; }
+        .collapsible:after { content: ' ▼'; float: right; }
+        .collapsible.active:after { content: ' ▲'; }
+        .debug-content { display: none; margin-top: 10px; }
+        .panel-item { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 4px 0; }
+        .panel-item label { min-width: 120px; color: #aaa; font-size: 14px; }
+        .panel-item input { flex: 1; min-width: 120px; background: #252540; border: 1px solid #3a3a5a; color: #fff; padding: 6px 10px; border-radius: 6px; font-size: 14px; }
+        .note { background:#241a2e; border:1px solid #4a3a5a; color:#e8c8ff; padding:10px 12px; border-radius:8px; font-size:13px; margin-top:12px; line-height:1.6; }
+        .btn-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+        .btn-sm { background: #3a3a5a; border: 1px solid #4a4a6a; color: #ccc; padding: 6px 16px; border-radius: 6px; font-size: 13px; cursor: pointer; }
+        .btn-sm:hover { background: #4a4a6a; color: #fff; }
+        .btn-sm.gold { background: #8a7a2a; border-color: #aa9a3a; color: #ffd700; }
+        .btn-sm.gold:hover { background: #aa8a3a; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 style="color: #88d0ff;">⚙️ 崩铁 · 总伤计算器 2.6.18 · 死键修复版</h1>
+    <p style="color: #aaa; margin-bottom: 16px;">完整伤害拆解 + 专属增伤/追击/附加/真伤链路修复 + 防御乘法层 + 那刻夏敌人数条件判断</p>
+
+    <div class="card"><h2>📂 加载角色数据</h2>
+        <div class="flex">
+            <input type="file" id="jsonLoader" accept=".json">
+            <span id="loadStatus" style="color: #aaa;">正在尝试自动加载...</span>
+        </div>
+        <div class="btn-group" style="margin-top:10px;">
+            <button class="btn-sm gold" onclick="downloadPage()">📄 下载本页面 (HTML)</button>
+            <button class="btn-sm gold" onclick="downloadData()">💾 下载角色数据 (JSON)</button>
+        </div>
+    </div>
+
+    <div id="configArea" class="hidden">
+        <div class="card"><h2>👥 队伍配置</h2><div class="row"><label>主C</label><select id="mainSelect"><option value="">— 请先加载数据 —</option></select></div><div id="allyContainer"></div></div>
+        <div class="card"><h2>📊 面板 & 环境</h2>
+            <div class="row"><label>基础攻击/生命</label><input type="number" id="baseAtk" value="3200" step="10"></div>
+            <div class="row"><label>暴击率 (%)</label><input type="number" id="critRate" value="85" step="0.5" min="0" max="100"></div>
+            <div class="row"><label>暴击伤害 (%)</label><input type="number" id="critDmg" value="220" step="1"></div>
+            <div class="row"><label>主C专武叠影</label><input type="number" id="mainSuperimpose" value="1" step="1" min="1" max="5"></div>
+            <div class="row"><label>主C星魂层数</label><select id="mainStarLevel"><option value="0" selected>0魂</option><option value="1">1魂</option><option value="2">2魂</option><option value="3">3魂</option><option value="4">4魂</option><option value="5">5魂</option><option value="6">6魂</option></select></div>
+            <div class="row"><label>敌人数</label><select id="enemyCount"><option value="1">1</option><option value="5" selected>5</option></select></div>
+            <div class="row"><label>怪物防御</label><input type="number" id="enemyDef" value="1000" step="10"></div>
+            <div class="row"><label>怪物抗性 (%)</label><input type="number" id="enemyRes" value="0" step="1"></div>
+            <div id="extraPanelContainer"></div>
+            <button id="calcBtn">🧮 计算总伤</button>
+        </div>
+        <div class="card" id="resultArea" style="display:none;">
+            <h2>📈 计算结果</h2>
+            <div id="resultContent"></div>
+        </div>
+        <div class="card"><button class="collapsible">🔧 调试面板（点击展开/折叠）</button><div class="debug-content"><div id="debugPreview" class="code-block">计算后显示主C及队友完整属性</div></div></div>
+    </div>
+</div>
+
+<script>
+let characterData = null, mainChar = null, allies = [], panelInputs = {};
+
+const jsonLoader = document.getElementById('jsonLoader'), loadStatus = document.getElementById('loadStatus'), configArea = document.getElementById('configArea');
+const mainSelect = document.getElementById('mainSelect'), allyContainer = document.getElementById('allyContainer');
+const baseAtkInput = document.getElementById('baseAtk'), critRateInput = document.getElementById('critRate'), critDmgInput = document.getElementById('critDmg');
+const mainSuperimposeInput = document.getElementById('mainSuperimpose'), mainStarLevelSelect = document.getElementById('mainStarLevel');
+const enemyCountSelect = document.getElementById('enemyCount'), enemyDefInput = document.getElementById('enemyDef'), enemyResInput = document.getElementById('enemyRes');
+const calcBtn = document.getElementById('calcBtn'), resultArea = document.getElementById('resultArea'), resultContent = document.getElementById('resultContent');
+const debugPreview = document.getElementById('debugPreview'), extraPanelContainer = document.getElementById('extraPanelContainer');
+
+document.addEventListener('click', e => { if (e.target.classList.contains('collapsible')) { e.target.classList.toggle('active'); e.target.nextElementSibling.style.display = e.target.nextElementSibling.style.display === 'block' ? 'none' : 'block'; } });
+
+// ========== 工具函数 ==========
+function parsePercent(str) { if (!str) return 0; str = str.trim(); const m = str.match(/^(\d+)\*([\d.]+)%$/); if (m) return parseFloat(m[1]) * parseFloat(m[2]) / 100; if (str.includes('+')) { let total = 0; for (let t of str.split('+')) total += parsePercent(t); return total; } if (str.endsWith('%')) return parseFloat(str) / 100; return parseFloat(str) || 0; }
+function parseEffString(effStr) { if (!effStr) return {}; const parts = effStr.split(',').map(s => s.trim()); const result = {}; for (let p of parts) { if (!p) continue; if (p.includes(':')) { const [cond, val] = p.split(':').map(s => s.trim()); result[cond] = val; } else if (p.includes('=')) { const idx = p.indexOf('='); result[p.substring(0, idx).trim()] = p.substring(idx+1).trim(); } else result[p] = ''; } return result; }
+function evalFormula(expr, ctx) { if (!expr) return 0; let s = expr.trim().replace(/\[/g, '(').replace(/\]/g, ')'); const sortedKeys = Object.keys(ctx).sort((a, b) => b.length - a.length); for (let k of sortedKeys) { s = s.replace(new RegExp(k, 'g'), ctx[k]); } s = s.replace(/(\d+(\.\d+)?)%/g, (_, n) => parseFloat(n)/100); try { const result = Function('"use strict"; return (' + s + ')')(); return isNaN(result) ? 0 : result; } catch(e) { return 0; } }
+function smartVal(v, ctx) { return evalFormula(v, ctx); }
+function resolveRat(ratStr) { const cleaned = ratStr.replace(/[()]/g, ''); const parts = cleaned.split(',').map(s => s.trim()); while (parts.length < 3) parts.push('0%'); return parts; }
+function resolveNum(numStr) { const cleaned = numStr.replace(/[()]/g, ''); const parts = cleaned.split(',').map(s => parseInt(s.trim()) || 0); while (parts.length < 3) parts.push(0); return parts; }
+function resolveSp(spStr) { if (!spStr) return {}; const result = {}; const regex = /(\w+):\s*([\s\S]*?)(?=\s*\w+:\s*|$)/g; let match; while ((match = regex.exec(spStr)) !== null) result[match[1]] = match[2].trim(); return result; }
+function parseRatTarget(ratStr, targetStr) {
+    const ratPart = ratStr.replace(/[()]/g, ''); const targetPart = targetStr ? targetStr.replace(/[()]/g, '') : '';
+    const ratSegs = ratPart.split(',').map(s => s.trim()); const targetSegs = targetPart ? targetPart.split(',').map(s => s.trim()) : [];
+    let rates = [], targets = [];
+    for (let i = 0; i < ratSegs.length; i++) {
+        const rParts = ratSegs[i].split('+').map(s => s.trim()), tParts = (i < targetSegs.length && targetSegs[i]) ? targetSegs[i].split('+').map(s => s.trim()) : ['all'];
+        const expandedRates = [], expandedTargets = [];
+        for (let j = 0; j < rParts.length; j++) {
+            const rp = rParts[j], tp = j < tParts.length ? tParts[j] : 'all';
+            const expandMatch = rp.match(/^(\d+)\*([\d.]+)%$/);
+            if (expandMatch) { const count = parseInt(expandMatch[1]), val = parseFloat(expandMatch[2]) / 100; for (let k = 0; k < count; k++) { expandedRates.push(val); expandedTargets.push(tp); } }
+            else { expandedRates.push(parsePercent(rp)); expandedTargets.push(tp); }
+        }
+        if (expandedTargets.length === 1 && expandedRates.length > 1) { const single = expandedTargets[0]; expandedTargets.length = 0; for (let k = 0; k < expandedRates.length; k++) expandedTargets.push(single); }
+        rates.push(...expandedRates); targets.push(...expandedTargets);
+    }
+    return { rates, targets };
+}
+function evalCondition(condStr, mainChar, allies) {
+    if (!condStr) return true; const team = allies.map(a => a.char), fullTeam = [mainChar, ...team];
+    const orParts = condStr.split('|').map(s => s.trim());
+    for (let orPart of orParts) {
+        const andParts = orPart.split('&').map(s => s.trim());
+        let andResult = true;
+        for (let part of andParts) {
+            if (part.startsWith('ally_count(')) {
+                const match = part.match(/^ally_count\((.+?)\)\s*(>=|<=|>|<|==)\s*(\d+)$/);
+                if (match) { const path = match[1].trim(), op = match[2], num = parseInt(match[3]); const count = fullTeam.filter(c => c.path === path || c.name === path).length; if (op === '>=' && count < num) { andResult = false; break; } if (op === '<=' && count > num) { andResult = false; break; } if (op === '>'  && count <= num) { andResult = false; break; } if (op === '<'  && count >= num) { andResult = false; break; } if (op === '==' && count !== num) { andResult = false; break; } }
+                else { andResult = false; break; }
+            } else if (part.startsWith('ally_has(')) {
+                const inner = part.slice(9, -1).trim(); const names = inner.split(',').map(s => s.trim()).filter(Boolean);
+                const has = names.length > 0 ? team.some(c => names.some(name => c.path === name || c.name === name)) : team.some(c => c.path === inner || c.name === inner);
+                if (!has) { andResult = false; break; }
+            } else if (part.startsWith('ally_not(')) {
+                const inner = part.slice(9, -1).trim(); if (team.some(c => c.name === inner)) { andResult = false; break; }
+            } else if (part === 'summon_exist') {
+                if (!team.some(c => c.has_summon === true)) { andResult = false; break; }
+            } else if (part.startsWith('max_energy>')) {
+                const threshold = parseInt(part.split('>')[1]); const maxEnergy = mainChar.max_energy || 100;
+                if (!(maxEnergy > threshold)) { andResult = false; break; }
+            } else { andResult = false; break; }
+        }
+        if (andResult) return true;
+    }
+    return false;
+}
+function parseMixedExpr(expr, ctx, mainChar, allies) {
+    if (!expr) return 0;
+    let cleanExpr = expr.trim();
+    if (cleanExpr.startsWith(';')) { cleanExpr = cleanExpr.substring(1).trim(); }
+    if (/[()]/.test(cleanExpr)) return evalFormula(cleanExpr, ctx);
+    if (/\[/.test(cleanExpr)) return evalFormula(cleanExpr, ctx);
+    const parts = cleanExpr.split('+').map(s => s.trim()).filter(s => s.length > 0);
+    let total = 0;
+    for (let part of parts) {
+        let valStr = part, condStr = '';
+        const ifIdx = part.indexOf(' if ');
+        if (ifIdx > -1) { valStr = part.substring(0, ifIdx).trim(); condStr = part.substring(ifIdx + 4).trim(); }
+        if (!valStr) continue;
+        const val = smartVal(valStr, ctx);
+        if (condStr) { if (evalCondition(condStr, mainChar, allies)) total += val; }
+        else total += val;
+    }
+    return total;
+}
+
+// ---- 专属键累积 / 求值工具 ----
+function mergeBonus(existing, add) {
+    if (!add) return existing || '';
+    return (existing ? existing + ',' : '') + add;
+}
+function dmgToInc(v) {
+    if (!v) return v;
+    if (v.startsWith('+') || v.startsWith('-')) return v;
+    return '+' + ((parsePercent(v) - 1) * 100) + '%';
+}
+function sumExpr(str, ctx) {
+    if (!str) return 0;
+    let total = 0;
+    for (let seg of String(str).split(',')) { seg = seg.trim(); if (seg) total += smartVal(seg, ctx); }
+    return total;
+}
+function scanEffKey(effStr, key) {
+    if (!effStr) return [];
+    const out = [];
+    for (let p of effStr.split(',')) {
+        p = p.trim();
+        if (p === key) { out.push(''); continue; }
+        if (p.startsWith(key + '=')) out.push(p.substring(key.length + 1).trim());
+    }
+    return out;
+}
+
+function collectPanelConfig() {
+    const configs = [];
+    if (mainChar?.panel) configs.push(...mainChar.panel.map(p => ({...p})));
+    document.querySelectorAll('.ally-select').forEach(sel => {
+        const char = characterData?.find(c => c.name === sel.value);
+        if (char?.panel) configs.push(...char.panel.map(p => ({...p})));
+    });
+    return [...new Map(configs.map(c => [c.key, c])).values()];
+}
+function renderPanel() {
+    const configs = collectPanelConfig();
+    extraPanelContainer.innerHTML = '';
+    panelInputs = {};
+    if (!configs.length) { extraPanelContainer.classList.add('hidden'); return; }
+    extraPanelContainer.classList.remove('hidden');
+    for (let cfg of configs) {
+        const div = document.createElement('div'); div.className = 'panel-item';
+        div.innerHTML = `<label>${cfg.label || cfg.key}</label><input type="number" id="panel_${cfg.key}" value="${cfg.default ?? 100}" step="${cfg.step ?? 1}">`;
+        extraPanelContainer.appendChild(div);
+        panelInputs[cfg.key] = div.querySelector('input');
+    }
+}
+function updatePanel() { renderPanel(); }
+
+// ========== 星魂 / 专武 效果合并 ==========
+function applyStarEffects(char, starLevel, superimpose, enemyCount, sundayCd) {
+    let data = JSON.parse(JSON.stringify(char));
+    let othParts = data.oth ? data.oth.split(',').map(s => s.trim()) : [];
+    const effIncrements = [];
+    const teamDebuffKeys = ['defence', 'adr', 'arp', 'Igdefence'];
+    const specialFields = ['ult_extra','ult_arp','skill_dmg','ult_dmg','ice_res_pen','dmg','addition_extra','addition_type','ult_is_addition','true_dmg'];
+    for (let f of specialFields) if (data[f] === undefined) data[f] = '';
+    if (!data.skill_as_ult) data.skill_as_ult = false;
+    if (!data.na_as_ult) data.na_as_ult = false;
+    if (!data.team_addition_extra) data.team_addition_extra = '';
+    if (!data.teamult_type) data.teamult_type = '';
+
+    function mergeSpecialRaw(rawStr) {
+        if (!rawStr) return;
+        const keyMap = {
+            ult_extra: v => data.ult_extra = mergeBonus(data.ult_extra, v),
+            extra_ult: v => data.ult_extra = mergeBonus(data.ult_extra, v),
+            ult_dmg:   v => data.ult_extra = mergeBonus(data.ult_extra, dmgToInc(v)),
+            skill_dmg: v => data.skill_dmg = mergeBonus(data.skill_dmg, v),
+            ult_arp:   v => data.ult_arp   = mergeBonus(data.ult_arp, v),
+            ice_res_pen: v => data.ult_arp = mergeBonus(data.ult_arp, v),
+            dmg:       v => data.dmg       = mergeBonus(data.dmg, dmgToInc(v)),
+            addition_rat: v => data.addition_extra = mergeBonus(data.addition_extra, v),
+            addition_dmg: v => data.addition_extra = mergeBonus(data.addition_extra, v),
+            true_dmg:  v => data.true_dmg  = mergeBonus(data.true_dmg, v),
+        };
+        for (let k of Object.keys(keyMap)) {
+            for (let v of scanEffKey(rawStr, k)) keyMap[k](v);
+        }
+        if (scanEffKey(rawStr, 'addition_type').includes('ult')) data.addition_type = 'ult';
+        if (scanEffKey(rawStr, 'ult_type').includes('addition')) data.ult_is_addition = true;
+    }
+    mergeSpecialRaw(data.eff);
+
+    const starFields = ['s1','s2','s3','s4','s5','s6'];
+    for (let i = 0; i < starLevel && i < starFields.length; i++) {
+        const sf = starFields[i], val = data[sf]; if (!val) continue;
+        const parts = val.split(',').map(s => s.trim()), kv = {};
+        for (let p of parts) { if (p.includes('=')) { const idx = p.indexOf('='); kv[p.substring(0, idx).trim()] = p.substring(idx+1).trim(); } }
+        if (kv['rat']) data.rat = kv['rat'];
+        if (kv['eff']) {
+            data.eff = kv['eff'];
+            for (let f of ['ult_extra','ult_arp','skill_dmg','dmg','addition_extra','addition_type','true_dmg']) data[f] = '';
+            mergeSpecialRaw(data.eff);
+        }
+        if (kv['oth']) { data.oth = kv['oth']; othParts = kv['oth'].split(',').map(s => s.trim()); }
+        let ratParts = resolveRat(data.rat);
+        if (kv['enhanced_skill']) { ratParts[1] = kv['enhanced_skill']; data.rat = '(' + ratParts.join(',') + ')'; }
+        if (kv['enhanced_na']) { ratParts[0] = kv['enhanced_na']; data.rat = '(' + ratParts.join(',') + ')'; }
+        let modified = false; if (kv['na']) { ratParts[0] = kv['na']; modified = true; } if (kv['skill']) { ratParts[1] = kv['skill']; modified = true; } if (kv['ult']) { ratParts[2] = kv['ult']; modified = true; } if (modified) data.rat = '(' + ratParts.join(',') + ')';
+        if (kv['strong_na']) { let spObj = resolveSp(data.sp); spObj['strong_na'] = kv['strong_na']; data.sp = Object.entries(spObj).map(([k,v]) => v ? `${k}:${v}` : k).join(','); }
+        const talentMap = { 'talent_extra': 'extra', 'talent_defence': 'defence', 'talent_Igdefence': 'Igdefence', 'talent_cd': 'cd', 'talent_cr': 'cr' };
+        for (let [tk, targetKey] of Object.entries(talentMap)) { if (kv[tk]) { let inc = kv[tk]; if (!inc.startsWith('+') && !inc.startsWith('-')) inc = '+' + inc; effIncrements.push({ key: targetKey, incValue: inc }); if (teamDebuffKeys.includes(targetKey)) othParts.push(targetKey + '=' + inc); } }
+        let effParts = data.eff ? data.eff.split(',').map(s => s.trim()) : [];
+        if (kv['ult_cd']) { const entry = 'cd=' + kv['ult_cd']; let f = false; for (let j = 0; j < effParts.length; j++) if (effParts[j].startsWith('cd=')) { effParts[j] = entry; f = true; break; } if (!f) effParts.push(entry); }
+        const allKeys = ['defence', 'Igdefence', 'extra', 'cd', 'adr', 'arp', 'atk', 'allx', 'allextra', 'cr', 'dmg', 'dmg_extra', 'team_addition_extra', 'teamult_type'];
+        for (let dk of allKeys) { if (kv[dk]) { const raw = kv[dk]; const isInc = raw.startsWith('+') || raw.startsWith('-'); if (isInc) { let inc = raw; if (!inc.startsWith('+') && !inc.startsWith('-')) inc = '+' + inc; effIncrements.push({ key: dk, incValue: inc }); if (teamDebuffKeys.includes(dk)) othParts.push(dk + '=' + inc); } else { const entry = dk + '=' + raw; let f = false; for (let j = 0; j < effParts.length; j++) if (effParts[j].startsWith(dk + '=')) { effParts[j] = entry; f = true; break; } if (!f) effParts.push(entry); if (teamDebuffKeys.includes(dk)) { let f2 = false; for (let j = 0; j < othParts.length; j++) if (othParts[j].startsWith(dk + '=')) { othParts[j] = entry; f2 = true; break; } if (!f2) othParts.push(entry); } } } }
+        mergeSpecialRaw(val);
+        if (kv['skill_as_ult']?.toLowerCase() === 'true') data.skill_as_ult = true;
+        if (kv['na_as_ult']?.toLowerCase() === 'true') data.na_as_ult = true;
+        if (effParts.length) data.eff = effParts.join(','); if (othParts.length) data.oth = othParts.join(',');
+    }
+    if (effIncrements.length) { let effParts = data.eff ? data.eff.split(',').map(s => s.trim()) : []; for (let inc of effIncrements) { let found = false; for (let j = 0; j < effParts.length; j++) { if (effParts[j].startsWith(inc.key + '=')) { effParts[j] = inc.key + '=' + effParts[j].substring(effParts[j].indexOf('=')+1) + inc.incValue; found = true; break; } } if (!found) effParts.push(inc.key + '=' + inc.incValue); } data.eff = effParts.join(','); }
+    if (starLevel >= 6 && data.s6 && data.s6.includes('oth=')) { const m = data.s6.match(/oth=([^,]*)/); if (m) data.oth = m[1]; }
+    return data;
+}
+
+// ========== 主计算 ==========
+function calculate() {
+    try {
+        if (!characterData?.length) { alert('请先加载 JSON'); return; }
+        const mainName = mainSelect.value; if (!mainName) { alert('请选择主C'); return; }
+        mainChar = characterData.find(c => c.name === mainName); if (!mainChar) { alert('主C数据不存在'); return; }
+        allies = []; const selects = document.querySelectorAll('.ally-select'), stars = document.querySelectorAll('.ally-star'), supers = document.querySelectorAll('.ally-super');
+        for (let i = 0; i < selects.length; i++) { const name = selects[i].value; if (name) { const char = characterData.find(c => c.name === name); if (char) allies.push({ char, starLevel: parseInt(stars[i].value)||0, superimpose: parseInt(supers[i].value)||1 }); } }
+        const baseVal = parseFloat(baseAtkInput.value)||0, cr = Math.min(parseFloat(critRateInput.value)/100||0,1), cd = parseFloat(critDmgInput.value)/100||0;
+        const mainSup = parseInt(mainSuperimposeInput.value)||1, mainStar = parseInt(mainStarLevelSelect.value)||0;
+        const enemyCount = parseInt(enemyCountSelect.value), enemyDef = parseFloat(enemyDefInput.value)||1000, enemyRes = parseFloat(enemyResInput.value)/100||0;
+
+        const panelVars = {}; const allPanelConfigs = collectPanelConfig();
+        for (let cfg of allPanelConfigs) { const input = panelInputs[cfg.key]; let val = cfg.default ?? 100; if (input) { const parsed = parseFloat(input.value); if (!isNaN(parsed)) val = parsed; } const isNumeric = (cfg.default > 1000); panelVars[cfg.key] = isNumeric ? val : val / 100; }
+        if (!(panelVars.cd_sunday >= 0)) panelVars.cd_sunday = 2.0;
+        const ctx = { n: enemyCount, x: mainSup, p: allies.length, a: 1, cd_sunday: panelVars.cd_sunday, ...panelVars };
+
+        const finalMain = applyStarEffects(mainChar, mainStar, mainSup, enemyCount, panelVars.cd_sunday || 0);
+        const finalAllies = allies.map(a => applyStarEffects(a.char, a.starLevel, a.superimpose, enemyCount, panelVars.cd_sunday || 0));
+        debugPreview.textContent = JSON.stringify({ main: finalMain, allies: finalAllies.map((a,i)=>({name:allies[i].char.name, data:a})) }, null, 2);
+
+        let allyExtra=0, allyAllx=0, allyDefence=0, allyAdr=0, allyArp=0, allyCd=0, allyCr=0, allyAtk=0, allyFixedAtk=0, allyIgdefence=0;
+        let mainExtra=0, mainAllx=0, mainDefence=0, mainIgdefence=0, mainAdr=0, mainArp=0, mainCd=0, mainCr=0, mainAtk=0, mainFixedAtk=0;
+        let wrExtra=0, wrDefence=0, wrIgdefence=0, wrAtk=0, wrCd=0, wrAllx=0, wrFixedAtk=0, wrUltExtra=0;
+        let teamAdditionExtra=0, teamUltAsAddition=false;
+        let trueDmgRate=0;
+        let attachRatio=0, attachTimesExpr='', attachAtkKey='', attachCritVal=null, attachLimitVal=null, attachCritFallbackVal=null, attachTargetType='all';
+        let wrAssistExtra=0;
+        let againTimes=0, extraSkillTimes=0, copySkillTimes=0, additionTimes=0, additionRatio=0;
+
+        // ---- 攻击次数统计 ----
+        if (finalMain.sp) {
+            const spObj = resolveSp(finalMain.sp);
+            if (spObj.again) againTimes = parseInt(spObj.again.split(',')[1]) || 1;
+            if (spObj.extra_skill) extraSkillTimes = parseInt(spObj.extra_skill.split(',')[1]) || 1;
+            if (spObj.copy) { const parts = spObj.copy.split(','); if (parts[0]==='战技'||parts[0]==='skill') copySkillTimes = parseInt(parts[1])||1; }
+            if (finalMain.sp.includes('sptype=addition')) {
+                const spParts = finalMain.sp.split(',').map(s => s.trim());
+                for (let p of spParts) { if (p.startsWith('rat=')) additionRatio = smartVal(p.split('=')[1], ctx); if (p.startsWith('times=')) additionTimes = smartVal(p.split('=')[1], ctx); }
+                if (!additionTimes) additionTimes = 1;
+            }
+        }
+        let attackCount = 1 + 1 + 1 + againTimes + extraSkillTimes + copySkillTimes + additionTimes;
+        ctx.a = attackCount;
+
+        // ---- 解析队友增益 ----
+        for (let fa of finalAllies) {
+            if (fa.oth) {
+                const o = parseEffString(fa.oth);
+                if (o.attach_damage) attachRatio += parseMixedExpr(o.attach_damage, ctx, mainChar, allies);
+                if (o.pattach) attachRatio += parseMixedExpr(o.pattach, ctx, mainChar, allies);
+                if (o.qattach) attachRatio += parseMixedExpr(o.qattach, ctx, mainChar, allies);
+                if (o.attach_times) attachTimesExpr = o.attach_times;
+                if (o.attach_atk) attachAtkKey = o.attach_atk;
+                if (o.attach_crit) attachCritVal = parseMixedExpr(o.attach_crit, ctx, mainChar, allies);
+                if (o.attach_limit) attachLimitVal = parseInt(o.attach_limit) || 0;
+                if (o.attach_crit_fallback) attachCritFallbackVal = parseMixedExpr(o.attach_crit_fallback, ctx, mainChar, allies);
+                if (o.attach_target) attachTargetType = o.attach_target;
+                for (let [k,v] of Object.entries(o)) {
+                    if (['attach_damage','pattach','qattach','attach_times','sptype','attach_atk','attach_crit','attach_limit','attach_crit_fallback','attach_target'].includes(k)) continue;
+                    if (k === 'atk') {
+                        if (v.startsWith(';')) { allyFixedAtk += evalFormula(v.substring(1).trim(), ctx); }
+                        else if (v.includes(';')) { const [pctPart, fixedPart] = v.split(';').map(s => s.trim()); if (pctPart) allyAtk += parseMixedExpr(pctPart, ctx, mainChar, allies); if (fixedPart) allyFixedAtk += evalFormula(fixedPart, ctx); }
+                        else { allyAtk += parseMixedExpr(v, ctx, mainChar, allies); }
+                    } else {
+                        const val = parseMixedExpr(v, ctx, mainChar, allies);
+                        if (k==='extra') allyExtra+=val; else if (k==='allx') allyAllx+=val; else if (k==='defence') allyDefence+=val; else if (k==='Igdefence') allyIgdefence+=val; else if (k==='adr') allyAdr+=val; else if (k==='arp') allyArp+=val; else if (k==='cd') allyCd+=val; else if (k==='cr') allyCr+=val; else if (k==='team_cd') allyCd+=val; else if (k==='all_cd') allyCd+=val;
+                    }
+                }
+            }
+            if (fa.team_addition_extra) teamAdditionExtra += evalFormula(fa.team_addition_extra, ctx);
+            if (fa.teamult_type === 'addition') teamUltAsAddition = true;
+        }
+
+        // ---- 解析主C自身增益 ----
+        const SPECIAL_KEYS = ['ult_extra','ult_arp','skill_dmg','ult_dmg','ice_res_pen','dmg','addition_rat','addition_dmg','addition_type','atk_boost','true_dmg','skill_as_ult','na_as_ult'];
+        const me = parseEffString(finalMain.eff);
+        for (let [k,v] of Object.entries(me)) {
+            if (SPECIAL_KEYS.includes(k)) continue;
+            if (k === 'atk') {
+                if (v.startsWith(';')) { mainFixedAtk += evalFormula(v.substring(1).trim(), ctx); }
+                else if (v.includes(';')) { const [pctPart, fixedPart] = v.split(';').map(s => s.trim()); if (pctPart) mainAtk += parseMixedExpr(pctPart, ctx, mainChar, allies); if (fixedPart) mainFixedAtk += evalFormula(fixedPart, ctx); }
+                else { mainAtk += parseMixedExpr(v, ctx, mainChar, allies); }
+            } else {
+                const val = parseMixedExpr(v, ctx, mainChar, allies);
+                if (k==='extra') mainExtra+=val; else if (k==='allx') mainAllx+=val; else if (k==='defence') mainDefence+=val; else if (k==='Igdefence') mainIgdefence+=val; else if (k==='adr') mainAdr+=val; else if (k==='arp') mainArp+=val; else if (k==='cd') mainCd+=val; else if (k==='cr') mainCr+=val;
+            }
+        }
+        if (me.atk_boost) mainFixedAtk += smartVal(me.atk_boost, ctx);
+        if (finalMain.true_dmg) {
+            for (let seg of String(finalMain.true_dmg).split(',')) { seg = seg.trim(); if (seg) trueDmgRate += parseMixedExpr(seg, ctx, mainChar, allies); }
+        }
+
+        // 专武
+        if (finalMain.wr) {
+            for (let p of finalMain.wr.split(',').map(s => s.trim())) {
+                if (!p.includes('=')) continue;
+                const idx = p.indexOf('='), k = p.substring(0, idx).trim(), v = p.substring(idx+1).trim();
+                if (k === 'assist_extra') { wrAssistExtra += evalFormula(v, ctx); }
+                else if (k === 'atk') {
+                    if (v.startsWith(';')) { wrFixedAtk += evalFormula(v.substring(1).trim(), ctx); }
+                    else if (v.includes(';')) { const [pctPart, fixedPart] = v.split(';').map(s => s.trim()); if (pctPart) wrAtk += evalFormula(pctPart, ctx); if (fixedPart) wrFixedAtk += evalFormula(fixedPart, ctx); }
+                    else { wrAtk += evalFormula(v, ctx); }
+                } else {
+                    const val = evalFormula(v, ctx);
+                    if (k==='extra') wrExtra+=val; else if (k==='defence') wrDefence+=val; else if (k==='Igdefence') wrIgdefence+=val; else if (k==='cd') wrCd+=val; else if (k==='allx') wrAllx+=val; else if (k==='ult_extra') wrUltExtra+=val; else if (k==='ult_Igdefence') mainIgdefence+=val;
+                }
+            }
+        }
+
+        // ---- 主C专属乘区 ----
+        const ultExtra = sumExpr(finalMain.ult_extra, ctx) + wrUltExtra;
+        const skillDmg = sumExpr(finalMain.skill_dmg, ctx);
+        const ultArp   = sumExpr(finalMain.ult_arp, ctx);
+        const mainDmgExtra = sumExpr(finalMain.dmg, ctx);
+        const additionExtra = sumExpr(finalMain.addition_extra, ctx);
+        const additionTypeUlt = finalMain.addition_type === 'ult';
+
+        // ---- 最终乘区计算 ----
+        const totalFixedAtk = mainFixedAtk + allyFixedAtk + wrFixedAtk;
+        const finalBase = baseVal + totalFixedAtk;
+        const totalAtkPct = mainAtk + allyAtk + wrAtk;
+        const finalAtk = finalBase * (1 + totalAtkPct);
+        const totalExtra = mainExtra + mainAllx + allyExtra + allyAllx + wrExtra + wrAllx + mainDmgExtra;
+        const totalArp = mainArp + allyArp; const resRed = mainAdr + allyAdr;
+        const totalIgdefence = mainIgdefence + allyIgdefence + wrIgdefence;
+        const totalDefence = mainDefence + allyDefence + wrDefence;
+        const effDef = enemyDef * Math.max(0, 1 - totalDefence) * Math.max(0, 1 - totalIgdefence);
+        const defFactor = 1000 / (1000 + effDef);
+        const fCr = Math.min(cr + allyCr + mainCr, 1); const fCd = cd + allyCd + mainCd + wrCd;
+        const critExpect = isNaN(1 + fCr*(fCd-1)) ? 1 : 1 + fCr*(fCd-1);
+
+        // ---- 各技能伤害 ----
+        const isSingle = enemyCount===1;
+        const rats = resolveRat(finalMain.rat), tgtStr = finalMain.target||'', tgts = tgtStr ? tgtStr.split(',') : [];
+        const ratSegCnt = s => s ? s.split('+').filter(Boolean).length : 0;
+        const naSeg = ratSegCnt(rats[0]), skSeg = ratSegCnt(rats[1]), ultSeg = ratSegCnt(rats[2]);
+        const legacySeg = finalMain.seg_single || finalMain.seg_full || finalMain.sg || finalMain.full;
+        if (legacySeg) {
+            const ls = resolveNum(legacySeg);
+            if (ls[0]!==naSeg || ls[1]!==skSeg || ls[2]!==ultSeg)
+                console.warn('[段数] '+finalMain.name+' 旧 seg='+legacySeg+' 与 rat 反推('+naSeg+','+skSeg+','+ultSeg+') 不一致，已忽略旧值改用 rat 段数');
+        }
+
+        function calcSkillDamage(ratExpr, tgtExpr, seg, bonusExtra, bonusArp) {
+            if (!ratExpr || ratExpr==='0%' || !seg) return 0;
+            let { rates, targets } = parseRatTarget('('+ratExpr+')', tgtExpr ? '('+tgtExpr+')' : '');
+            if (rates.length < seg) { while (rates.length < seg) { rates.push(0); targets.push('main'); } }
+            else if (rates.length > seg) { rates = rates.slice(0, seg); targets = targets.slice(0, seg); }
+            let dmg = 0;
+            const resF = 1 - Math.min(Math.max(enemyRes - resRed - totalArp - (bonusArp||0), -0.5), 0.9);
+            for (let i=0; i<rates.length; i++) {
+                const hit = finalAtk * rates[i] * (1+totalExtra+(bonusExtra||0)) * defFactor * resF * critExpect;
+                if (targets[i]==='all') dmg += hit * enemyCount;
+                else if (targets[i]==='adjacent') dmg += hit * (enemyCount===1?1:3);
+                else dmg += hit;
+            }
+            return dmg;
+        }
+
+        const naDmg = calcSkillDamage(rats[0], tgts[0]||'', naSeg, finalMain.na_as_ult?ultExtra:0, finalMain.na_as_ult?ultArp:0);
+        const skBonus = skillDmg + (finalMain.skill_as_ult?ultExtra:0);
+        const skBonusArp = finalMain.skill_as_ult?ultArp:0;
+        const skBase = calcSkillDamage(rats[1], tgts[1]||'', skSeg, skBonus, skBonusArp);
+        let skDmg = skBase;
+        if (copySkillTimes) skDmg += skBase * copySkillTimes;
+        const ultDmg = calcSkillDamage(rats[2], tgts[2]||'', ultSeg, ultExtra, ultArp);
+        const againDmg = againTimes ? calcSkillDamage(rats[1], tgts[1]||'', skSeg, skBonus, skBonusArp) * againTimes : 0;
+        const extraSkillDmg = extraSkillTimes ? calcSkillDamage(rats[1], tgts[1]||'', skSeg, skBonus, skBonusArp) * extraSkillTimes : 0;
+        const addBonusExtra = additionExtra + (additionTypeUlt ? ultExtra : 0);
+        const addBonusArp = additionTypeUlt ? ultArp : 0;
+        const additionDmg = additionRatio && additionTimes ? calcSkillDamage(`${additionRatio*100}%`, 'main', 1, addBonusExtra, addBonusArp) * additionTimes : 0;
+
+        // ---- 附加伤害 ----
+        let attachTimes = attackCount;
+        if (attachTimesExpr) { const t = smartVal(attachTimesExpr, ctx); if (t > 0) attachTimes = t; }
+        let attachAtk = finalAtk;
+        if (attachAtkKey && panelVars[attachAtkKey] !== undefined) attachAtk = panelVars[attachAtkKey];
+        let attachCrit = critExpect;
+        if (attachCritVal !== null) attachCrit = attachCritVal;
+        let attachCritFallback = 1.5;
+        if (attachCritFallbackVal !== null) attachCritFallback = attachCritFallbackVal;
+
+        let attachDmg = 0;
+        const perAttachBase = attachAtk * attachRatio * (1+totalExtra) * defFactor * (1 - Math.min(Math.max(enemyRes - resRed - totalArp, -0.5), 0.9));
+        if (attachLimitVal && attachTimes > attachLimitVal) {
+            attachDmg += perAttachBase * attachCrit * attachLimitVal;
+            attachDmg += perAttachBase * attachCritFallback * (attachTimes - attachLimitVal);
+        } else {
+            attachDmg = perAttachBase * attachCrit * attachTimes;
+        }
+        if (attachTargetType === 'all') attachDmg *= enemyCount;
+
+        // ---- 真伤层 ----
+        function skillRatioSum(ratExpr, tgtExpr, seg) {
+            if (!ratExpr || !seg) return 0;
+            let { rates, targets } = parseRatTarget('('+ratExpr+')', tgtExpr ? '('+tgtExpr+')' : '');
+            rates = rates.slice(0, seg); targets = targets.slice(0, seg);
+            let s = 0;
+            for (let i=0;i<rates.length;i++){ let mult = 1; if (targets[i]==='all') mult = enemyCount; else if (targets[i]==='adjacent') mult = (enemyCount===1?1:3); s += rates[i]*mult; }
+            return s;
+        }
+        let burstRatioSum = skillRatioSum(rats[0], tgts[0]||'', naSeg) + skillRatioSum(rats[1], tgts[1]||'', skSeg) + skillRatioSum(rats[2], tgts[2]||'', ultSeg);
+        if (additionRatio && additionTimes) burstRatioSum += additionRatio * additionTimes;
+        const trueDmgAmount = trueDmgRate > 0 ? finalAtk * burstRatioSum * (1 + totalExtra) * trueDmgRate : 0;
+
+        const total = naDmg + skDmg + ultDmg + againDmg + extraSkillDmg + additionDmg + attachDmg + trueDmgAmount;
+
+        // 展示
+        resultArea.style.display = 'block';
+        resultContent.innerHTML = `
+        <div class="result-grid">
+            <div>
+                <h3>📊 对${enemyCount}目标总伤（主C ${mainStar}魂）</h3>
+                <div class="total">${(total/10000).toFixed(2)} 万</div>
+                <div style="font-size:14px; color:#ccc; margin-top:8px;">
+                    总攻击次数: ${attackCount}<br>
+                    普攻: ${(naDmg/10000).toFixed(2)}万 (1次)<br>
+                    战技: ${(skDmg/10000).toFixed(2)}万 (1次${copySkillTimes ? `+复制${copySkillTimes}次` : ''})<br>
+                    终结技: ${(ultDmg/10000).toFixed(2)}万 (1次)<br>
+                    ${againDmg ? `额外战技: ${(againDmg/10000).toFixed(2)}万 (${againTimes}次)<br>` : ''}
+                    ${extraSkillDmg ? `追加战技: ${(extraSkillDmg/10000).toFixed(2)}万 (${extraSkillTimes}次)<br>` : ''}
+                    ${additionDmg ? `追击伤害: ${(additionDmg/10000).toFixed(2)}万 (${additionTimes}次)<br>` : ''}
+                    ${attachDmg ? `附加伤害: ${(attachDmg/10000).toFixed(2)}万 (${attachTimes}次)<br>` : ''}
+                    ${trueDmgAmount ? `真伤层: ${(trueDmgAmount/10000).toFixed(2)}万<br>` : ''}
+                </div>
+            </div>
+            <div>
+                <h3>⚙️ 乘区拆解</h3>
+                <div style="font-size:13px; color:#ccc;">
+                    最终攻击: ${finalAtk.toFixed(0)}<br>
+                    总增伤: ${(totalExtra*100).toFixed(1)}%${mainDmgExtra?` (含独立增伤${(mainDmgExtra*100).toFixed(1)}%)`:''}<br>
+                    终结技专属增伤: ${(ultExtra*100).toFixed(1)}%${finalMain.ult_extra||wrUltExtra?'':' (无)'}<br>
+                    战技专属增伤: ${(skillDmg*100).toFixed(1)}%<br>
+                    无视防御(自身): ${(totalIgdefence*100).toFixed(1)}%<br>
+                    减防(对敌): ${(totalDefence*100).toFixed(1)}%<br>
+                    有效防御: ${effDef.toFixed(0)} (乘法层)<br>
+                    防御系数: ${defFactor.toFixed(3)}<br>
+                    抗性乘区: ${(1-Math.min(Math.max(enemyRes-resRed-totalArp,-0.5),0.9)).toFixed(3)}${ultArp?` (终伤含穿透${(ultArp*100).toFixed(1)}%)`:''}<br>
+                    暴击期望: ${critExpect.toFixed(3)}
+                </div>
+            </div>
+        </div>
+        <div class="note">
+            <b>本次修复说明：</b>终结技/战技专属增伤(ult_extra/extra_ult/ult_dmg/skill_dmg)、终结技抗性穿透(ult_arp/ice_res_pen)、通用独立增伤(dmg)、追击增伤(addition_rat/addition_dmg)、真伤(true_dmg)、视为终结技(skill_as_ult/na_as_ult)、主C自身攻击力加成(atk_boost) 现已接入公式；防御改为减防×无视乘法层；昔涟 attach_dmg→attach_damage、刻律德菈 追击改为 sptype=addition、那刻夏 敌人数增伤改为战技专属(skill_dmg=n*20%，对单仅+20%)。
+        </div>`;
+    } catch(e) { alert('计算出错：' + e.message); }
+}
+
+// UI 交互
+function loadData(data) {
+    characterData = data; const names = data.map(c => c.name);
+    mainSelect.innerHTML = '<option value="">请选择主C</option>' + names.map(n => `<option value="${n}">${n}</option>`).join('');
+    allyContainer.innerHTML = '';
+    for (let i = 1; i <= 3; i++) {
+        const d = document.createElement('div'); d.className = 'ally-row';
+        d.innerHTML = `<label>队友${i}</label><select class="ally-select"><option value="">无</option>${names.map(n => `<option value="${n}">${n}</option>`).join('')}</select><span class="ally-label">魂</span><select class="ally-star">${[0,1,2,3,4,5,6].map(v => `<option value="${v}">${v}</option>`).join('')}</select><span class="ally-label">叠</span><select class="ally-super">${[1,2,3,4,5].map(v => `<option value="${v}">${v}</option>`).join('')}</select>`;
+        allyContainer.appendChild(d);
+    }
+    configArea.classList.remove('hidden'); loadStatus.textContent = `✅ 已加载 ${data.length} 个角色`; loadStatus.style.color = '#5f9';
+    debugPreview.textContent = '计算后显示完整属性'; updatePanel();
+}
+jsonLoader.addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return; const r = new FileReader();
+    r.onload = ev => { try { const d = JSON.parse(ev.target.result); if (Array.isArray(d) && d.length) loadData(d); else { loadStatus.textContent='❌ JSON 格式错误'; loadStatus.style.color='#f55'; } } catch(err) { loadStatus.textContent='❌ 解析失败: '+err.message; loadStatus.style.color='#f55'; } };
+    r.readAsText(f);
+});
+mainSelect.addEventListener('change', () => { mainChar = characterData?.find(c => c.name===mainSelect.value)||null; updatePanel(); });
+document.addEventListener('change', e => { if (e.target.classList.contains('ally-select')) updatePanel(); });
+calcBtn.addEventListener('click', calculate);
+
+// ========== 自动加载 ==========
+async function autoLoadData() {
+    try {
+        const response = await fetch('./data/character.json');
+        if (!response.ok) throw new Error('文件不存在');
+        const data = await response.json();
+        if (Array.isArray(data) && data.length) {
+            loadData(data);
+            loadStatus.textContent = `✅ 自动加载 ./data/character.json (${data.length} 个角色)`;
+            loadStatus.style.color = '#5f9';
+            return true;
+        }
+    } catch (e) {
+        console.log('自动加载失败，请手动上传:', e.message);
+        loadStatus.textContent = '📂 请上传 character.json (或放入 ./data/character.json)';
+        loadStatus.style.color = '#aaa';
+        return false;
+    }
+}
+document.addEventListener('DOMContentLoaded', autoLoadData);
+
+// ========== 下载功能 ==========
+function downloadPage() {
+    const html = document.documentElement.outerHTML;
+    const blob = new Blob([
+        '<!DOCTYPE html>\n' + html
+    ], { type: 'text/html; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'calcu.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function downloadData() {
+    if (!characterData || !characterData.length) {
+        alert('请先加载角色数据！');
+        return;
+    }
+    const json = JSON.stringify(characterData, null, 2);
+    const blob = new Blob([json], { type: 'application/json; charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'character.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
