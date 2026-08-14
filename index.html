@@ -4,21 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RLRS Studio · REMIX 激越工作室 — 独立游戏工具开发</title>
-    <meta name="description" content="REMIX LASER RAISING STUDIO(RLRS,REMIX 激越工作室)官方站点。独立开发工作室,出品 MCLCS 启动器与崩坏:星穹铁道工具集。" />
+    <meta name="description" content="REMIX LASER RAISING STUDIO（RLRS，REMIX 激越工作室）官方站点。独立开发工作室，出品 MCLCS Minecraft 启动器与工具箱、崩坏：星穹铁道工具集。" />
     <meta name="theme-color" content="#0a0c10" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href="https://remix-laser-raising-studio.github.io/" />
 
-    <!-- 社交分享(Open Graph) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="RLRS Studio · REMIX 激越工作室" />
-    <meta property="og:description" content="独立开发工作室,探索技术与创意的边界。出品 MCLCS 启动器与崩坏:星穹铁道工具集。" />
+    <meta property="og:description" content="独立开发工作室，探索技术与创意的边界。出品 MCLCS 启动器与崩坏：星穹铁道工具集。" />
     <meta property="og:url" content="https://remix-laser-raising-studio.github.io/" />
     <meta property="og:site_name" content="RLRS Studio" />
     <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="RLRS Studio · REMIX 激越工作室" />
-    <meta name="twitter:description" content="独立开发工作室,出品 MCLCS 启动器与崩坏:星穹铁道工具集。" />
 
     <link rel="stylesheet" href="/css/style.css" />
 </head>
@@ -28,74 +25,318 @@
 
     <div class="page">
 
-        <nav class="nav-bar">
-            <a href="/" class="brand">✦ <span>RLRS</span> Studio</a>
+        <!-- 统一导航 -->
+        <nav class="site-nav">
+            <a href="/" class="brand">
+                <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true">
+                    <path d="M15 49 L33 16 L42 16 L24 49 Z" />
+                    <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
+                </svg>
+                <span><span class="mk">✦</span> RLRS</span> Studio
+            </a>
             <div class="nav-links">
-                <a href="/mclcs/">MCLCS</a>
-                <a href="/sr/">崩铁工具</a>
-                <a href="/join/">加入我们</a>
+                <a href="/mclcs/" class="link">MCLCS</a>
+                <a href="/sr/" class="link">崩铁工具</a>
+                <a href="/join/" class="link">加入我们</a>
+                <a href="/mclcs/wpf/" class="btn btn-primary nav-cta">⬇ 获取 MCLCS</a>
             </div>
         </nav>
 
+        <!-- Hero -->
         <section class="hero">
-            <div class="badge">✦ 独立工作室</div>
+            <div class="badge">✦ 独立游戏工具工作室</div>
+            <h1 class="tagline">为玩家而生，<span>把"好用"做成一种体验</span></h1>
+            <p class="desc">REMIX 激越工作室出品 MCLCS 启动器与崩坏：星穹铁道工具集 —— 开源、免费、为热爱持续打磨。</p>
 
-            <div class="logo">RLRS</div>
-            <div class="brand-full">Remix Laser Raising Studio</div>
-            <div class="logo-sub">REMIX 激越工作室</div>
-
-            <h1 class="tagline">激越 · <span>不止于游戏工具</span></h1>
-
-            <p class="desc">REMIX 激越工作室 · 独立开发 · 探索技术与创意的边界</p>
+            <div class="actions">
+                <a href="/mclcs/wpf/" class="btn btn-primary">⬇ 获取 MCLCS</a>
+                <a href="/sr/" class="btn btn-ghost">🌠 崩铁工具</a>
+                <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener" class="btn btn-ghost">源代码</a>
+            </div>
 
             <div class="status">
                 <span class="status-dot"></span>
-                <span class="status-text">MCLCS 公测中 <small>· Windows</small></span>
-            </div>
-
-            <div class="actions">
-                <a href="/mclcs/" class="btn btn-primary">⬇ 获取 MCLCS</a>
-                <a href="/sr/" class="btn btn-ghost">🌠 崩铁工具</a>
-                <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener" class="btn btn-ghost">cnb.cool</a>
-            </div>
-
-            <div class="socials">
-                <a href="/join/">加入我们</a>
-                <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener">B站</a>
-                <a href="mailto:bingjianremix@outlook.com">邮箱</a>
-                <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener">文档</a>
+                <span class="status-text">MCLCS v2.5.4 公测中 <small>· Windows</small></span>
             </div>
         </section>
 
-        <h2 class="section-title">— 我们的作品 —</h2>
-        <div class="grid">
-            <a href="/mclcs/" class="product-card">
-                <div class="icon">🖥️</div>
-                <h3>MCLCS</h3>
-                <div class="platform">MINECRAFT 启动器 · 工具箱</div>
-                <div class="desc">十五个工具箱全内置,Windows 公测中,Android 版开发中。</div>
-                <span class="status-badge ready">● 获取下载</span>
-                <span class="btn-hint">点击进入 →</span>
-            </a>
-
-            <a href="/sr/" class="product-card">
-                <div class="icon">🌠</div>
-                <h3>崩铁工具集</h3>
-                <div class="platform">HONKAI · STAR RAIL</div>
-                <div class="desc">总伤计算器与抽卡模拟器,独立页面,免费使用。</div>
-                <span class="status-badge ready">● 立即使用</span>
-                <span class="btn-hint">点击进入 →</span>
-            </a>
+        <!-- Hero 产品实拍：全宽交互预览 -->
+        <div class="hero-shot reveal">
+            <div class="showcase-frame">
+                <div class="showcase-bar">
+                    <span class="dots"><i></i><i></i><i></i></span>
+                    <span class="u">remix-laser-raising-studio.github.io/mclcs/wpf/ui-preview.html</span>
+                </div>
+                <iframe src="/mclcs/wpf/ui-preview.html" title="MCLCS 界面交互预览" loading="lazy"></iframe>
+            </div>
+            <div class="hero-shot-cap">
+                实时交互界面 · 无需下载即可体验 &nbsp;—&nbsp; <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener">在新标签打开完整体验 ↗</a>
+            </div>
         </div>
 
-        <div class="footer">
-            © <span id="year">2026</span> · <a href="/">RLRS Studio</a> · 由 BingJian_REMIX 创立
-        </div>
+        <!-- 交替分栏 1：智能崩溃修复 -->
+        <section class="split">
+            <div class="split-text reveal">
+                <span class="eyebrow">Smart Recovery</span>
+                <h2>崩溃不再是终点</h2>
+                <p>MCLCS 能识别内存、Java 不兼容、缺失依赖等 8 类异常，给出清晰的报告与一键修复建议，安全重启游戏 —— 绝不破坏你的原文件。</p>
+                <ul>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>8 类异常智能归类，输出可读的崩溃报告</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>内存 / Java / 依赖问题，一键修复并重启</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>始终 / 询问 / 拒绝 三档修复策略，由你掌控</li>
+                </ul>
+            </div>
+            <div class="split-visual reveal" data-delay="1">
+                <div class="win">
+                    <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="t">崩溃分析报告</span></div>
+                    <div class="win-body">
+                        <div class="win-row"><span class="win-chip red">异常 · OutOfMemoryError</span><span class="win-pill">一键修复</span></div>
+                        <div class="win-line l"></div>
+                        <div class="win-line m"></div>
+                        <div class="win-row"><span class="win-chip mint">建议 · 内存上限提升至 4096 MB</span></div>
+                        <div class="win-line s"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 交替分栏 2：15 合 1 工具箱 -->
+        <section class="split rev">
+            <div class="split-text reveal">
+                <span class="eyebrow">All-in-One Toolbox</span>
+                <h2>一个启动器，一套工具链</h2>
+                <p>日志管理、性能监控、网络诊断、存档与备份、NBT 编辑、皮肤编辑、AI 助手……15 个工具内置于侧边栏，随用随取，无需额外安装。</p>
+                <ul>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>诊断 / 资源 / 开发 三大类全覆盖</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>侧边栏全局唤出，一键直达任意工具</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>年度统计、挂机工作流与 HUD 叠加</li>
+                </ul>
+            </div>
+            <div class="split-visual reveal" data-delay="1">
+                <div class="win">
+                    <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="t">工具箱</span></div>
+                    <div class="win-body">
+                        <div class="win-grid2">
+                            <div class="win-tile"><div class="tl-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div><div class="tl-t">日志管理器</div><div class="tl-d">高亮错误 · 实时跟踪</div></div>
+                            <div class="win-tile"><div class="tl-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 6 4-12 2 6h6"/></svg></div><div class="tl-t">性能监控</div><div class="tl-d">FPS / 内存 / CPU 曲线</div></div>
+                            <div class="win-tile"><div class="tl-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 4v5h-5"/></svg></div><div class="tl-t">备份管理器</div><div class="tl-d">定时 · 增量 · 自动清理</div></div>
+                            <div class="win-tile"><div class="tl-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg></div><div class="tl-t">AI 助手</div><div class="tl-d">崩溃解读 · 配装推荐</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 交替分栏 3：一键安装 -->
+        <section class="split">
+            <div class="split-text reveal">
+                <span class="eyebrow">One-Click Install</span>
+                <h2>下载即玩，告别手动找 Jar</h2>
+                <p>原版 / Fabric / Forge 全支持，镜像优先、自动回退官方。下载完成后自动校验完整性，缺失的库与前置依赖一键补齐，解压即运行。</p>
+                <ul>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>原版 / Fabric / Forge 一键安装</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>BMCLAPI 镜像优先，失败回退官方源</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>智能推荐与依赖补全（缺失项红色标记）</li>
+                </ul>
+            </div>
+            <div class="split-visual reveal" data-delay="1">
+                <div class="win">
+                    <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="t">下载中心</span></div>
+                    <div class="win-body">
+                        <div class="win-row"><span class="win-chip">Fabric API</span><span class="win-line m" style="flex:1"></span><span class="win-pill">安装</span></div>
+                        <div class="win-row"><span class="win-chip">Sodium</span><span class="win-line l" style="flex:1"></span><span class="win-pill ghost">已就绪</span></div>
+                        <div class="win-row"><span class="win-chip red">缺失前置 · Fabric Loader</span><span class="win-pill">补齐</span></div>
+                        <div class="win-line s"></div>
+                        <div class="win-line m"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 产品展示 -->
+        <section class="section reveal">
+            <div class="section-head">
+                <span class="eyebrow">Our Products</span>
+                <h2>我们的作品</h2>
+                <p class="lead">从桌面到移动端，从 Minecraft 到崩坏：星穹铁道，工具因热爱而生。</p>
+            </div>
+
+            <div class="product-showcase">
+                <a href="/mclcs/" class="product-card-lg">
+                    <div class="pc-top">
+                        <div class="pc-icon">
+                            <svg class="ico ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/><path d="M12 3v3M9 4.5l2 2M15 4.5l-2 2"/></svg>
+                        </div>
+                        <div>
+                            <h3>MCLCS</h3>
+                            <div class="pc-sub">Minecraft 启动器 · 工具箱</div>
+                        </div>
+                    </div>
+                    <p class="pc-desc">不只是启动器，更是一个全能的 Minecraft 工具箱。一键安装、智能崩溃修复、十五个内置工具，开箱即用。</p>
+                    <ul class="pc-points">
+                        <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>十五个工具箱全内置，覆盖诊断 / 资源 / 开发</li>
+                        <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>依赖自动补全，解压即运行，无需手动配置</li>
+                        <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>智能崩溃分析与一键修复，非破坏性</li>
+                    </ul>
+                    <div class="pc-foot">
+                        <span class="status-badge ready">● Windows 公测中</span>
+                        <span class="pc-enter">进入产品 →</span>
+                    </div>
+                </a>
+
+                <a href="/sr/" class="product-card-lg">
+                    <div class="pc-top">
+                        <div class="pc-icon">
+                            <svg class="ico ico-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M5.6 5.6l2.1 2.1M3 12h3M18.4 5.6l-2.1 2.1M21 12h-3"/><path d="M16 14a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/><path d="M12 11v3l2 1.2"/></svg>
+                        </div>
+                        <div>
+                            <h3>崩坏：星穹铁道 工具集</h3>
+                            <div class="pc-sub">Honkai · Star Rail</div>
+                        </div>
+                    </div>
+                    <p class="pc-desc">玩家自制的第三方工具合集，总伤计算器与抽卡模拟器独立成页，免费、即开即用。</p>
+                    <ul class="pc-points">
+                        <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>总伤计算器，快速核算角色面板</li>
+                        <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>全角色全光锥抽卡模拟器</li>
+                        <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>纯前端、免登录、隐私友好</li>
+                    </ul>
+                    <div class="pc-foot">
+                        <span class="status-badge ready">● 立即使用</span>
+                        <span class="pc-enter">进入工具 →</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- 功能亮点 -->
+        <section class="section reveal">
+            <div class="section-head">
+                <span class="eyebrow">Why RLRS</span>
+                <h2>为什么是我们</h2>
+                <p class="lead">把"能用"做到"好用"，把"工具"做成"体验"。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature">
+                    <div class="f-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17V7a2 2 0 0 1 2-2h9l5 5v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M8 21h8M12 17v4"/></svg></div>
+                    <h3>全平台覆盖</h3>
+                    <p>Windows 公测进行中，Android 版本正在构建，让工具跟随你到每一块屏幕。</p>
+                </div>
+                <div class="feature">
+                    <div class="f-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 .9-4.5 4.4 1.1 6.2L12 17l-5.6 3.1 1.1-6.2L3 8.9 9 .9z"/></svg></div>
+                    <h3>开源免费</h3>
+                    <p>核心项目以开源协议发布，代码透明、可审计，社区共建而非黑盒。</p>
+                </div>
+                <div class="feature">
+                    <div class="f-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+                    <h3>15 合 1 工具箱</h3>
+                    <p>日志、崩溃、性能、网络、存档、备份、NBT……一个启动器，一套完整工具链。</p>
+                </div>
+                <div class="feature">
+                    <div class="f-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+                    <h3>智能崩溃修复</h3>
+                    <p>识别内存、Java、依赖等 8 类异常，给出修复建议并安全重启，绝不破坏原文件。</p>
+                </div>
+                <div class="feature">
+                    <div class="f-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg></div>
+                    <h3>依赖自动补全</h3>
+                    <p>下载即校验完整性，缺失的库与前置自动补齐，告别手动找 Jar 的烦恼。</p>
+                </div>
+                <div class="feature">
+                    <div class="f-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-9-8.5c4 0 6 2 6 2"/><path d="M21 5v3.5h-3.5"/></svg></div>
+                    <h3>持续打磨</h3>
+                    <p>从单一启动器到工具矩阵，工作室持续迭代，听取每一位玩家的反馈。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 信任背书 -->
+        <section class="section reveal">
+            <div class="stat-strip">
+                <div class="stat"><div class="num">15+</div><div class="lbl">内置工具箱</div></div>
+                <div class="stat"><div class="num">.NET 8</div><div class="lbl">现代技术栈</div></div>
+                <div class="stat"><div class="num">开源</div><div class="lbl">透明可审计</div></div>
+                <div class="stat"><div class="num">多实例</div><div class="lbl">时长与崩溃统计</div></div>
+            </div>
+        </section>
+
+        <!-- 收尾 CTA -->
+        <section class="cta-band reveal">
+            <h2>准备好，让 Minecraft 更好用了吗？</h2>
+            <p>免费、开源、Windows 公测中。下载 MCLCS，或先在我们的交互预览里体验真实界面。</p>
+            <div class="actions" style="margin-bottom:0">
+                <a href="/mclcs/wpf/" class="btn btn-primary">⬇ 获取 MCLCS v2.5.4</a>
+                <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener" class="btn btn-ghost">体验交互界面 ↗</a>
+            </div>
+        </section>
+
+        <!-- 统一页脚 -->
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="fb-logo">
+                        <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true" style="width:22px;height:22px">
+                            <path d="M15 49 L33 16 L42 16 L24 49 Z" />
+                            <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
+                        </svg>
+                        <span><span class="mk">✦</span> RLRS</span> Studio
+                    </div>
+                    <p>REMIX 激越工作室 · 一支热爱游戏工具与技术的独立开发小队，探索技术与创意的边界。</p>
+                </div>
+                <div class="footer-col">
+                    <h4>产品</h4>
+                    <a href="/mclcs/">MCLCS 启动器</a>
+                    <a href="/mclcs/wpf/">MCLCS-WPF（Windows）</a>
+                    <a href="/mclcs/android/">MCLCS-Android</a>
+                    <a href="/sr/">崩铁工具集</a>
+                </div>
+                <div class="footer-col">
+                    <h4>资源</h4>
+                    <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener">源代码</a>
+                    <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/latest" target="_blank" rel="noopener">下载发布</a>
+                    <a href="/join/">加入我们</a>
+                    <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener">界面预览</a>
+                </div>
+                <div class="footer-col">
+                    <h4>联系</h4>
+                    <a href="mailto:bingjianremix@outlook.com">邮箱</a>
+                    <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener">B 站</a>
+                    <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener">cnb.cool</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© <span id="year">2026</span> RLRS Studio · 由 BingJian_REMIX 创立</span>
+                <div class="footer-socials">
+                    <a href="/">首页</a>
+                    <a href="/mclcs/">MCLCS</a>
+                    <a href="/sr/">崩铁工具</a>
+                    <a href="/join/">加入我们</a>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
     <script src="/js/particles.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 导航滚动态
+        const nav = document.querySelector('.site-nav');
+        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 12);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+
+        // 滚动揭示（大厂产品页标志性动效）
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('in');
+                    io.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
     </script>
 </body>
 </html>

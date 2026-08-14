@@ -22,23 +22,33 @@
 
     <div class="page">
 
-        <nav class="nav-bar">
-            <a href="/" class="brand">◀ <span>RLRS</span> Studio</a>
+        <!-- 统一导航 -->
+        <nav class="site-nav">
+            <a href="/" class="brand">
+                <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true">
+                    <path d="M15 49 L33 16 L42 16 L24 49 Z" />
+                    <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
+                </svg>
+                <span><span class="mk">✦</span> RLRS</span> Studio
+            </a>
             <div class="nav-links">
-                <a href="/mclcs/">MCLCS</a>
-                <a href="/join/">加入我们</a>
+                <a href="/mclcs/" class="link">MCLCS</a>
+                <a href="/sr/" class="link">崩铁工具</a>
+                <a href="/join/" class="link">加入我们</a>
+                <a href="/mclcs/wpf/" class="btn btn-primary nav-cta">⬇ 获取 MCLCS</a>
             </div>
         </nav>
 
-        <section class="card" style="text-align: center;">
+        <!-- Hero -->
+        <section class="hero">
             <div class="badge">✦ 独立工具</div>
-            <div class="logo" style="font-size: 40px;">🌠 崩坏星穹铁道</div>
-            <div class="logo-sub">HONKAI · STAR RAIL</div>
-            <p class="desc">工具集 · 独立页面</p>
+            <h1 class="tagline">崩坏：星穹铁道</h1>
+            <div class="brand-full" style="margin-bottom:14px">HONKAI · STAR RAIL</div>
+            <p class="desc">工具集 · 独立页面 · 免费使用</p>
         </section>
 
-        <h2 class="section-title">— 选择工具 —</h2>
-        <div class="grid">
+        <h2 class="section-title reveal">— 选择工具 —</h2>
+        <div class="grid reveal">
             <a href="/sr/pages/caclu.html" target="_blank" rel="noopener" class="product-card">
                 <div class="icon">⚔️</div>
                 <h3>总伤计算器</h3>
@@ -58,19 +68,71 @@
             </a>
         </div>
 
-        <div class="disclaimer">
+        <div class="disclaimer reveal">
             <strong>免责声明:</strong>本站工具均为玩家自制的第三方工具,与米哈游(miHoYo / HoYoverse)无关,不涉及任何官方素材或资源。
             「崩坏:星穹铁道」「Honkai: Star Rail」及相关名称、角色、商标均归米哈游所有。
         </div>
 
-        <div class="footer">
-            © <span id="year">2026</span> <a href="/">RLRS Studio</a> · 由 BingJian_REMIX 创立
-        </div>
+        <!-- 统一页脚 -->
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="fb-logo">
+                        <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true" style="width:22px;height:22px">
+                            <path d="M15 49 L33 16 L42 16 L24 49 Z" />
+                            <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
+                        </svg>
+                        <span><span class="mk">✦</span> RLRS</span> Studio
+                    </div>
+                    <p>REMIX 激越工作室 · 一支热爱游戏工具与技术的独立开发小队，探索技术与创意的边界。</p>
+                </div>
+                <div class="footer-col">
+                    <h4>产品</h4>
+                    <a href="/mclcs/">MCLCS 启动器</a>
+                    <a href="/mclcs/wpf/">MCLCS-WPF（Windows）</a>
+                    <a href="/mclcs/android/">MCLCS-Android</a>
+                    <a href="/sr/">崩铁工具集</a>
+                </div>
+                <div class="footer-col">
+                    <h4>资源</h4>
+                    <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener">源代码</a>
+                    <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/latest" target="_blank" rel="noopener">下载发布</a>
+                    <a href="/join/">加入我们</a>
+                    <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener">界面预览</a>
+                </div>
+                <div class="footer-col">
+                    <h4>联系</h4>
+                    <a href="mailto:bingjianremix@outlook.com">邮箱</a>
+                    <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener">B 站</a>
+                    <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener">cnb.cool</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© <span id="year">2026</span> RLRS Studio · 由 BingJian_REMIX 创立</span>
+                <div class="footer-socials">
+                    <a href="/">首页</a>
+                    <a href="/mclcs/">MCLCS</a>
+                    <a href="/sr/">崩铁工具</a>
+                    <a href="/join/">加入我们</a>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
     <script src="/js/particles.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+        const nav = document.querySelector('.site-nav');
+        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 12);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
     </script>
 </body>
 </html>

@@ -4,16 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MCLCS-WPF — 下载 | RLRS Studio</title>
-    <meta name="description" content="下载 MCLCS-WPF(v2.5.2),RLRS 工作室出品的 Minecraft 启动器与工具箱,支持 Windows 10 / 11,依赖自动补全。" />
+    <meta name="description" content="下载 MCLCS-WPF(v2.5.4),RLRS 工作室出品的 Minecraft 启动器与工具箱,支持 Windows 10 / 11,依赖自动补全,十五个内置工具。" />
     <meta name="theme-color" content="#0a0c10" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href="https://remix-laser-raising-studio.github.io/mclcs/wpf/" />
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content="MCLCS-WPF — 下载" />
-    <meta property="og:description" content="Minecraft 启动器与工具箱,Windows 10 / 11,依赖自动补全。" />
+    <meta property="og:description" content="Minecraft 启动器与工具箱,Windows 10 / 11,依赖自动补全,十五个内置工具。" />
     <meta property="og:url" content="https://remix-laser-raising-studio.github.io/mclcs/wpf/" />
     <meta property="og:site_name" content="RLRS Studio" />
     <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary" />
+
     <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
@@ -22,18 +25,28 @@
 
     <div class="page">
 
-        <nav class="nav-bar">
-            <a href="/" class="brand">◀ <span>RLRS</span> Studio</a>
+        <!-- 统一导航 -->
+        <nav class="site-nav">
+            <a href="/" class="brand">
+                <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true">
+                    <path d="M15 49 L33 16 L42 16 L24 49 Z" />
+                    <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
+                </svg>
+                <span><span class="mk">✦</span> RLRS</span> Studio
+            </a>
             <div class="nav-links">
-                <a href="/mclcs/">选择版本</a>
-                <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener">源码 →</a>
+                <a href="/mclcs/" class="link">MCLCS</a>
+                <a href="/sr/" class="link">崩铁工具</a>
+                <a href="/join/" class="link">加入我们</a>
+                <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/latest" target="_blank" rel="noopener" class="btn btn-primary nav-cta">⬇ 获取 MCLCS</a>
             </div>
         </nav>
 
+        <!-- Hero -->
         <section class="hero">
-            <div class="badge mint">● 最新 v2.5.2</div>
-            <h1>MCLCS-WPF</h1>
-            <div class="sub">WINDOWS · .NET 8.0</div>
+            <div class="badge mint">● 最新 v2.5.4</div>
+            <h1 class="tagline">MCLCS-WPF</h1>
+            <div class="brand-full" style="margin-bottom:18px">WINDOWS · .NET 8.0</div>
 
             <div class="meta-tags">
                 <span class="meta-tag">🪟 Windows 10 / 11</span>
@@ -41,22 +54,147 @@
                 <span class="meta-tag">🧰 十五个工具箱</span>
             </div>
 
-            <p class="desc">Minecraft 启动器,更是一个全能的工具箱。下载后解压即可运行,依赖自动补全,无需手动配置。</p>
+            <p class="desc">Minecraft 启动器，更是一个全能的工具箱。下载后解压即可运行，依赖自动补全，无需手动配置。</p>
 
             <div class="actions">
                 <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/latest" target="_blank" rel="noopener" class="btn btn-primary">⬇ 下载 MCLCS-WPF</a>
                 <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener" class="btn btn-ghost">查看源码</a>
+                <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener" class="btn btn-ghost">体验界面 ↗</a>
             </div>
         </section>
 
-        <div class="footer">
-            © <span id="year">2026</span> <a href="/">RLRS Studio</a> · 由 BingJian_REMIX 创立
+        <!-- Hero 产品实拍 -->
+        <div class="hero-shot reveal">
+            <div class="showcase-frame">
+                <div class="showcase-bar">
+                    <span class="dots"><i></i><i></i><i></i></span>
+                    <span class="u">remix-laser-raising-studio.github.io/mclcs/wpf/ui-preview.html</span>
+                </div>
+                <iframe src="/mclcs/wpf/ui-preview.html" title="MCLCS 界面交互预览" loading="lazy"></iframe>
+            </div>
+            <div class="hero-shot-cap">
+                实时交互界面 · 无需下载即可体验 &nbsp;—&nbsp; <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener">在新标签打开完整体验 ↗</a>
+            </div>
         </div>
+
+        <!-- 交替分栏：为 Windows 深度优化 -->
+        <section class="split">
+            <div class="split-text reveal">
+                <span class="eyebrow">Built for Windows</span>
+                <h2>为 Windows 深度优化</h2>
+                <p>不只是"能跑"，而是把 Windows 平台的体验打磨到细节：智能选 Java、后台预热、游戏内 HUD、多实例追踪，开箱即用。</p>
+                <ul>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>Java 智能选择（≥21），自动安装 Temurin</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>启动预热与 HUD 叠加，性能零负担</li>
+                    <li><svg class="ico ico-sm ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>多实例追踪与游玩时长统计</li>
+                </ul>
+            </div>
+            <div class="split-visual reveal" data-delay="1">
+                <div class="win">
+                    <div class="win-bar"><span class="dots"><i></i><i></i><i></i></span><span class="t">设置 · 启动</span></div>
+                    <div class="win-body">
+                        <div class="win-row"><span class="win-chip">Java 自动 · Temurin 21</span><span class="win-pill ghost">已就绪</span></div>
+                        <div class="win-row"><span class="win-chip mint">启动预热 · 开</span><span class="win-chip mint">HUD 叠加 · 关</span></div>
+                        <div class="win-line l"></div>
+                        <div class="win-row"><span class="win-line m" style="flex:1"></span><span class="win-pill">启动游戏</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 系统要求 -->
+        <section class="section reveal">
+            <div class="section-head">
+                <span class="eyebrow">System Requirements</span>
+                <h2>系统要求</h2>
+                <p class="lead">轻量、现代，几乎覆盖所有近年的 Windows 设备。</p>
+            </div>
+            <div class="sysreq">
+                <div class="sr-item">
+                    <div class="k">操作系统</div>
+                    <div class="v">Windows 10 / 11（64 位）</div>
+                </div>
+                <div class="sr-item">
+                    <div class="k">运行环境</div>
+                    <div class="v">.NET 8 运行时（缺失自动安装）</div>
+                </div>
+                <div class="sr-item">
+                    <div class="k">Java</div>
+                    <div class="v">自动安装 Temurin 21</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 收尾 CTA -->
+        <section class="cta-band reveal">
+            <h2>立即获取 MCLCS v2.5.4</h2>
+            <p>免费、开源、Windows 公测中。解压即运行，或先在我们的交互预览里体验真实界面。</p>
+            <div class="actions" style="margin-bottom:0">
+                <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/latest" target="_blank" rel="noopener" class="btn btn-primary">⬇ 下载 MCLCS-WPF</a>
+                <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener" class="btn btn-ghost">体验交互界面 ↗</a>
+            </div>
+        </section>
+
+        <!-- 统一页脚 -->
+        <footer class="site-footer">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="fb-logo">
+                        <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true" style="width:22px;height:22px">
+                            <path d="M15 49 L33 16 L42 16 L24 49 Z" />
+                            <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
+                        </svg>
+                        <span><span class="mk">✦</span> RLRS</span> Studio
+                    </div>
+                    <p>REMIX 激越工作室 · 一支热爱游戏工具与技术的独立开发小队，探索技术与创意的边界。</p>
+                </div>
+                <div class="footer-col">
+                    <h4>产品</h4>
+                    <a href="/mclcs/">MCLCS 启动器</a>
+                    <a href="/mclcs/wpf/">MCLCS-WPF（Windows）</a>
+                    <a href="/mclcs/android/">MCLCS-Android</a>
+                    <a href="/sr/">崩铁工具集</a>
+                </div>
+                <div class="footer-col">
+                    <h4>资源</h4>
+                    <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF" target="_blank" rel="noopener">源代码</a>
+                    <a href="https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/latest" target="_blank" rel="noopener">下载发布</a>
+                    <a href="/join/">加入我们</a>
+                    <a href="/mclcs/wpf/ui-preview.html" target="_blank" rel="noopener">界面预览</a>
+                </div>
+                <div class="footer-col">
+                    <h4>联系</h4>
+                    <a href="mailto:bingjianremix@outlook.com">邮箱</a>
+                    <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener">B 站</a>
+                    <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener">cnb.cool</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© <span id="year">2026</span> RLRS Studio · 由 BingJian_REMIX 创立</span>
+                <div class="footer-socials">
+                    <a href="/">首页</a>
+                    <a href="/mclcs/">MCLCS</a>
+                    <a href="/sr/">崩铁工具</a>
+                    <a href="/join/">加入我们</a>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
     <script src="/js/particles.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
+        const nav = document.querySelector('.site-nav');
+        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 12);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+        const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
     </script>
 </body>
 </html>
