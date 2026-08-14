@@ -3,307 +3,62 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MCLCS-Android — 开发中</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #0a0c10;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 600px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 48px 40px 36px;
-            text-align: center;
-            box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
-            animation: fadeUp 0.8s ease-out both;
-        }
-        .nav-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            margin-bottom: 24px;
-        }
-        .nav-bar a {
-            color: rgba(255, 255, 255, 0.2);
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.25s;
-        }
-        .nav-bar a:hover {
-            color: #ffd700;
-        }
-        .nav-bar .brand {
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 600;
-            font-size: 15px;
-        }
-        .nav-bar .brand span {
-            color: #ffd700;
-        }
-
-        .icon-big {
-            font-size: 64px;
-            display: block;
-            margin-bottom: 8px;
-        }
-        h1 {
-            font-size: 36px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #ffd700, #f7971e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .sub {
-            color: rgba(255, 255, 255, 0.15);
-            font-size: 14px;
-            letter-spacing: 4px;
-            font-weight: 300;
-            margin-top: 2px;
-        }
-        .status {
-            display: inline-block;
-            margin-top: 16px;
-            background: rgba(255, 215, 0, 0.06);
-            color: #ffd700;
-            padding: 8px 28px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 600;
-            border: 1px solid rgba(255, 215, 0, 0.08);
-        }
-        .desc {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 15px;
-            line-height: 1.8;
-            margin: 20px 0 12px;
-        }
-        .roadmap {
-            text-align: left;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 16px;
-            padding: 20px 24px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            margin: 16px 0 24px;
-        }
-        .roadmap li {
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 14px;
-            line-height: 2;
-            list-style: none;
-        }
-        .roadmap li::before {
-            content: "▸ ";
-            color: rgba(255, 215, 0, 0.2);
-        }
-        .roadmap li.done::before {
-            content: "✓ ";
-            color: #64ffda;
-        }
-        .roadmap li.done {
-            color: rgba(255, 255, 255, 0.15);
-            text-decoration: line-through;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 14px 44px;
-            border-radius: 60px;
-            font-size: 16px;
-            font-weight: 600;
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.04);
-            color: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: all 0.3s;
-            cursor: not-allowed;
-        }
-        .btn:hover {
-            border-color: rgba(255, 215, 0, 0.15);
-            color: rgba(255, 215, 0, 0.2);
-        }
-
-        .footer {
-            margin-top: 24px;
-            color: rgba(255, 255, 255, 0.04);
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-        .footer a {
-            color: rgba(255, 255, 255, 0.06);
-            text-decoration: none;
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 32px 20px 28px;
-                border-radius: 28px;
-            }
-            h1 {
-                font-size: 28px;
-            }
-            .icon-big {
-                font-size: 48px;
-            }
-            .roadmap {
-                padding: 16px 18px;
-            }
-        }
-
-        @keyframes fadeUp {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <title>MCLCS-Android — 开发中 | RLRS Studio</title>
+    <meta name="description" content="MCLCS-Android 是 RLRS 工作室正在开发的移动端 Minecraft 工具箱,将 MCLCS 的核心能力带到手机端,敬请期待。" />
+    <meta name="theme-color" content="#0a0c10" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href="https://remix-laser-raising-studio.github.io/mclcs/android/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MCLCS-Android — 开发中" />
+    <meta property="og:description" content="移动端 Minecraft 工具箱,开发中,敬请期待。" />
+    <meta property="og:url" content="https://remix-laser-raising-studio.github.io/mclcs/android/" />
+    <meta property="og:site_name" content="RLRS Studio" />
+    <meta property="og:locale" content="zh_CN" />
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
 
-    <canvas id="particles-canvas"></canvas>
+    <canvas id="particles-canvas" data-count="50" data-speed="0.2" data-dist="120"></canvas>
 
-    <div class="container">
+    <div class="page">
 
-        <div class="nav-bar">
+        <nav class="nav-bar">
             <a href="/mclcs/" class="brand">◀ <span>MCLCS</span></a>
-            <a href="/">RLRS Studio</a>
-        </div>
+            <div class="nav-links">
+                <a href="/">RLRS Studio</a>
+            </div>
+        </nav>
 
-        <span class="icon-big">📱</span>
-        <h1>MCLCS-Android</h1>
-        <div class="sub">MOBILE · 开发中</div>
-        <div class="status">● 正在构建</div>
+        <section class="card" style="max-width: 600px; margin: 0 auto;">
+            <span class="icon-big">📱</span>
+            <h1 class="page-title">MCLCS-Android</h1>
+            <div class="logo-sub">MOBILE · 开发中</div>
+            <div class="status" style="margin-top: 12px; margin-bottom: 16px;">
+                <span class="status-dot" style="background: var(--gold);"></span>
+                <span class="status-text" style="color: var(--gold);">● 正在构建</span>
+            </div>
 
-        <div class="desc">
-            将 MCLCS 的核心能力带到移动端。<br />
-            让手机也能管理 Minecraft。
-        </div>
+            <p class="desc">将 MCLCS 的核心能力带到移动端。<br />让手机也能管理 Minecraft。</p>
 
-        <div class="roadmap">
-            <li class="done">项目架构设计</li>
-            <li class="done">UI 原型</li>
-            <li>核心功能移植</li>
-            <li>内测版发布</li>
-            <li>公测上线</li>
-        </div>
+            <ul class="roadmap">
+                <li class="done">项目架构设计</li>
+                <li class="done">UI 原型</li>
+                <li>核心功能移植</li>
+                <li>内测版发布</li>
+                <li>公测上线</li>
+            </ul>
 
-        <span class="btn">暂未开放下载</span>
+            <span class="btn disabled">暂未开放下载</span>
+        </section>
 
         <div class="footer">
-            © 2026 <a href="/">RLRS Studio</a>
+            © <span id="year">2026</span> <a href="/">RLRS Studio</a> · 由 BingJian_REMIX 创立
         </div>
-
     </div>
 
+    <script src="/js/particles.js"></script>
     <script>
-        (function() {
-            const canvas = document.getElementById('particles-canvas');
-            const ctx = canvas.getContext('2d');
-            let w, h;
-            const particles = [];
-            const COUNT = 50;
-            const MAX_SPEED = 0.2;
-            const CONNECT_DIST = 120;
-
-            function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * w;
-                    this.y = Math.random() * h;
-                    this.vx = (Math.random() - 0.5) * MAX_SPEED * 2;
-                    this.vy = (Math.random() - 0.5) * MAX_SPEED * 2;
-                    this.r = Math.random() * 2 + 1;
-                    this.alpha = Math.random() * 0.3 + 0.1;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    if (this.x < 0 || this.x > w) this.vx *= -1;
-                    if (this.y < 0 || this.y > h) this.vy *= -1;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(255, 215, 0, ' + this.alpha + ')';
-                    ctx.fill();
-                }
-            }
-
-            for (var i = 0; i < COUNT; i++) {
-                particles.push(new Particle());
-            }
-
-            function drawLines() {
-                for (var i = 0; i < particles.length; i++) {
-                    for (var j = i + 1; j < particles.length; j++) {
-                        var dx = particles[i].x - particles[j].x;
-                        var dy = particles[i].y - particles[j].y;
-                        var dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < CONNECT_DIST) {
-                            var alpha = (1 - dist / CONNECT_DIST) * 0.12;
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.strokeStyle = 'rgba(255, 215, 0, ' + alpha + ')';
-                            ctx.lineWidth = 0.5;
-                            ctx.stroke();
-                        }
-                    }
-                }
-            }
-
-            function loop() {
-                ctx.clearRect(0, 0, w, h);
-                for (var i = 0; i < particles.length; i++) {
-                    particles[i].update();
-                    particles[i].draw();
-                }
-                drawLines();
-                requestAnimationFrame(loop);
-            }
-            loop();
-        })();
+        document.getElementById('year').textContent = new Date().getFullYear();
     </script>
-
 </body>
 </html>
