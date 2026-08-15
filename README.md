@@ -51,8 +51,8 @@
 ## 📬 联系与社区
 
 - **邮箱**：bingjian_remix_2026@Outlook.com
-- **Discord**：UID 2090624670（邀请链接整理中）
-- **B站**：即将公布
+- **Discord**：即将公布
+- **B站**：[@REMIX工作室](https://space.bilibili.com/2090624670)
 
 ---
 
