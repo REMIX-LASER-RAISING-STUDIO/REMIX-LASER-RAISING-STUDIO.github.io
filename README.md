@@ -1,7 +1,7 @@
 # RLRS-Studio.github.io
 - REMIX_LASER_RAISING_STUDIO，简称 RLRS_STUDIO，中文名 REMIX激越工作室
 
-- # REMIX LASER RAISING STUDIO
+# REMIX LASER RAISING STUDIO
 
 欢迎来到 **REMIX LASER RAISING STUDIO** 的官方 GitHub 组织页面！我们是专注于 Minecraft 相关工具开发与创意内容制作的技术团队，致力于为玩家社区带来实用、有趣且高质量的开源作品。
 
