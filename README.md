@@ -1,5 +1,5 @@
 # RLRS-Studio.github.io
-- REMIX_LASER_RAISING_STUDIO，简称 RLRS_STUDIO，中文名 REMIX激越工作室
+- REMIX_LASER_RAISING_STUDIO，简称 RLRS_STUDIO，中文名 REMIX 激越工作室
 
 # REMIX LASER RAISING STUDIO
 
@@ -50,9 +50,9 @@
 
 ## 📬 联系与社区
 
-- **邮箱**：remixstudio@example.com（请替换）
-- **Discord**：[邀请链接](https://discord.gg/xxx)
-- **B站**：[@REMIX工作室](https://space.bilibili.com/xxx)
+- **邮箱**：bingjian_remix_2026@Outlook.com
+- **Discord**：UID 2090624670（邀请链接整理中）
+- **B站**：即将公布
 
 ---
 
