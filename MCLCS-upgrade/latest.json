@@ -3,8 +3,9 @@
     "version": "2.5.5",
     "channel": "stable",
     "mandatory": false,
+    "status": "true",
     "releaseDate": "2026-09-04",
-    "downloadUrl": "https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/download/v2.5.5/MCLCS-2.5.5-win-x64.zip",
+    "downloadUrl": "https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/download/v2.5.5/MCLCS-WPF-2.5.5-win-x64.zip",
     "singleFileAvailable": true,
     "changelog": "MCLCS 启动器 2.5.5 当前稳定版。2.5.6 尚在公测前验收阶段，验收通过与出包后将在 latest.json 升级版本号并启用新包下载。"
   },
@@ -12,8 +13,9 @@
     "version": "2.5.4",
     "channel": "stable",
     "mandatory": false,
+    "status": "true",
     "releaseDate": "",
-    "downloadUrl": "https://cnb.cool/RLRS-Studio/MCLCS-Linux/-/releases/download/v2.5.4/MCLCS-2.5.4-Linux-x64.zip",
+    "downloadUrl": "https://cnb.cool/RLRS-Studio/MCLCS-Linux/-/releases/download/v2.5.4/MCLCS-Linux-2.5.4-linux-x64.zip",
     "singleFileAvailable": true,
     "changelog": "MCLCS 启动器 Linux 版 2.5.4 当前稳定版。"
   },
@@ -21,9 +23,11 @@
     "version": "0.0.0",
     "channel": "stable",
     "mandatory": false,
+    "status": "false",
     "releaseDate": "",
     "downloadUrl": "",
     "singleFileAvailable": false,
     "changelog": "（由 MCLCS-Android 仓库维护，请替换为实际版本与下载链接）"
   }
 }
+
