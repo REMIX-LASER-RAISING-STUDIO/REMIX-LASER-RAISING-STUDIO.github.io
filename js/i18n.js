@@ -173,7 +173,7 @@
             'join.qr.qq': 'QQ 群',
 
             'sr.title': '崩坏：星穹铁道 · 工具 | RLRS Studio',
-            'sr.desc': 'RLRS 工作室出品的崩坏：星穹铁道玩家自制工具集，包含总伤计算器与全角色全光锥抽卡模拟器，免费使用。',
+            'sr.desc': 'RLRS 工作室出品的崩坏：星穹铁道玩家自制工具集，包含总伤计算器与全角色全光锥抽卡模拟器。支持伤害模拟、配队对比、光锥出货概率推演，数据持续更新，免费使用，无需登录。',
             'sr.ogtitle': '崩坏：星穹铁道 · 工具集',
             'sr.ogdesc': '总伤计算器与抽卡模拟器，玩家自制，免费使用。',
             'sr.badge': '✦ 独立工具',
@@ -381,7 +381,7 @@
             'join.qr.qq': 'QQ 群',
 
             'sr.title': '崩壞：星穹鐵道 · 工具 | RLRS Studio',
-            'sr.desc': 'RLRS 工作室出品的崩壞：星穹鐵道玩家自製工具集，包含總傷計算器與全角色全光錐抽卡模擬器，免費使用。',
+            'sr.desc': 'RLRS 工作室出品的崩壞：星穹鐵道玩家自製工具集，包含總傷計算器與全角色全光錐抽卡模擬器。支援傷害模擬、配隊對比、光錐出貨機率推演，資料持續更新，免費使用，無需登入。',
             'sr.ogtitle': '崩壞：星穹鐵道 · 工具集',
             'sr.ogdesc': '總傷計算器與抽卡模擬器，玩家自製，免費使用。',
             'sr.badge': '✦ 獨立工具',
@@ -589,7 +589,7 @@
             'join.qr.qq': 'QQ Group',
 
             'sr.title': 'Honkai: Star Rail · Tools | RLRS Studio',
-            'sr.desc': 'Fan-made Honkai: Star Rail tools by RLRS Studio: a total-damage calculator and a full gacha simulator. Free to use.',
+            'sr.desc': 'Fan-made Honkai: Star Rail tools by RLRS Studio, including a total-damage calculator and a full character & light cone gacha simulator. Supports damage simulation, team comparison and drop-rate estimation, updated regularly. Free, no login.',
             'sr.ogtitle': 'Honkai: Star Rail · Tools',
             'sr.ogdesc': 'Total-damage calculator and gacha simulator. Fan-made, free to use.',
             'sr.badge': '✦ Independent Tools',
