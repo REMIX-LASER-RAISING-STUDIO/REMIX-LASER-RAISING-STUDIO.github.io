@@ -1,13 +1,13 @@
 {
   "wpf": {
-    "version": "2.5.5",
+    "version": "2.5.6",
     "channel": "stable",
     "mandatory": false,
     "status": "true",
-    "releaseDate": "2026-09-04",
-    "downloadUrl": "https://cnb.cool/RLRS-Studio/MCLCS-WPF/-/releases/download/v2.5.5/MCLCS-WPF-2.5.5-win-x64.zip",
+    "releaseDate": "2026-09-13",
+    "downloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Launcher-2.5.6-win-x64.zip",
     "singleFileAvailable": true,
-    "changelog": "MCLCS 启动器 2.5.5 当前稳定版。2.5.6 尚在公测前验收阶段，验收通过与出包后将在 latest.json 升级版本号并启用新包下载。"
+    "changelog": "燧石启动器（Chert）2.5.6 当前稳定版。仓库已更名为 Chert-WPF，下载包为 Chert-Launcher-2.5.6-win-x64.zip。"
   },
   "linux": {
     "version": "2.5.4",
