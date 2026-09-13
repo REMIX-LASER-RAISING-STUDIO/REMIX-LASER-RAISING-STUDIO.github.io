@@ -1,0 +1,38 @@
+{
+  "wpf": {
+    "version": "2.5.6",
+    "channel": "stable",
+    "mandatory": false,
+    "status": "true",
+    "releaseDate": "2026-09-13",
+    "downloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Launcher-2.5.6-win-x64.zip",
+    "singleFileAvailable": true,
+    "lightAvailable": true,
+    "lightDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Light-2.5.6-win-x64.zip",
+    "changelog": "Chert Launcher（燧石启动器）2.5.6：\n- AFK 添加动作支持弹窗选择全部动作类型\n- 皮肤编辑器 3D 预览重打光修正\n- 性能页改为多块实时折线图\n- 下载队列按钮无框无底（保留环形进度）\n- 工具箱移除版本列表/版本设置入口\n- 游戏页快速启动仅保留版本库\n- 版本设置页重设计为分区卡片\n- 暗色主题补全控件前景色\n- 添加同名游戏名提示、实时提示统一右下角 toast\n- 音乐播放器页滚动与删除按钮修正\n- 标题栏新增最大化按钮\n- 新增轻量版 Chert-Light：framework-dependent 单文件，体积约 1MB，需目标机已安装 .NET 10 桌面运行时；自包含版 Chert-Launcher 仍保持双击即跑、零依赖"
+  },
+  "linux": {
+    "version": "0.0.0",
+    "channel": "stable",
+    "mandatory": false,
+    "status": "false",
+    "releaseDate": "",
+    "downloadUrl": "",
+    "singleFileAvailable": false,
+    "lightAvailable": false,
+    "lightDownloadUrl": "",
+    "changelog": "（由 MCLCS-Linux 仓库维护，请替换为实际版本与下载链接）"
+  },
+  "android": {
+    "version": "0.0.0",
+    "channel": "stable",
+    "mandatory": false,
+    "status": "false",
+    "releaseDate": "",
+    "downloadUrl": "",
+    "singleFileAvailable": false,
+    "lightAvailable": false,
+    "lightDownloadUrl": "",
+    "changelog": "（由 MCLCS-Android 仓库维护，请替换为实际版本与下载链接）"
+  }
+}
