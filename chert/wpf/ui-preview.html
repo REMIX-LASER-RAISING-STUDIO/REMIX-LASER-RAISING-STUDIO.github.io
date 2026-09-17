@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chert Launcher · 燧石启动器 1:1 展示</title>
+<style>
+:root{
+  /* ===== 暗色主题（DarkTheme.xaml / Palette.xaml） ===== */
+  --win:#0F1115;
+  --ctrl:#1A1D24;
+  --ctrl-border:#2A2F3A;
+  --ctrl-hover:#252830;
+  --card:rgba(26,29,36,0.70);
+  --card-hover-border:#3B82F6;
+  --toggle-off:#3A3F4A;
+  --fg:#FFFFFF;
+  --fg2:#C8CDD6;
+  --accent:#3B82F6;
+  --accent-hover:#2B6FE0;
+  --danger:#E74C3C;
+  --input:#14161C;
+  --input-border:#2A2F3A;
+  --input-focus:#3B82F6;
+  --progress:#3B82F6;
+
+  /* ===== 四色索引贴（Palette.xaml） ===== */
+  --game:#4CAF50;        --game-active:#55C45A;
+  --dl:#2196F3;          --dl-active:#25A8FF;
+  --tool:#FF9800;        --tool-active:#FFAA00;
+  --set:#607D8B;         --set-active:#6C8C9C;
+  --cream:#F2E9D8;       /* 选中指示细线（奶白） */
+
+  --tabbar-h:52px;
+  --status-h:30px;
+  --sidebar-w:56px;
+  --sidebar-exp:152px;
+  --radius:12px;
+  --radius-sm:10px;
+  --font:-apple-system,"Segoe UI","Microsoft YaHei",system-ui,sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font);font-size:13px;background:radial-gradient(1200px 700px at 70% -10%,#1b2029,#0b0d11 60%);
+  color:var(--fg);display:flex;align-items:center;justify-content:center;min-height:100vh;padding:22px;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:#2f3540;border-radius:8px;border:2px solid transparent;background-clip:content-box}
+::-webkit-scrollbar-thumb:hover{background:#3b4350;background-clip:content-box}
+
+/* ===== 窗口外壳（1100x720, MinWidth900 MinHeight600） ===== */
+.window{
+  width:min(1100px,100%);height:min(720px,93vh);
+  background:var(--win);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04) inset;position:relative;
+}
+
+/* ===== 标题栏（52px, 随主标签变色） ===== */
+.titlebar{
+  height:var(--tabbar-h);background:var(--game);display:flex;align-items:center;
+  padding:0 12px 0 16px;position:relative;flex-shrink:0;
+  transition:background .2s ease;user-select:none;
+}
+.brand{font-size:17px;font-weight:800;color:#fff;letter-spacing:.3px;white-space:nowrap}
+.brand .spark{display:inline-block;width:18px;height:18px;border-radius:5px;margin-right:8px;
+  background:linear-gradient(135deg,#ffd27d,#ff9d4d);vertical-align:-3px;
+  box-shadow:0 2px 8px rgba(0,0,0,.35);position:relative}
+.brand .spark::after{content:"";position:absolute;inset:5px;border-radius:2px;
+  background:linear-gradient(135deg,#2b2f3a,#0f1115)}
+
+.tb-search{width:272px;margin:0 12px;position:relative}
+.tb-search input{
+  width:100%;height:30px;padding:0 10px;font-size:12px;color:#fff;caret-color:#fff;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:8px;outline:none;
+}
+.tb-search input::placeholder{color:rgba(255,255,255,.7)}
+
+/* 下载进度环按钮 */
+.dl-btn{width:40px;height:40px;margin-left:6px;position:relative;background:transparent;border:none;cursor:pointer;
+  display:grid;place-items:center;flex:none}
+.dl-btn svg{width:16px;height:16px;color:#fff;z-index:2}
+.dl-ring{position:absolute;inset:3px}
+.dl-btn .dl-ring{width:auto;height:auto}   /* 覆盖 .dl-btn svg 的 16px，使其撑满按钮内边距（34×34）并居中 */
+.dl-ring circle{fill:none;stroke-width:3;stroke-linecap:round}
+.dl-ring .track{stroke:rgba(255,255,255,.35)}
+.dl-ring .bar{stroke:#fff;stroke-dasharray:94.25;stroke-dashoffset:30;transform:rotate(-90deg);
+  transform-origin:center;transform-box:fill-box}
+
+/* 四色索引贴（右对齐、底部齐平） */
+.tabs{margin-left:auto;display:flex;align-items:flex-end;height:100%;position:relative}
+.tab{
+  height:30px;width:56px;margin-left:-20px;cursor:pointer;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  transition:width .2s ease, margin .2s ease, background .15s ease, filter .15s ease;
+  background:var(--tc);color:#fff;font-size:13px;font-weight:700;overflow:hidden;
+}
+.tab:first-child{margin-left:0}
+.tab.s0{border-radius:8px 0 0 0}          /* 最左：仅左上圆角 */
+.tab.s3{border-radius:0 8px 0 0}          /* 最右：仅右上圆角 */
+.tab .tlabel{opacity:0;white-space:nowrap;transition:opacity .2s ease;pointer-events:none}
+.tab.expanded{width:130px}
+.tab.expanded .tlabel{opacity:1}
+.tab.active{width:130px;filter:brightness(1.12);background:var(--tc-active);z-index:20}
+.tab.active .tlabel{opacity:1}
+.tab.active .underline{opacity:1}
+.tab .underline{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:22px;height:3px;border-radius:2px;background:var(--cream);opacity:0;transition:opacity .2s ease}
+.tab:hover:not(.active){filter:brightness(1.12);z-index:20}
+
+/* 窗口控制 */
+.win-ctl{display:flex;align-items:center;margin-left:10px}
+.win-ctl button{width:38px;height:34px;background:transparent;border:none;color:#fff;cursor:pointer;
+  display:grid;place-items:center;border-radius:7px}
+.win-ctl button:hover{background:rgba(255,255,255,.2)}
+.win-ctl button.close:hover{background:#E74C3C}
+.win-ctl svg{width:12px;height:12px}
+
+/* ===== 主体 ===== */
+.body{display:flex;flex:1;min-height:0}
+
+/* 侧边栏 */
+.sidebar{width:var(--sidebar-w);flex:none;background:var(--ctrl);border-right:1px solid transparent;
+  overflow:hidden;transition:width .2s ease,border-color .2s ease;position:relative;z-index:5}
+.sidebar:hover{width:var(--sidebar-exp)}
+.sidebar .scroll{height:100%;overflow-y:hidden;overflow-x:hidden;padding:8px 6px}
+.sitem{height:36px;display:flex;align-items:center;gap:10px;padding:0 0 0 14px;margin:2px 0;cursor:pointer;
+  border-radius:8px;position:relative;color:var(--fg2);transition:background .12s}
+.sitem:hover{background:var(--ctrl-hover)}
+.sitem.active{background:var(--ctrl-hover);color:var(--fg)}
+.sitem .ico{width:18px;height:18px;flex:none;color:var(--fg2)}
+.sitem.active .ico{color:var(--fg)}
+.sitem .st{font-size:13px;white-space:nowrap;font-weight:600;overflow:hidden;opacity:1;transition:opacity .15s ease}
+.sitem .ind{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:0 3px 3px 0;
+  background:var(--ind,var(--game));opacity:0;transition:opacity .2s ease}
+.sitem.active .ind{opacity:1}
+/* 折叠态（56px）仅留图标，文字如 WPF 的 Visibility.Collapsed 完全隐藏，悬停展开淡入 */
+.sidebar:not(:hover) .st{opacity:0;pointer-events:none}
+.sidebar:not(:hover) .sgroup{display:none}
+.sgroup{font-size:11px;color:var(--fg2);opacity:.55;padding:10px 0 4px 14px;white-space:nowrap;font-weight:700}
+.sgroup:first-child{padding-top:4px}
+
+/* 内容区 */
+.content{flex:1;min-width:0;position:relative;overflow:hidden}
+/* 页面顶部同色渐隐带（ApplyPageTint） */
+.page-tint{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(to bottom,var(--tint,var(--game)) 0%,var(--tint,var(--game)) 10%,var(--win) 55%,var(--win) 100%);
+  transition:background .2s ease}
+.page{position:absolute;inset:0;z-index:1;overflow:auto;padding:18px 20px 16px;opacity:0;
+  transform:translateY(14px);pointer-events:none;transition:opacity .2s ease,transform .2s ease}
+.page.active{opacity:1;transform:none;pointer-events:auto}
+
+/* ===== 卡片（CardStyle） ===== */
+.card{background:var(--card);border:1px solid var(--ctrl-border);border-radius:var(--radius);
+  padding:14px;transition:transform .15s,box-shadow .15s,border-color .15s,background .15s;position:relative}
+.card:hover{transform:translateY(-6px);border-color:var(--card-hover-border);box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.sec-title{font-size:15px;font-weight:800;margin:18px 0 8px;display:flex;align-items:center;gap:10px}
+.sec-title .line{flex:1;height:1px;background:var(--ctrl-border)}
+
+/* 按钮 */
+.btn{border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;
+  color:#fff;background:var(--accent);transition:filter .15s,transform .1s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;border:1px solid var(--ctrl-border);color:var(--fg)}
+.btn.ghost:hover{border-color:var(--accent);background:rgba(59,130,246,.08)}
+.btn.sm{padding:6px 12px;font-size:12.5px}
+
+/* 滑动开关（ToggleSwitchStyle） */
+.sw{width:44px;height:24px;border:none;background:var(--toggle-off);border-radius:12px;position:relative;
+  cursor:pointer;padding:0;flex:none;transition:background .15s}
+.sw .kn{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;
+  transition:transform .15s}
+.sw.on{background:var(--accent)}
+.sw.on .kn{transform:translateX(20px)}
+
+/* 输入框 */
+.input{background:var(--input);border:1px solid var(--input-border);color:var(--fg);border-radius:8px;
+  padding:8px 10px;font-size:13px;outline:none;font-family:var(--font)}
+.input:focus{border-color:var(--input-focus)}
+select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' stroke='%23C8CDD6' stroke-width='1.6'><path d='M1 1l4 4 4-4'/></svg>");
+  background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.badge{display:inline-block;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700;color:#fff;background:var(--set)}
+.badge.green{background:var(--game)} .badge.orange{background:var(--tool)} .badge.red{background:var(--danger)}
+
+/* 游戏页 */
+.quick{display:grid;grid-template-columns:2fr 1.1fr .8fr auto;gap:12px;align-items:end}
+.qlabels{display:flex;gap:12px;margin:14px 0 4px}
+.qlabels span{font-size:11px;color:var(--fg2)}
+.qlabels span:nth-child(1){flex:2}
+.qlabels span:nth-child(2){flex:1.1}
+.qlabels span:nth-child(3){flex:.8}
+.qrow{display:flex;align-items:center;gap:12px;margin-top:0}
+/* 账号选择器（对应 GameView 的账号 ComboBox + AuthType 彩色徽标） */
+.acct{position:relative;flex:2}
+.acct-main{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--ctrl-border);border-radius:8px;background:var(--input);cursor:pointer;font-size:13px}
+.acct .caret{margin-left:auto;color:var(--fg2);font-size:11px}
+.ab{font-size:10px;font-weight:700;color:#fff;padding:1px 6px;border-radius:4px;flex:none}
+.ab.off{background:#9AA0A6}.ab.ms{background:var(--game)}.ab.auth{background:var(--tool)}
+.acct-pop{display:none;position:absolute;top:calc(100% + 4px);left:0;right:0;background:var(--ctrl);
+  border:1px solid var(--ctrl-border);border-radius:8px;padding:4px;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.acct:hover .acct-pop{display:block}
+.acct-pop .ai{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer}
+.acct-pop .ai:hover{background:var(--ctrl-hover)}
+.acct-pop .ai span:first-child{flex:1}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.hscroll{display:flex;gap:14px;overflow-x:auto;padding:6px 2px;scroll-snap-type:x proximity}
+.hcard{flex:0 0 auto;scroll-snap-align:start}
+
+/* 下载页卡片网格 */
+.grid-cards{display:flex;flex-wrap:wrap;gap:12px}
+.dcard{width:196px;background:var(--card);border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);
+  overflow:hidden;transition:transform .15s,border-color .15s}
+.dcard:hover{transform:translateY(-4px);border-color:var(--card-hover-border)}
+.dcard .cover{height:110px;background:var(--ctrl);position:relative;display:grid;place-items:center}
+.dcard .cover svg{width:34px;height:34px;color:var(--fg2);opacity:.5}
+.dcard .dbody{padding:8px 10px 10px}
+.dcard .title{font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dcard .author{font-size:11px;color:var(--fg2);opacity:.7;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dcard .meta{font-size:11px;color:var(--accent);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dcard .sum{font-size:11px;color:var(--fg2);opacity:.7;height:32px;margin-top:4px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.45}
+.dcard .acts{display:flex;gap:6px;margin-top:6px;flex-wrap:nowrap}
+.dcard .acts .btn{padding:5px 9px;font-size:12px;white-space:nowrap}
+
+/* 工具箱面板网格 */
+.panel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.pcard{padding:16px}
+.pcard h3{font-size:14px;margin-bottom:6px;display:flex;align-items:center;gap:9px}
+.pcard .pi{width:30px;height:30px;border-radius:7px;background:var(--ctrl);display:grid;place-items:center;color:var(--fg2)}
+.pcard .pi svg{width:16px;height:16px}
+.pcard p{font-size:12px;color:var(--fg2);opacity:.85;line-height:1.5}
+
+/* 设置行 */
+.set-row{display:flex;align-items:center;gap:10px;margin:9px 0;flex-wrap:wrap}
+.set-row .lbl{width:90px;color:var(--fg2);font-size:13px;flex:none}
+.set-row .lbl2{width:150px;color:var(--fg);font-size:13px;flex:none}
+
+/* 状态栏 */
+.statusbar{height:var(--status-h);background:var(--ctrl);border-top:1px solid var(--ctrl-border);
+  display:flex;align-items:center;padding:0 12px;font-size:12px;color:var(--fg2);gap:0;flex-shrink:0}
+.statusbar .sp{flex:1}
+.statusbar .sb-item{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.statusbar .sb-item+.sb-item{margin-left:12px}
+.sb-prog{width:120px;height:12px;border-radius:6px;background:var(--ctrl-border);overflow:hidden}
+.sb-prog>i{display:block;height:100%;background:var(--accent);width:62%}
+.music-mini{display:flex;align-items:center;gap:4px;margin-left:14px}
+.music-mini button{background:transparent;border:none;color:var(--fg2);cursor:pointer;font-size:12px;width:24px;height:22px;border-radius:5px}
+.music-mini button:hover{background:var(--ctrl-hover);color:var(--fg)}
+.net-dot{width:8px;height:8px;border-radius:50%;background:var(--game)}
+
+/* ===== 弹窗（ModalOverlayStyle / ModalCardStyle） ===== */
+.overlay{position:absolute;inset:0;z-index:60;background:rgba(0,0,0,.5);display:none;
+  align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex}
+.modal{background:var(--ctrl);border:1px solid var(--ctrl-border);border-radius:14px;padding:20px;
+  max-width:560px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.modal h3{font-size:17px;font-weight:800;margin-bottom:4px}
+.modal .sub{color:var(--fg2);font-size:12px;margin-bottom:12px}
+.modal .close-x{float:right;background:transparent;border:none;color:var(--fg2);cursor:pointer;font-size:16px}
+.modal .row-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.modal .cover{height:200px;background:var(--ctrl);border-radius:8px;margin:10px 0;display:grid;place-items:center}
+.modal .cover svg{width:48px;height:48px;color:var(--fg2);opacity:.5}
+.meta-line{font-size:11px;color:var(--fg2);opacity:.8;margin:3px 0}
+.meta-line b{color:var(--fg);opacity:1}
+
+/* 下载队列弹窗 */
+.dl-pop{position:absolute;top:50px;right:12px;width:420px;background:var(--ctrl);border:1px solid var(--ctrl-border);
+  border-radius:8px;padding:12px;z-index:55;box-shadow:0 14px 36px rgba(0,0,0,.4);display:none}
+.dl-pop.show{display:block}
+.dl-pop .qitem{margin:6px 0}
+.dl-pop .qitem .qp{height:8px;border-radius:4px;background:var(--ctrl-border);overflow:hidden;margin-top:4px}
+.dl-pop .qitem .qp>i{display:block;height:100%;background:var(--accent);width:40%}
+
+.toast{position:absolute;right:16px;bottom:40px;width:330px;background:var(--ctrl);border:1px solid var(--ctrl-border);
+  border-radius:8px;z-index:58;box-shadow:0 14px 36px rgba(0,0,0,.45);overflow:hidden;animation:toastIn .2s ease}
+.toast .bar{width:4px;align-self:stretch;background:var(--accent)}
+@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+.hint{font-size:12px;color:var(--fg2);margin-top:4px}
+.pagehead h2{font-size:19px;font-weight:800}
+.pagehead .pill{font-size:12px;color:var(--fg2);background:var(--ctrl);padding:4px 10px;border-radius:20px;border:1px solid var(--ctrl-border)}
+.flex{display:flex;align-items:center}.between{justify-content:space-between}.gap8{gap:8px}
+.muted{color:var(--fg2)}.small{font-size:12px}
+
+/* ===== 工具箱面板（来自各 Toolbox/…View.xaml） ===== */
+.tb{padding:0}                      /* 工具箱单一面板容器 */
+.tb h2{font-size:19px;font-weight:800;margin-bottom:12px}
+.tb .bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tb .bar .sp{margin-left:auto}
+.pbox{background:var(--card);border:1px solid var(--ctrl-border);border-radius:var(--radius);padding:14px}
+.tb .toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tb .hint{font-size:12px;color:var(--fg2);opacity:.75;margin-bottom:8px;line-height:1.5}
+.tb .status{font-size:12px;color:var(--fg2);margin-top:8px}
+.tb .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.tb .lbl{color:var(--fg2);font-size:13px}
+.tb .list{border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);overflow:hidden;background:var(--input)}
+.tb .li{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--ctrl-border);font-size:13px}
+.tb .li:last-child{border-bottom:none}
+.tb .li .name{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb .li .sub{font-size:11px;color:var(--fg2);opacity:.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb .li .grow{flex:1;min-width:0}
+.tb .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tb .grid2.sm{gap:10px}
+.tb .stat{border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);padding:12px;background:var(--ctrl)}
+.tb .stat .v{font-size:22px;font-weight:800;color:var(--accent)}
+.tb .stat .k{font-size:12px;color:var(--fg2)}
+.tb .chart{height:90px;margin-top:8px}
+.tb table{width:100%;border-collapse:collapse;background:var(--input);border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);overflow:hidden;font-size:12.5px}
+.tb th{text-align:left;font-size:11px;color:var(--fg2);background:var(--ctrl);padding:7px 10px;font-weight:700}
+.tb td{padding:7px 10px;border-top:1px solid var(--ctrl-border)}
+.tb td .mono{font-family:Consolas,Menlo,monospace;color:var(--fg2)}
+.tb .sev{font-size:10px;font-weight:700;color:#fff;padding:2px 7px;border-radius:4px;white-space:nowrap}
+.tb .sev.crit{background:var(--danger)} .tb .sev.warn{background:var(--tool)} .tb .sev.info{background:var(--accent)}
+.tb .tree{font-family:Consolas,Menlo,monospace;font-size:12.5px;line-height:1.7;background:var(--input);border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);padding:10px;overflow:auto;max-height:300px}
+.tb .tree .t{color:var(--fg2);font-size:10px;background:var(--ctrl);padding:1px 5px;border-radius:3px;margin-right:6px}
+.tb .tree .v{color:var(--accent)}
+.tb .chat{max-width:820px;margin:0 auto}
+.tb .bubble{border-radius:14px;padding:10px 13px;max-width:78%;font-size:13px;line-height:1.5;margin:8px 0}
+.tb .bubble.ai{background:var(--ctrl);border:1px solid var(--ctrl-border);border-radius:14px 14px 14px 4px}
+.tb .bubble.me{background:var(--accent);color:#fff;margin-left:auto;border-radius:14px 14px 4px 14px}
+.tb .sug{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+.tb .sug button{text-align:left;background:var(--card);border:1px solid var(--ctrl-border);border-radius:12px;padding:14px 12px;cursor:pointer;transition:border-color .15s}
+.tb .sug button:hover{border-color:var(--accent)}
+.tb .sug b{font-size:14px} .tb .sug span{font-size:12px;color:var(--fg2);display:block;margin-top:4px;line-height:1.5}
+.tb .aiwelcome{text-align:center;padding:34px 0 12px}
+.tb .aiwelcome .bot{width:64px;height:64px;border-radius:32px;background:var(--ctrl);border:1px solid var(--ctrl-border);display:grid;place-items:center;font-size:30px;margin:0 auto 14px}
+.tb .aiwelcome h3{font-size:23px;font-weight:800} .tb .aiwelcome p{color:var(--fg2);max-width:520px;margin:8px auto 0}
+.tb .afk-actions{background:var(--input);border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);max-height:240px;overflow:auto}
+.tb .preview{background:var(--ctrl);border:1px solid var(--ctrl-border);border-radius:var(--radius-sm);min-height:220px;display:grid;place-items:center;color:var(--fg2)}
+</style>
+</head>
+<body>
+<div class="window" id="win">
+
+  <!-- ===================== 标题栏 ===================== -->
+  <div class="titlebar" id="titlebar">
+    <div class="brand"><span class="spark"></span>Chert Launcher</div>
+
+    <div class="tb-search">
+      <input id="globalSearch" placeholder="搜索 Mod、光影、材质包…（回车跳转）" />
+    </div>
+
+    <button class="dl-btn" id="dlBtn" title="下载队列 / 进度">
+      <svg class="dl-ring" viewBox="0 0 34 34"><circle class="track" cx="17" cy="17" r="15"></circle><circle class="bar" cx="17" cy="17" r="15"></circle></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+    </button>
+    <span class="badge red" style="position:absolute;top:6px;right:8px;min-width:14px;height:14px;border-radius:7px;font-size:9px;display:grid;place-items:center;padding:0 3px">2</span>
+
+    <!-- 四色索引贴主标签 -->
+    <div class="tabs" id="tabs"></div>
+
+    <div class="win-ctl">
+      <button id="btnMin" title="最小化"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 6h8"/></svg></button>
+      <button id="btnMax" title="最大化"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="2.5" width="7" height="7" rx="1"/></svg></button>
+      <button id="btnClose" class="close" title="关闭"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l6 6M9 3l-6 6"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ===================== 主体 ===================== -->
+  <div class="body">
+    <div class="sidebar" id="sidebar">
+      <div class="scroll" id="sidebarItems"></div>
+    </div>
+
+    <div class="content" id="content">
+      <div class="page-tint" id="pageTint"></div>
+
+      <!-- ===== 游戏页 ===== -->
+      <div class="page active" id="page-game">
+        <div class="pagehead" style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+          <h2>游戏</h2><span class="pill">快速启动</span>
+        </div>
+
+        <div class="card">
+          <div class="quick">
+            <select class="input" style="grid-column:1/4"><option>1.21.4 — 正式版</option><option>1.20.1 — Forge 47.3.0</option><option>1.19.2 — Fabric 0.16.5</option><option>整合包 · All of Fabric 8</option></select>
+            <div style="display:flex;gap:8px;grid-column:4">
+              <button class="btn" style="min-width:96px" onclick="toast('正在启动 Minecraft…')">启动</button>
+              <button class="btn ghost" onclick="showModal('bigPage')">版本库</button>
+            </div>
+          </div>
+          <div class="qlabels">
+            <span>账号</span><span>用户名</span><span>内存 (MB)</span>
+          </div>
+          <div class="qrow">
+            <div class="acct" onclick="toast('切换账号')">
+              <div class="acct-main"><span>Steve（离线）</span><span class="ab off">离线</span><span class="caret">▾</span></div>
+              <div class="acct-pop">
+                <div class="ai"><span>Alex_Ms（微软）</span><span class="ab ms">微软</span></div>
+                <div class="ai"><span>Neo服务器（Authlib）</span><span class="ab auth">Authlib</span></div>
+              </div>
+            </div>
+            <input class="input" style="flex:1.1" value="Steve" />
+            <input class="input" style="flex:.8" value="4096" />
+          </div>
+          <div class="hint" style="margin-top:8px">未选择账号时将使用离线模式启动。</div>
+        </div>
+
+        <div class="sec-title">局域网游戏 <button class="btn ghost sm" style="margin-left:auto" onclick="toast('已扫描局域网')">刷新</button></div>
+        <div class="hscroll">
+          <div class="card hcard" style="width:230px;height:116px"><div><b>Survival World</b><div class="small muted" style="margin-top:4px">192.168.1.20:25565</div></div><button class="btn sm" style="margin-top:8px;float:right">加入</button></div>
+          <div class="card hcard" style="width:230px;height:116px"><div><b>Creative Hub</b><div class="small muted" style="margin-top:4px">192.168.1.33:25566</div></div><button class="btn sm" style="margin-top:8px;float:right">加入</button></div>
+        </div>
+        <div class="hint">未发现局域网游戏，点击「刷新」重新扫描。</div>
+
+        <div class="sec-title">服务器列表
+          <button class="btn ghost sm" style="margin-left:auto" onclick="toast('已刷新服务器')">刷新</button>
+          <button class="btn ghost sm" onclick="showModal('addServer')">添加</button>
+        </div>
+        <div class="hscroll">
+          <div class="card hcard" style="width:240px;height:120px"><div class="flex gap8"><span class="dot" style="background:var(--game)"></span><b>Hypixel</b></div><div class="small muted" style="margin-top:4px;margin-left:14px">mc.hypixel.net</div><button class="btn sm" style="margin-top:8px;float:right">加入</button></div>
+          <div class="card hcard" style="width:240px;height:120px"><div class="flex gap8"><span class="dot" style="background:#FFC107"></span><b>2b2t</b></div><div class="small muted" style="margin-top:4px;margin-left:14px">2b2t.org</div><button class="btn sm" style="margin-top:8px;float:right">加入</button></div>
+          <div class="card hcard" style="width:240px;height:120px"><div class="flex gap8"><span class="dot" style="background:#FF9800"></span><b>Fallentech</b></div><div class="small muted" style="margin-top:4px;margin-left:14px">play.fallentech.net</div><button class="btn sm" style="margin-top:8px;float:right">加入</button></div>
+        </div>
+
+        <div class="sec-title">智能推荐 <button class="btn ghost sm" style="margin-left:auto" onclick="toast('已刷新推荐')">刷新</button></div>
+        <div class="hscroll">
+          <div class="card hcard" style="width:250px;height:150px">
+            <div class="flex gap8"><b>JEI</b><span class="badge red">缺前置</span></div>
+            <div class="small muted" style="margin-top:6px">物品管理器，几乎必备的模组。</div>
+            <div class="small" style="color:var(--fg);margin-top:6px">你常玩 Fabric 1.20.1</div>
+            <div class="flex" style="justify-content:flex-end;margin-top:8px;gap:8px"><button class="btn sm">安装</button><button class="btn ghost sm">不感兴趣</button></div>
+          </div>
+          <div class="card hcard" style="width:250px;height:150px">
+            <div class="flex gap8"><b> sodium</b></div>
+            <div class="small muted" style="margin-top:6px">极致性能优化，提升帧率。</div>
+            <div class="small" style="color:var(--fg);margin-top:6px">当前版本缺少性能模组</div>
+            <div class="flex" style="justify-content:flex-end;margin-top:8px;gap:8px"><button class="btn sm">安装</button><button class="btn ghost sm">不感兴趣</button></div>
+          </div>
+        </div>
+
+        <div class="sec-title">统计</div>
+        <div class="hscroll">
+          <div class="card hcard" style="width:180px;height:96px"><div class="small muted">最近版本</div><div style="font-weight:800;font-size:16px;margin-top:8px">1.21.4</div></div>
+          <div class="card hcard" style="width:180px;height:96px"><div class="small muted">本周时长</div><div style="font-weight:800;font-size:16px;margin-top:8px">6.2 h</div></div>
+          <div class="card hcard" style="width:180px;height:96px"><div class="small muted">崩溃次数</div><div style="font-weight:800;font-size:16px;margin-top:8px">0</div></div>
+          <div class="card hcard" style="width:180px;height:96px;cursor:pointer" onclick="showModal('annual')"><div class="small muted">年度报告</div><div style="font-weight:800;font-size:16px;margin-top:8px;color:var(--accent)">查看</div><div class="small muted" style="margin-top:4px">2025 游戏回顾</div></div>
+        </div>
+      </div>
+
+      <!-- ===== 下载中心页 ===== -->
+      <div class="page" id="page-download">
+        <div class="pagehead" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <h2>下载中心</h2><span class="pill" id="dlSub">Minecraft</span>
+        </div>
+        <div class="flex gap8" style="margin:4px 0 10px">
+          <input class="input" style="width:240px" id="dlSearch" placeholder="搜索 Modrinth / CurseForge…" />
+          <button class="btn" onclick="toast('开始搜索')">搜索</button>
+        </div>
+        <div class="flex gap8 small muted" id="dlFilters"></div>
+        <div class="flex between" style="margin:10px 0"><div class="small muted" id="dlCount">共 24 个结果</div></div>
+        <div class="grid-cards" id="dlCards"></div>
+      </div>
+
+      <!-- ===== 工具箱页（点击侧边栏某项 → 显示对应面板，一次一个） ===== -->
+      <div class="page" id="page-toolbox">
+        <div class="pagehead" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <h2>工具箱</h2><span class="pill" id="tbPanelName">日志管理器</span>
+        </div>
+        <div class="tb" id="tbPanel"></div>
+      </div>
+
+      <!-- ===== 设置页 ===== -->
+      <div class="page" id="page-settings">
+        <div class="pagehead" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+          <h2 id="setTitle">通用</h2>
+        </div>
+        <div id="setBody" style="max-width:720px"></div>
+        <button class="btn" style="margin-top:16px" onclick="toast('设置已保存')">保存设置</button>
+        <div class="hint" id="setMsg"></div>
+      </div>
+    </div>
+
+    <!-- 下载队列弹窗 -->
+    <div class="dl-pop" id="dlPop">
+      <div class="flex between" style="margin-bottom:8px">
+        <b style="font-size:14px">下载队列</b>
+        <span class="small muted">共 2 项</span>
+      </div>
+      <div class="qitem"><div class="flex between small"><span>sodium-fabric-0.5.8</span><span class="muted">下载中</span></div><div class="qp"><i style="width:62%"></i></div></div>
+      <div class="qitem"><div class="flex between small"><span>Just Enough Items 1.20.1</span><span class="muted">等待中</span></div><div class="qp"><i style="width:8%"></i></div></div>
+      <button class="btn sm" style="margin-top:10px" onclick="toast('开始下载队列')">开始下载队列</button>
+    </div>
+  </div>
+
+  <!-- ===================== 状态栏 ===================== -->
+  <div class="statusbar">
+    <div class="sb-item">Java 21.0.5</div>
+    <div class="sb-item" style="margin-left:12px">已安装 7 个版本</div>
+    <div class="sb-item" style="margin-left:12px">运行中 0 个实例</div>
+    <div class="sb-item" style="margin-left:12px">
+      <div class="sb-prog"><i></i></div><span style="margin-left:8px">下载 62% · 1.8 MB/s</span>
+    </div>
+    <div class="music-mini">
+      <button title="上一首">⏮</button>
+      <button title="播放/暂停">⏸</button>
+      <button title="下一首">⏭</button>
+      <div style="margin-left:8px">
+        <div style="font-size:12px;max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">C418 — Sweden</div>
+        <div class="small muted" style="font-size:10px">Minecraft OST · 4:23</div>
+      </div>
+    </div>
+    <div class="sp"></div>
+    <div class="sb-item"><span class="net-dot"></span>网络正常</div>
+  </div>
+
+  <!-- ===================== 弹窗层 ===================== -->
+  <div class="overlay" id="overlay">
+    <!-- 年度报告 -->
+    <div class="modal" data-m="annual" style="display:none;max-width:480px">
+      <h3>2025 年度报告</h3>
+      <div class="sub">你的 Minecraft 这一年 · 由 Chert Launcher 统计</div>
+      <div class="flex gap8" style="margin:12px 0"><div class="card" style="flex:1;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--accent)">318</div><div class="small muted">游玩小时</div></div><div class="card" style="flex:1;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--accent)">47</div><div class="small muted">启动次数</div></div><div class="card" style="flex:1;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--accent)">12</div><div class="small muted">安装 Mod</div></div></div>
+      <div class="card small muted" style="line-height:1.6">最常玩：1.20.1（Fabric）· 最爱服务器：Hypixel · 最稳帧率：142 FPS</div>
+      <div class="row-btns"><button class="btn ghost" onclick="hideModal()">关闭</button><button class="btn" onclick="hideModal();toast('已生成分享图')">分享</button></div>
+    </div>
+
+    <!-- 版本库大页 -->
+    <div class="modal" data-m="bigPage" style="display:none;max-width:560px">
+      <button class="close-x" onclick="hideModal()">✕</button>
+      <h3>版本库</h3>
+      <div class="sub">安装、切换与修复各 Minecraft 版本</div>
+      <div class="meta-line"><b>已安装：</b>1.21.4 / 1.20.1 (Forge) / 1.19.2 (Fabric) / All of Fabric 8</div>
+      <div class="meta-line"><b>可安装：</b>1.21.5 / 1.20.4 / NeoForge 21.4 / Quilt 1.20.1</div>
+      <div class="row-btns"><button class="btn ghost" onclick="hideModal()">取消</button><button class="btn" onclick="hideModal();toast('正在安装版本')">安装新版本</button></div>
+    </div>
+
+    <!-- 添加服务器 -->
+    <div class="modal" data-m="addServer" style="display:none;max-width:420px">
+      <button class="close-x" onclick="hideModal()">✕</button>
+      <h3>添加服务器</h3>
+      <div class="set-row"><div class="lbl2">名称</div><input class="input" style="flex:1" placeholder="我的服务器" /></div>
+      <div class="set-row"><div class="lbl2">地址</div><input class="input" style="flex:1" placeholder="mc.example.com:25565" /></div>
+      <div class="row-btns"><button class="btn ghost" onclick="hideModal()">取消</button><button class="btn" onclick="hideModal();toast('已添加服务器')">添加</button></div>
+    </div>
+
+    <!-- Mod 详情 -->
+    <div class="modal" data-m="detail" style="display:none">
+      <button class="close-x" onclick="hideModal()">✕</button>
+      <h3 id="dTitle">Just Enough Items</h3>
+      <div class="cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 3v18"/></svg></div>
+      <div class="meta-line"><b>作者：</b>mezz · <b>下载：</b>1.2亿 · <b>加载器：</b>Fabric / Forge / NeoForge</div>
+      <div class="meta-line"><b>版本：</b>1.20.1（19.0.0+）</div>
+      <div class="small muted" style="margin-top:8px;line-height:1.6">物品与配方查询模组，几乎是所有整合包的标配。悬停物品可查看合成路径与用途。</div>
+      <div class="hint">AI 翻译：此模组帮助玩家在游戏中查看物品来源与合成方式。</div>
+      <div class="row-btns"><button class="btn ghost" onclick="toast('已翻译')">AI 翻译</button><button class="btn ghost" onclick="hideModal();window.open('https://modrinth.com','_blank')">打开页面</button><button class="btn" onclick="hideModal();toast('已加入下载队列')">加入队列</button></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toastHost"></div>
+</div>
+
+<script>
+/* ============ 图标（按 PngIcon Token 映射，line 风格 24x24） ============ */
+const ICONS = {
+  download:'<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/>',
+  mod:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9h16M9 4v16"/>',
+  shader:'<circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+  tex:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/>',
+  pack:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>',
+  map:'<path d="M9 4l6 2 6-2v14l-6 2-6-2-6 2V6z"/><path d="M9 4v14M15 6v14"/>',
+  log:'<path d="M4 5h16M4 10h16M4 15h10M4 20h13"/>',
+  bug:'<rect x="8" y="8" width="8" height="10" rx="4"/><path d="M12 4v4M8 6l-2-2M16 6l2-2M4 12h4M16 12h4M5 18l3-3M19 18l-3-3"/>',
+  perf:'<path d="M3 13h4l3 7 4-16 3 9h4"/>',
+  net:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  dp:'<path d="M4 6h16v12H4z"/><path d="M8 10l3 3-3 3M13 16h3"/>',
+  save:'<path d="M5 3h12l4 4v14H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/>',
+  backup:'<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/>',
+  shot:'<rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>',
+  clean:'<path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/>',
+  modpack:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/>',
+  music:'<path d="M9 18V6l10-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="16" cy="16" r="3"/>',
+  dev:'<path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13 5l-2 14"/>',
+  skin:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  shortcut:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 9l-3 3 3 3M15 9l3 3-3 3"/>',
+  flowchart:'<rect x="3" y="4" width="7" height="5" rx="1"/><rect x="14" y="15" width="7" height="5" rx="1"/><path d="M6.5 9v4h10"/>',
+  ai:'<path d="M12 3a4 4 0 0 0-4 4 4 4 0 0 0-1 7.5A3 3 0 0 0 12 21a3 3 0 0 0 5-6.5A4 4 0 0 0 16 7a4 4 0 0 0-4-4z"/><path d="M12 8v8M8 12h8"/>',
+  general:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/>',
+  launch:'<path d="M5 4l14 8-14 8z"/>',
+  account:'<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>',
+  appearance:'<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>',
+  about:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>'
+};
+function svg(t,w){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:${w||18}px;height:${w||18}px">${ICONS[t]||''}</svg>`}
+
+/* ============ 配置（来自 MainTabDefinition / SidebarModel） ============ */
+const TABS = [
+  {kind:'Game',     title:'游戏',   color:'var(--game)', active:'var(--game-active)', order:0, hasSidebar:false, always:true},
+  {kind:'Download', title:'下载中心',color:'var(--dl)',  active:'var(--dl-active)',  order:1, hasSidebar:true},
+  {kind:'Toolbox',  title:'工具箱', color:'var(--tool)',active:'var(--tool-active)',order:2, hasSidebar:true},
+  {kind:'Settings', title:'设置',   color:'var(--set)', active:'var(--set-active)', order:3, hasSidebar:true}
+];
+const SIDEBAR = {
+  Download:[
+    {id:'minecraft',title:'Minecraft',icon:'download'},{id:'mod',title:'Mod 管理',icon:'mod'},
+    {id:'shader',title:'光影',icon:'shader'},{id:'resourcepack',title:'材质包',icon:'tex'},
+    {id:'modpack',title:'整合包',icon:'pack'},{id:'map',title:'地图',icon:'map'}
+  ],
+  Toolbox:[
+    {id:'log',title:'日志管理器',icon:'log'},{id:'crash',title:'崩溃分析',icon:'bug'},
+    {id:'perf',title:'性能监控',icon:'perf'},{id:'network',title:'网络诊断',icon:'net'},
+    {id:'datapack',title:'数据包冲突检测',icon:'dp'},{id:'saves',title:'存档管理器',icon:'save'},
+    {id:'backup',title:'备份管理器',icon:'backup'},{id:'screenshot',title:'截图管理器',icon:'shot'},
+    {id:'clean',title:'清理冗余文件',icon:'clean'},{id:'modpackio',title:'整合包导入导出',icon:'modpack'},
+    {id:'music',title:'音乐播放器',icon:'music'},{id:'map',title:'地图安装',icon:'map'},
+    {id:'moddev',title:'Mod 开发环境',icon:'dev'},{id:'packmaker',title:'资源包创建器',icon:'dev'},
+    {id:'nbt',title:'NBT 编辑器',icon:'dev'},{id:'command',title:'命令语法表',icon:'dev'},
+    {id:'skin',title:'皮肤编辑器',icon:'skin'},{id:'shortcut',title:'快捷方式生成器',icon:'shortcut'},
+    {id:'afk',title:'挂机工作流',icon:'flowchart'},{id:'aichat',title:'AI 助手',icon:'ai'}
+  ],
+  Settings:[
+    {id:'general',title:'通用',icon:'general'},{id:'launch',title:'启动',icon:'launch'},
+    {id:'download',title:'下载',icon:'download'},{id:'recommend',title:'推荐',icon:'ai'},
+    {id:'account',title:'账号',icon:'account'},{id:'ai',title:'AI',icon:'ai'},
+    {id:'appearance',title:'外观',icon:'appearance'},{id:'about',title:'关于',icon:'about',bottom:true}
+  ]
+};
+const TOOL_DESC = {
+  log:'查看 / 搜索 / 过滤 / 导出游戏日志与崩溃报告。',crash:'分析崩溃报告，定位根因并给出修复建议。',
+  perf:'实时监控游戏 FPS / 内存 / TPS。',network:'诊断下载与联机网络连通性。',datapack:'检测数据包冲突与加载顺序问题。',
+  saves:'管理存档：复制、迁移、压缩与备份。',backup:'定时备份游戏目录与存档。',screenshot:'集中浏览与导出游戏截图。',
+  clean:'扫描并清理日志、缓存等冗余文件。',modpackio:'导入 / 导出整合包（CurseForge / Modrinth）。',
+  music:'内置音乐播放器，支持后台播放与迷你条。',map:'安装地图存档与地图模组。',moddev:'一键搭建 Fabric / Forge 开发环境。',
+  packmaker:'可视化创建资源包 / 数据包。',nbt:'图形化编辑 level.dat 与区块 NBT。',command:'Minecraft 命令语法速查表。',
+  skin:'像素级皮肤编辑器，支持预览。',shortcut:'为游戏 / 版本生成桌面快捷方式。',
+  afk:'挂机自动化工作流编排。',aichat:'Chert AI 助手：崩溃分析 / Mod 推荐 / 翻译。'
+};
+
+/* ============ 渲染索引贴 ============ */
+const tabsEl=document.getElementById('tabs');
+TABS.forEach((t,i)=>{
+  const el=document.createElement('div');
+  el.className='tab s'+i+(t.always?' expanded':'');
+  el.style.setProperty('--tc',t.color);
+  el.style.setProperty('--tc-active',t.active);
+  el.dataset.kind=t.kind;
+  el.innerHTML=`<span class="tlabel">${t.title}</span><span class="underline"></span>`;
+  el.addEventListener('click',()=>selectTab(t.kind));
+  el.addEventListener('mouseenter',()=>{ if(t.kind!==cur) el.classList.add('expanded'); });
+  el.addEventListener('mouseleave',()=>{ if(t.kind!==cur) el.classList.remove('expanded'); });
+  tabsEl.appendChild(el);
+});
+
+/* ============ 状态 ============ */
+let cur='Game';
+const titlebar=document.getElementById('titlebar');
+const pageTint=document.getElementById('pageTint');
+const sidebar=document.getElementById('sidebar');
+const sidebarItems=document.getElementById('sidebarItems');
+
+function selectTab(kind){
+  if(kind===cur) return;
+  cur=kind;
+  const t=TABS.find(x=>x.kind===kind);
+  // 标题栏 / 页面渐隐带随标签变色
+  titlebar.style.background=t.color;
+  pageTint.style.setProperty('--tint',t.color);
+  // 索引贴状态
+  document.querySelectorAll('.tab').forEach(el=>{
+    const on=el.dataset.kind===kind;
+    el.classList.toggle('active',on);
+    el.classList.toggle('expanded',on);
+  });
+  // 页面切换
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+kind.toLowerCase()).classList.add('active');
+  // 侧边栏
+  buildSidebar(kind);
+  if(kind==='Download') renderDownload();
+  if(kind==='Toolbox') renderToolboxPanel(sbSel);
+  if(kind==='Settings') renderSettings('general');
+}
+
+/* ============ 侧边栏 ============ */
+let sbSel=null;
+function buildSidebar(kind){
+  sidebarItems.innerHTML='';
+  const items=SIDEBAR[kind];
+  // 游戏页无侧边栏（Sidebar.Has(Game)=false）→ 隐藏整个侧边栏列
+  if(!items){ sidebar.style.display='none'; sbSel=null; return; }
+  sidebar.style.display='';
+  const t=TABS.find(x=>x.kind===kind);
+  sidebar.style.setProperty('--ind',t.color);
+  if(Array.isArray(items)){
+    sbSel=items[0].id;
+    items.forEach(it=>sidebarItems.appendChild(sideItem(it,kind)));
+  }
+  updateSbSel();
+}
+function sideItem(it,kind){
+  const el=document.createElement('div');el.className='sitem';el.dataset.id=it.id;
+  el.innerHTML=`<span class="ind"></span><span class="ico">${svg(it.icon,18)}</span><span class="st">${it.title}</span>`;
+  el.addEventListener('click',()=>{sbSel=it.id;updateSbSel();routeSidebar(kind,it.id);});
+  return el;
+}
+function updateSbSel(){
+  document.querySelectorAll('.sitem').forEach(el=>el.classList.toggle('active',el.dataset.id===sbSel));
+}
+function routeSidebar(kind,id){
+  if(kind==='Download'){ const it=SIDEBAR.Download.find(x=>x.id===id); document.getElementById('dlSub').textContent=it?it.title:'Minecraft'; renderDownload(id); }
+  if(kind==='Toolbox'){ renderToolboxPanel(id); }
+  if(kind==='Settings'){ renderSettings(id); }
+}
+
+/* ============ 下载中心 ============ */
+const MOCK=[
+  {t:'Just Enough Items',a:'mezz',meta:'Fabric · 1.2亿下载',s:'物品与配方查询模组，整合包标配。',ic:'mod'},
+  {t:'Sodium',a:'CaffeineMC',meta:'Fabric · 9800万下载',s:'极致性能优化，显著提升帧率。',ic:'mod'},
+  {t:'Create',a:'simibubi',meta:'Forge · 7300万下载',s:'机械动力模组，齿轮与自动化。',ic:'mod'},
+  {t:'Complementary Shaders',a:'EminGT',meta:'光影 · 4.2评分',s:'画质与性能平衡的知名光影包。',ic:'shader'},
+  {t:'BSL Shaders',a:'Capt Tatsu',meta:'光影 · 4.5评分',s:'电影感光影，云层与水体出色。',ic:'shader'},
+  {t:'Faithful 64x',a:'Faithful',meta:'材质包 · 1.21',s:'原版风格 64x 高清材质。',ic:'tex'},
+  {t:'All of Fabric 8',a:'Modrinth',meta:'整合包 · Forge 1.20.1',s:'大型科技魔法整合包。',ic:'pack'},
+  {t:'Skyblock 2',a:'Hypixel',meta:'整合包 · 空岛生存',s:'空岛生存整合包，含任务书。',ic:'pack'}
+];
+function renderDownload(id){
+  const sub=id||'minecraft';
+  const filters=document.getElementById('dlFilters');
+  const cards=document.getElementById('dlCards');
+  const fmap={
+    minecraft:'<select class="input sm" style="width:160px"><option>全部版本</option><option>正式版</option><option>快照</option><option>旧版</option></select>',
+    mod:'<select class="input sm" style="width:140px"><option>1.21.4</option><option>1.20.1</option></select><select class="input sm" style="width:120px"><option>全部加载器</option><option>Fabric</option><option>Forge</option></select>',
+    shader:'<select class="input sm" style="width:140px"><option>1.21.4</option></select>',
+    resourcepack:'<select class="input sm" style="width:140px"><option>1.21.4</option></select>',
+    modpack:'<select class="input sm" style="width:140px"><option>1.21.4</option></select><select class="input sm" style="width:120px"><option>Modrinth</option><option>CurseForge</option></select>',
+    map:'<select class="input sm" style="width:150px"><option>全部分类</option></select><select class="input sm" style="width:120px"><option>1.21.4</option></select>'
+  };
+  filters.innerHTML=fmap[sub]||'';
+  const data = sub==='minecraft' ? MOCK.slice(0,5).map(m=>({...m,t:m.t+' 快照'})) : MOCK;
+  cards.innerHTML=data.map(m=>`
+    <div class="dcard">
+      <div class="cover">${svg(m.ic,34)}</div>
+      <div class="dbody">
+        <div class="title">${m.t}</div>
+        <div class="author">${m.a}</div>
+        <div class="meta">${m.meta}</div>
+        <div class="sum">${m.s}</div>
+        <div class="acts">
+          ${sub!=='minecraft'?'<button class="btn sm" onclick="toast(\'已加入队列\')">加入队列</button>':''}
+          <button class="btn ghost sm" onclick="showModal('detail');document.getElementById('dTitle').textContent='${m.t}'">${sub==='minecraft'?'安装':'详情'}</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* ============ 工具箱（点侧边栏某项 → 显示对应面板，一次一个） ============ */
+function spark(values,color){
+  const w=320,h=90,max=Math.max(...values,1),min=Math.min(...values,0),n=values.length,rng=(max-min)||1;
+  const pts=values.map((v,i)=>`${(i/(n-1)*w).toFixed(1)},${(h-(v-min)/rng*h).toFixed(1)}`).join(' ');
+  return `<svg class="chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="width:100%">
+    <polyline points="${pts} ${w},${h} 0,${h}" fill="${color}" opacity=".15" stroke="none"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2"/></svg>`;
+}
+
+const PANELS = {
+  log:()=>`<div class="toolbar"><button class="btn sm">刷新</button><button class="btn ghost sm">导出</button></div>
+    <div class="tb grid2" style="align-items:start">
+      <div class="list">
+        <div class="li"><div class="grow"><div class="name">latest.log</div><div class="sub">游戏日志 · 184,320 B</div></div></div>
+        <div class="li"><div class="grow"><div class="name">2026-09-16-1.log.gz</div><div class="sub">游戏日志 · 92,114 B</div></div></div>
+        <div class="li"><div class="grow"><div class="name">crash-2026-09-15_22.31.04.txt</div><div class="sub">崩溃报告 · 12,038 B</div></div></div>
+      </div>
+      <div>
+        <div class="toolbar"><input class="input" style="width:200px" placeholder="关键字过滤"><span class="sw"><span class="kn"></span></span><span class="lbl">仅错误</span><button class="btn sm" style="margin-left:auto">刷新</button></div>
+        <div class="tree" style="max-height:300px;line-height:1.6">
+          <div><span style="color:#7AB8FF">[22:31:02]</span> <span style="color:var(--fg)">INFO</span> Launching Minecraft 1.21.4…</div>
+          <div><span style="color:#7AB8FF">[22:31:03]</span> <span style="color:var(--fg)">INFO</span> Loaded 48 mods (Fabric)</div>
+          <div><span style="color:#7AB8FF">[22:31:05]</span> <span style="color:#E74C3C">ERROR</span> Failed to bind 0.0.0.0:25565（端口占用）</div>
+          <div><span style="color:#7AB8FF">[22:31:05]</span> <span style="color:#FF9800">WARN</span> Sodium not present, 性能可能下降</div>
+          <div><span style="color:#7AB8FF">[22:31:08]</span> <span style="color:var(--fg)">INFO</span> Game started (pid 4821)</div>
+          <div><span style="color:#7AB8FF">[22:31:40]</span> <span style="color:var(--fg)">INFO</span> FPS 142 · TPS 20</div>
+        </div>
+      </div>
+    </div>`,
+
+  crash:()=>`<div class="tb grid2" style="align-items:start">
+      <div><div class="hint" style="color:var(--fg)">崩溃报告</div>
+        <div class="list">
+          <div class="li"><div class="grow"><div class="name">crash-2026-09-15_22.31.04.txt</div><div class="sub">java.lang.OutOfMemoryError · 12,038 B</div></div></div>
+          <div class="li"><div class="grow"><div class="name">crash-2026-09-10_19.02.11.txt</div><div class="sub">org.lwjgl.opengl.GLException · 9,772 B</div></div></div>
+        </div>
+        <button class="btn sm" style="margin-top:8px">刷新</button></div>
+      <div><div class="hint" style="color:var(--fg)">分析报告</div>
+        <div class="input mono" style="height:210px;overflow:auto;white-space:pre-wrap;line-height:1.6;color:var(--fg2)">java.lang.OutOfMemoryError: Java heap space
+	at net.minecraft.class_310.method_1509(...)
+	at net.minecraft.class_310.method_1530(...)
+
+【诊断】分配内存 2048MB 不足以承载 48 个 Mod + 高清材质。
+【建议】将内存提升至 4096MB，并移除冲突的皮肤层模组。</div>
+        <button class="btn sm" style="margin-top:8px">打开崩溃分析报告</button></div>
+    </div>`,
+
+  perf:()=>`<div class="toolbar"><b style="font-size:16px">性能监控</b><button class="btn sm" style="margin-left:14px">刷新</button></div>
+    <div class="tb grid2 sm" style="margin-bottom:10px">
+      <div class="stat"><div class="k">CPU 占用</div><div class="v">23%</div>${spark([18,22,25,21,30,23,19,24],'#3B82F6')}</div>
+      <div class="stat"><div class="k">内存占用</div><div class="v" style="color:#5BC0BE">61%</div>${spark([55,58,62,60,64,61,59,61],'#5BC0BE')}</div>
+    </div>
+    <div class="tb grid2 sm" style="margin-bottom:10px">
+      <div class="stat"><div class="k">运行实例</div><div class="v">1</div></div>
+      <div class="stat"><div class="k">处理器核心</div><div class="v">16</div></div>
+      <div class="stat"><div class="k">内存使用</div><div class="v" style="font-size:14px">2502 / 4096 MB</div></div>
+      <div class="stat"><div class="k">本周时长</div><div class="v">6.2 h</div></div>
+    </div>
+    <table><thead><tr><th>版本</th><th>PID</th><th>CPU</th><th>内存</th><th>启动时间</th></tr></thead>
+    <tbody><tr><td>1.21.4 (Fabric)</td><td class="mono">4821</td><td>23%</td><td>2502 MB</td><td class="mono">2026-09-16 22:31</td></tr></tbody></table>`,
+
+  network:()=>`<div class="toolbar"><b style="font-size:16px">网络诊断</b><button class="btn sm" style="margin-left:14px">开始诊断</button></div>
+    <div class="hint">检测下载源与联机服务器的连通性，定位卡顿 / 超时根因。</div>
+    <div class="list">
+      <div class="li"><div class="grow"><div class="name">BMCLAPI 镜像</div><div class="sub">https://bmclapi.bangbang93.com</div></div><span class="dot" style="background:var(--game)"></span><span class="lbl">38 ms</span></div>
+      <div class="li"><div class="grow"><div class="name">Mojang 官方</div><div class="sub">https://piston-meta.mojang.com</div></div><span class="dot" style="background:var(--game)"></span><span class="lbl">120 ms</span></div>
+      <div class="li"><div class="grow"><div class="name">Modrinth</div><div class="sub">https://api.modrinth.com</div></div><span class="dot" style="background:#FFC107"></span><span class="lbl">超时</span></div>
+      <div class="li"><div class="grow"><div class="name">Hypixel</div><div class="sub">mc.hypixel.net:25565</div></div><span class="dot" style="background:var(--game)"></span><span class="lbl">72 ms</span></div>
+    </div>`,
+
+  datapack:()=>`<div class="toolbar"><span class="lbl">存档</span><select class="input sm" style="width:160px"><option>生存世界 / Survival</option></select><span class="lbl" style="margin-left:12px">目标版本</span><input class="input sm" style="width:90px" value="1.21.4"><button class="btn sm" style="margin-left:10px">扫描</button><button class="btn ghost sm">刷新规则</button></div>
+    <div class="tb grid2" style="align-items:start;margin-bottom:10px">
+      <div class="pbox"><div class="hint">检测到 3 处冲突（2 严重 / 1 警告）</div>
+        <div class="list">
+          <div class="li"><span class="sev crit">严重</span><span class="sev info">配方</span><div class="grow"><div class="name">minecraft:apple</div><div class="sub" style="color:var(--accent)">胜出：BetterFood</div> · 落败：VanillaTweaks</div></div>
+          <div class="li"><span class="sev crit">严重</span><span class="sev info">标签</span><div class="grow"><div class="name">#minecraft:mineable</div><div class="sub" style="color:var(--accent)">胜出：TweaksMod</div></div></div>
+          <div class="li"><span class="sev warn">警告</span><span class="sev info">维度</span><div class="grow"><div class="name">better_end:island</div><div class="sub" style="color:var(--accent)">胜出：BetterEnd</div></div></div>
+        </div><button class="btn sm" style="margin-top:8px">跳转到数据包</button></div>
+      <div>
+        <div class="pbox" style="margin-bottom:8px"><div class="hint" style="color:var(--fg)">已安装数据包（共 5）</div>
+          <div class="list">
+            <div class="li"><div class="grow"><span style="font-weight:600">BetterEnd</span><span class="sub"> format 48 · zip</span></div></div>
+            <div class="li"><div class="grow"><span style="font-weight:600">VanillaTweaks</span><span class="sub"> format 48</span></div></div>
+            <div class="li"><div class="grow"><span style="font-weight:600">BetterFood</span><span class="sub" style="color:#E74C3C"> 缺失 pack.mcmeta</span></div></div>
+          </div></div>
+        <div class="pbox"><div class="hint" style="color:var(--fg)">格式告警</div><div style="font-size:11px;color:var(--tool);line-height:1.6">BetterFood 缺少 pack.mcmeta，将在 1.21.4 被忽略。<br/>VanillaTweaks 声明的 format 26 与当前世界不兼容。</div></div>
+      </div>
+    </div>
+    <div class="pbox" style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><b>建议</b><span class="lbl">移除 VanillaTweaks 改用 BetterFood 配方层，并补全 BetterFood 的 pack.mcmeta。</span></div>
+    <div class="status">扫描完成：3 处冲突，5 个数据包。</div>`,
+
+  saves:()=>`<div class="toolbar"><b style="font-size:16px">存档管理器</b><span class="lbl" style="margin-left:12px">版本</span><select class="input sm" style="width:140px"><option>1.21.4 (Fabric)</option></select><button class="btn sm" style="margin-left:10px">扫描</button><button class="btn ghost sm">扫描损坏</button><span class="lbl" style="margin-left:8px;opacity:.6">种子库已并入存档管理器</span></div>
+    <div class="status" style="margin-bottom:8px">已扫描 4 个存档，1 个存在潜在损坏。</div>
+    <div class="list">
+      <div class="li"><span class="dot" style="background:var(--game);flex:none"></span><div class="grow"><div class="name">生存世界 <span style="color:#7AB8FF;font-size:11px">📁 saves/Survival</span></div><div class="sub">当前 1.21.4 (dv=3952) · 兼容 · 已备份 3 次 · 未检测到损坏</div></div><div class="row" style="gap:6px"><button class="btn ghost sm">🌱</button><button class="btn ghost sm">备份</button><button class="btn ghost sm">降级</button><button class="btn ghost sm">恢复</button><button class="btn ghost sm">删除</button></div></div>
+      <div class="li"><span class="dot" style="background:#E74C3C;flex:none"></span><div class="grow"><div class="name">旧创造 <span style="color:#7AB8FF;font-size:11px">📁 saves/OldCreative</span></div><div class="sub">当前 1.20.1 (dv=3465) · 升级后区块可能损坏 · 已备份 1 次 · <span style="color:#E74C3C">检测到实体溢出</span></div></div><div class="row" style="gap:6px"><button class="btn ghost sm">🌱</button><button class="btn ghost sm">备份</button><button class="btn ghost sm">降级</button><button class="btn ghost sm">恢复</button><button class="btn ghost sm">删除</button></div></div>
+    </div>`,
+
+  backup:()=>`<div class="pbox" style="margin-bottom:10px"><b>备份策略</b>
+      <div class="row" style="margin:8px 0"><span class="lbl" style="width:72px">存储路径</span><input class="input" style="flex:1" value="D:/Chert/Backups"><button class="btn ghost sm">浏览</button><button class="btn ghost sm">打开</button></div>
+      <div class="row" style="gap:18px;flex-wrap:wrap;margin-bottom:8px">
+        <span class="row"><span class="lbl">频率</span><select class="input sm" style="width:96px;margin-left:6px"><option>每日</option><option>每周</option><option>手动</option></select></span>
+        <span class="row"><span class="lbl">保留</span><input class="input sm" style="width:52px;margin-left:6px" value="7"><span class="lbl" style="margin-left:4px">份</span></span>
+        <span class="row"><span class="lbl">最长</span><input class="input sm" style="width:52px;margin-left:6px" value="30"><span class="lbl" style="margin-left:4px">天</span></span>
+      </div>
+      <div class="row" style="gap:24px;flex-wrap:wrap"><span class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl">恢复前备份</span></span><span class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl">启动前自动备份</span></span><button class="btn sm">保存策略</button></div>
+    </div>
+    <div class="toolbar"><span class="lbl" style="width:72px">来源</span><select class="input" style="width:220px"><option>生存世界</option><option>旧创造</option></select><span class="lbl" style="margin-left:16px">备注</span><input class="input" style="flex:1" placeholder="手动备份"><button class="btn sm" style="margin-left:10px">创建备份</button><button class="btn ghost sm">刷新</button></div>
+    <table><thead><tr><th>来源</th><th>类型</th><th>时间</th><th>大小</th><th>文件</th><th>备注</th></tr></thead><tbody>
+      <tr><td>生存世界</td><td>自动</td><td class="mono">2026-09-16 22:31</td><td>1.8 GB</td><td>3</td><td><span class="sev info">自动</span></td></tr>
+      <tr><td>旧创造</td><td>手动</td><td class="mono">2026-09-15 21:00</td><td>920 MB</td><td>1</td><td>升级前</td></tr>
+    </tbody></table>
+    <div class="toolbar" style="margin-top:8px"><button class="btn ghost sm">恢复</button><button class="btn ghost sm">删除</button><button class="btn ghost sm">清理过期</button><span class="lbl" style="margin-left:16px">共 2 份 · 2.7 GB</span></div>
+    <div class="status">策略已保存，下次启动将自动备份「生存世界」。</div>`,
+
+  screenshot:()=>`<div class="toolbar"><button class="btn sm">刷新</button><button class="btn ghost sm">打包导出</button><button class="btn ghost sm">删除选中</button></div>
+    <div class="list">
+      <div class="li"><input type="checkbox" checked><div class="grow"><div class="name">2026-09-16_22.40.12.png</div><div class="sub">2,048,112 B</div></div></div>
+      <div class="li"><input type="checkbox"><div class="grow"><div class="name">base_swamp_001.png</div><div class="sub">1,833,540 B</div></div></div>
+      <div class="li"><input type="checkbox"><div class="grow"><div class="name">build_v3.png</div><div class="sub">1,501,003 B</div></div></div>
+    </div>
+    <div class="status">已选中 1 张截图。</div>`,
+
+  clean:()=>`<div class="toolbar"><button class="btn sm">扫描</button><button class="btn sm">清理</button><span class="sw"><span class="kn"></span></span><span class="lbl" style="margin-left:6px">直接删除（不进回收站）</span></div>
+    <div class="list">
+      <div class="li"><input type="checkbox" checked><div class="grow"><div class="name">logs/2026-09-01-1.log.gz</div><div class="sub">92,114 B</div></div></div>
+      <div class="li"><input type="checkbox" checked><div class="grow"><div class="name">crash-reports/crash-2026-08-20.txt</div><div class="sub">8,440 B</div></div></div>
+      <div class="li"><input type="checkbox"><div class="grow"><div class="name">.cache/asset_index_old.json</div><div class="sub">42,210 B</div></div></div>
+    </div>
+    <div class="status">可清理 3 项，合计约 143 KB。</div>`,
+
+  modpackio:()=>`<div class="tb grid2" style="align-items:start">
+      <div><b style="font-size:15px">导出整合包</b>
+        <div class="row" style="margin:10px 0"><select class="input" style="width:220px"><option>1.21.4 (Fabric)</option><option>1.20.1 (Forge)</option></select><button class="btn ghost sm">刷新</button></div>
+        <span class="lbl">显示名称</span><input class="input" style="width:100%;margin:6px 0 10px" value="My Modpack">
+        <div class="row" style="gap:20px;flex-wrap:wrap;margin-bottom:6px"><span class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl">包含 Mod</span></span><span class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl">包含配置</span></span></div>
+        <div class="row" style="gap:20px;flex-wrap:wrap;margin-bottom:6px"><span class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl">资源包</span></span><span class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl">光影包</span></span><span class="row"><span class="sw"><span class="kn"></span></span><span class="lbl">存档</span></span></div>
+        <button class="btn sm" style="margin-top:8px">导出</button></div>
+      <div><b style="font-size:15px">导入整合包</b><div class="hint" style="margin:10px 0">支持 CurseForge / Modrinth 整合包（.zip / .mrpack），自动解析 Mod 与依赖。</div><button class="btn sm">选择文件并导入</button></div>
+    </div>
+    <div class="status" style="margin-top:14px">导出完成：My Modpack.mrpack（48 Mod + 12 配置）。</div>`,
+
+  music:()=>`<div class="toolbar"><span class="lbl" style="opacity:.8">音源</span><button class="btn sm">本地</button><button class="btn ghost sm">在线</button><button class="btn ghost sm">MC 原声</button></div>
+    <div class="pbox" style="margin-bottom:10px">
+      <div style="font-weight:700;font-size:14px">C418 — Sweden</div>
+      <div class="small muted" style="margin:2px 0 8px">Minecraft OST · Volume Alpha</div>
+      <div class="small muted" style="margin-bottom:8px">正在播放 · 1:12 / 4:23</div>
+      <div class="flex gap8" style="margin-bottom:8px"><div class="sb-prog" style="flex:1;height:6px"><i style="width:27%"></i></div></div>
+      <div class="row"><button class="btn ghost sm">⏮</button><button class="btn sm" style="background:var(--accent)">⏸</button><button class="btn ghost sm">⏭</button><button class="btn ghost sm">🔁</button><span class="row" style="margin-left:12px"><span>🔊</span><input type="range" style="width:120px" value="80"></span></div>
+    </div>
+    <div class="toolbar"><button class="btn sm">加载本地文件夹</button></div>
+    <div class="list">
+      <div class="li"><div class="grow"><div class="name">Sweden</div><div class="sub">C418</div></div><button class="btn ghost sm">✕</button></div>
+      <div class="li"><div class="grow"><div class="name">Wet Hands</div><div class="sub">C418</div></div><button class="btn ghost sm">✕</button></div>
+      <div class="li"><div class="grow"><div class="name">Mice on Venus</div><div class="sub">C418</div></div><button class="btn ghost sm">✕</button></div>
+    </div>`,
+
+  map:()=>`<b style="font-size:16px">地图安装</b>
+    <div class="hint" style="margin:10px 0 6px">选择地图存档压缩包（.zip），安装到对应版本。</div>
+    <div class="row" style="margin-bottom:8px"><input class="input" style="flex:1" value="D:/Downloads/SkyblockMap.zip"><button class="btn sm">选择文件</button><button class="btn sm" style="margin-left:8px">安装</button></div>
+    <div class="hint">仅支持标准地图包（含 level.dat / region 目录）。</div>
+    <div class="status" style="margin-top:8px">已安装：SkyblockMap → 1.21.4</div>`,
+
+  moddev:()=>`<div style="max-width:560px"><b style="font-size:16px">Mod 开发环境</b>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">Mod ID</span><input class="input" style="width:100%" value="example_mod"></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">Mod 名称</span><input class="input" style="width:100%" value="Example Mod"></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">加载器</span><select class="input" style="width:100%"><option>Fabric</option><option>Forge</option><option>NeoForge</option><option>Quilt</option></select></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">MC 版本</span><input class="input" style="width:100%" value="1.21.4"></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">目标目录</span><div class="row"><input class="input" style="flex:1" value="D:/Dev/example_mod"><button class="btn sm">浏览</button></div></div>
+      <div class="row"><button class="btn sm">生成项目</button><span class="lbl" style="margin-left:12px">已生成 Gradle 工程，可在 IDE 中打开。</span></div></div>`,
+
+  packmaker:()=>`<div style="max-width:560px"><b style="font-size:16px">资源包创建器</b>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">包名称</span><input class="input" style="width:100%" value="My Resource Pack"></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">命名空间</span><input class="input" style="width:100%" value="mypack"></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">格式版本</span><select class="input" style="width:100%"><option>pack_format 48（1.21.4+）</option><option>pack_format 34（1.20.1+）</option></select></div>
+      <div class="row"><span class="sw on"><span class="kn"></span></span><span class="lbl" style="margin-left:6px">包含图标</span></div>
+      <button class="btn sm" style="margin-top:12px">生成资源包</button></div>`,
+
+  nbt:()=>`<div class="toolbar"><button class="btn sm">打开</button><button class="btn sm" style="background:var(--accent);border:none">保存</button><button class="btn ghost sm">另存</button><button class="btn ghost sm">导出文本</button><span class="sw on"><span class="kn"></span></span><span class="lbl" style="margin-left:6px">自动备份</span><select class="input sm" style="margin-left:16px;width:140px"><option>level.dat</option><option>playerdata/*.dat</option></select><b style="margin-left:auto">level.dat</b></div>
+    <div class="tb grid2" style="align-items:start;margin-bottom:10px">
+      <div class="pbox" style="padding:10px">
+        <div class="row" style="margin-bottom:6px"><button class="btn ghost sm">展开全部</button><button class="btn ghost sm" style="margin-left:6px">折叠全部</button><span class="lbl" style="margin-left:12px">1 个根 · 14 个节点</span></div>
+        <div class="tree">
+          <div><span class="t">compound</span><b>Data</b></div>
+          <div style="padding-left:16px"><span class="t">int</span>DataVersion <span class="v">= 3952</span></div>
+          <div style="padding-left:16px"><span class="t">compound</span><b>Player</b></div>
+          <div style="padding-left:32px"><span class="t">string</span>playerGameType <span class="v">= "survival"</span></div>
+          <div style="padding-left:32px"><span class="t">int</span>Score <span class="v">= 1280</span></div>
+          <div style="padding-left:32px"><span class="t">double</span>Health <span class="v">= 20.0</span></div>
+          <div style="padding-left:16px"><span class="t">compound</span><b>GameRules</b></div>
+          <div style="padding-left:32px"><span class="t">string</span>doDaylightCycle <span class="v">= "true"</span></div>
+        </div>
+      </div>
+      <div class="pbox" style="padding:12px">
+        <b>编辑节点</b>
+        <div class="lbl" style="margin-top:8px">路径</div><input class="input" value="Data.Player.Score" readonly style="margin:2px 0 8px">
+        <div class="lbl">类型</div><div style="color:var(--fg);margin:2px 0 8px">int (TAG_Int)</div>
+        <div class="lbl">值</div><input class="input" value="1280" style="margin:2px 0 6px">
+        <button class="btn sm" style="background:var(--accent);border:none">应用</button>
+        <hr style="border-color:var(--ctrl-border);margin:14px 0 10px">
+        <b>新增子节点</b>
+        <div class="lbl" style="margin-top:8px">名称</div><input class="input" style="margin:2px 0 6px" placeholder="NewTag">
+        <div class="lbl">类型</div><select class="input" style="margin:2px 0 8px;width:100%"><option>int</option><option>string</option><option>compound</option><option>list</option></select>
+        <div class="row"><button class="btn ghost sm">添加</button><button class="btn ghost sm" style="margin-left:6px">重命名</button></div>
+        <button class="btn sm" style="width:100%;margin-top:10px;background:var(--danger);border:none">删除节点</button>
+      </div>
+    </div>
+    <div class="status">已加载 level.dat，14 个节点。修改后点击「保存」写回。</div>`,
+
+  command:()=>`<div style="max-width:760px"><b style="font-size:15px">命令参考</b>
+      <div class="list" style="margin:8px 0;max-height:280px;overflow:auto">
+        <div class="li"><div class="grow"><div class="name">teleport</div><div class="sub mono">/tp &lt;目标&gt; &lt;x&gt; &lt;y&gt; &lt;z&gt;</div></div><button class="btn sm">插入</button></div>
+        <div class="li"><div class="grow"><div class="name">give</div><div class="sub mono">/give &lt;目标&gt; &lt;物品&gt; [数量]</div></div><button class="btn sm">插入</button></div>
+        <div class="li"><div class="grow"><div class="name">fill</div><div class="sub mono">/fill &lt;x1&gt; &lt;y1&gt; &lt;z1&gt; &lt;x2&gt; &lt;y2&gt; &lt;z2&gt; &lt;方块&gt;</div></div><button class="btn sm">插入</button></div>
+        <div class="li"><div class="grow"><div class="name">execute</div><div class="sub mono">/execute as &lt;目标&gt; at @s run &lt;命令&gt;</div></div><button class="btn sm">插入</button></div>
+        <div class="li"><div class="grow"><div class="name">scoreboard</div><div class="sub mono">/scoreboard objectives add &lt;名称&gt; &lt;准则&gt;</div></div><button class="btn sm">插入</button></div>
+      </div>
+      <b style="font-size:15px">组合命令</b>
+      <textarea class="input mono" style="width:100%;height:90px;margin-top:8px;font-family:Consolas,monospace">/tp @a 0 64 0
+/give @a minecraft:diamond 1</textarea>
+      <div class="row" style="margin-top:8px"><button class="btn sm">复制到剪贴板</button><span class="lbl" style="margin-left:12px">已复制 2 行命令。</span></div></div>`,
+
+  skin:()=>`<b style="font-size:16px">皮肤编辑器</b>
+    <div class="toolbar"><span class="lbl">玩家名</span><input class="input" style="width:160px" value="Steve"><button class="btn sm">获取皮肤</button><span class="lbl" style="margin-left:12px">模型：默认（宽）</span></div>
+    <div class="status" style="margin-bottom:8px">已加载 Steve 的默认皮肤。</div>
+    <div class="preview"><div style="text-align:center"><div style="font-size:48px">🧍</div><div class="small muted">3D 预览（旋转中）</div></div></div>`,
+
+  shortcut:()=>`<div style="max-width:360px"><b style="font-size:16px">快捷方式生成器</b>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">版本</span><select class="input" style="width:100%"><option>1.21.4 (Fabric)</option><option>1.20.1 (Forge)</option></select></div>
+      <div style="margin:12px 0"><span class="lbl" style="display:block;margin-bottom:4px">显示名称</span><input class="input" style="width:100%" value="生存世界"></div>
+      <button class="btn sm" style="width:120px">创建快捷方式</button>
+      <div class="status" style="margin-top:12px">已在桌面创建「生存世界」快捷方式。</div>
+      <div class="hint" style="margin-top:12px">双击快捷方式可直接以所选版本启动游戏，跳过启动器主界面。</div></div>`,
+
+  afk:()=>`<div class="tb grid2" style="align-items:start">
+      <div>
+        <div class="toolbar"><button class="btn sm">添加动作</button><button class="btn ghost sm">删除</button><button class="btn ghost sm">↑</button><button class="btn ghost sm">↓</button></div>
+        <div class="afk-actions">
+          <div class="li"><span class="sev info">F</span><div class="grow"><div class="name">帧率限制 30</div></div></div>
+          <div class="li"><span class="sev info">K</span><div class="grow"><div class="name">按 W 前进 5s</div></div></div>
+          <div class="li"><span class="sev info">C</span><div class="grow"><div class="name">聊天：你好</div></div></div>
+          <div class="li"><span class="sev info">*</span><div class="grow"><div class="name">循环 ×3</div></div></div>
+        </div>
+        <div class="pbox" style="margin-top:8px;padding:10px">
+          <div class="row" style="margin-bottom:6px"><span class="lbl" style="width:70px">动作类型</span><select class="input sm" style="width:140px"><option>F 帧率</option><option>D 延迟</option><option>K 按键</option><option>C 聊天</option><option>R 右键</option><option>T 文本</option></select></div>
+          <div class="row"><span class="lbl" style="width:70px">参数</span><input class="input sm" style="width:160px" value="30"></div>
+          <div class="lbl" style="margin:6px 0 0 70px;font-size:11px">帧率限制值（1-60），0 表示不限制。</div>
+        </div>
+        <div class="pbox" style="margin-top:8px;padding:10px">
+          <div class="row"><button class="btn sm">运行</button><span class="lbl" style="margin-left:10px">Token</span><span class="lbl" style="color:var(--accent);margin-left:8px">F30 K5 C你好 *3</span><button class="btn ghost sm" style="margin-left:8px">复制</button></div>
+          <div class="lbl" style="margin-top:6px">目标：当前窗口 · 运行中</div>
+        </div>
+      </div>
+      <div>
+        <b>保存工作流</b>
+        <input class="input" style="width:100%;margin:6px 0" value="挂机挖矿">
+        <button class="btn sm">保存</button>
+        <b style="display:block;margin:16px 0 6px">导入 Token</b>
+        <textarea class="input" style="width:100%;height:48px">F30 K5 C你好 *3</textarea>
+        <button class="btn sm" style="margin-top:6px">从 Token 导入</button>
+        <b style="display:block;margin:16px 0 6px">已保存</b>
+        <div class="list">
+          <div class="li"><div class="grow"><div class="name">挂机挖矿</div></div><button class="btn ghost sm">载入</button><button class="btn ghost sm" style="color:#E74C3C">✕</button></div>
+          <div class="li"><div class="grow"><div class="name">自动钓鱼</div></div><button class="btn ghost sm">载入</button><button class="btn ghost sm" style="color:#E74C3C">✕</button></div>
+        </div>
+      </div>
+    </div>`,
+
+  aichat:()=>`<div class="chat">
+      <div class="aiwelcome"><div class="bot">🤖</div><h3>Chert AI 助手</h3>
+        <p>可直接输入问题，支持崩溃分析、Mod 推荐、翻译等。点击下方卡片快速开始。</p>
+        <div class="sug">
+          <button><b>崩溃分析</b><span>粘贴崩溃报告，定位根因并给出修复建议。</span></button>
+          <button><b>AI 翻译</b><span>翻译 Mod / 资源包的外文说明与界面。</span></button>
+          <button><b>Mod 推荐</b><span>根据你的版本与已装 Mod 推荐实用模组。</span></button>
+          <button><b>日志总结</b><span>概括游戏日志，提取关键事件与异常。</span></button>
+        </div></div>
+      <div class="bubble ai">你好！我是 Chert AI 助手。有什么可以帮你？</div>
+      <div class="bubble me">帮我看下这个崩溃报告</div>
+      <div class="bubble ai">这是 <b>OutOfMemoryError</b>，建议把内存从 2048MB 提到 4096MB，并移除冲突的皮肤层模组。需要我尝试自动修复吗？</div>
+    </div>
+    <div class="toolbar" style="border-top:1px solid var(--ctrl-border);padding-top:10px;max-width:820px;margin:0 auto">
+      <button class="btn ghost sm">崩溃分析</button><button class="btn ghost sm">AI 翻译</button><button class="btn ghost sm">Mod 推荐</button><button class="btn ghost sm">日志总结</button>
+      <div class="row" style="width:100%;margin-top:8px"><input class="input" style="flex:1" placeholder="输入问题，回车发送…"><button class="btn sm" style="margin-left:8px">发送</button></div>
+    </div>`
+};
+
+function renderToolboxPanel(id){
+  const def=SIDEBAR.Toolbox.find(x=>x.id===id)||{title:'工具箱'};
+  document.getElementById('tbPanelName').textContent=def.title;
+  const host=document.getElementById('tbPanel');
+  host.innerHTML = PANELS[id] ? PANELS[id]() : '<div class="pbox">面板建设中…</div>';
+}
+
+/* ============ 设置 ============ */
+function sw(on){return `<button class="sw ${on?'on':''}" onclick="this.classList.toggle('on')"><span class="kn"></span></button>`}
+function renderSettings(id){
+  const map={
+    general:'通用',launch:'启动',download:'下载',recommend:'推荐',account:'账号',ai:'AI',appearance:'外观',about:'关于'
+  };
+  document.getElementById('setTitle').textContent=map[id]||'通用';
+  const b=document.getElementById('setBody');
+  if(id==='general'){
+    b.innerHTML=`
+      <div class="set-row"><div class="lbl">语言</div><select class="input" style="width:140px"><option>简体中文</option><option>English</option><option>繁體中文</option></select></div>
+      <div class="set-row">${sw(true)}<span>开机自启</span></div>
+      <div class="set-row">${sw(true)}<span>最小化到托盘</span></div>
+      <div class="set-row">${sw(true)}<span>动画效果</span></div>
+      <div class="set-row">${sw(false)}<span>文件变更检测</span></div>
+      <div class="set-row">${sw(true)}<span>音乐播放时自动压低</span></div>
+      <div class="set-row">${sw(false)}<span>启动后恢复音乐</span></div>`;
+  }else if(id==='launch'){
+    b.innerHTML=`
+      <div class="set-row"><div class="lbl">游戏目录</div><input class="input" style="width:300px" value=".minecraft" /><button class="btn ghost sm">浏览</button></div>
+      <div class="set-row"><div class="lbl">Java 路径</div><input class="input" style="width:300px" value="自动检测" /><button class="btn ghost sm">自动</button></div>
+      <div class="set-row"><div class="lbl">内存 (MB)</div><input class="input" style="width:120px" value="4096" /></div>
+      <div class="set-row"><div class="lbl">用户名</div><input class="input" style="width:200px" value="Steve" /></div>
+      <div class="set-row"><div class="lbl">JVM 参数</div><input class="input" style="width:300px" placeholder="-XX:+UnlockExperimentalVMOptions" /></div>
+      <div class="set-row"><div class="lbl">修复策略</div><select class="input" style="width:150px"><option>始终自动修复</option><option>每次询问</option><option>拒绝修复</option></select></div>
+      <div class="set-row">${sw(true)}<span>启动预热</span></div>
+      <div class="set-row">${sw(false)}<span>HUD 叠加</span></div>
+      <div class="set-row">${sw(true)}<span>启动前兼容性检测</span></div>`;
+  }else if(id==='download'){
+    b.innerHTML=`
+      <div class="set-row"><div class="lbl">下载源</div><select class="input" style="width:150px"><option>镜像优先</option><option>仅官方</option></select></div>
+      <div class="set-row"><div class="lbl">最大并发</div><input class="input" style="width:80px" value="8" /></div>
+      <div class="set-row">${sw(true)}<span>资源包自动修复</span></div>
+      <div class="set-row">${sw(false)}<span>服务器资源包缓存</span></div>`;
+  }else if(id==='recommend'){
+    b.innerHTML=`
+      <div class="set-row"><div class="lbl">推荐模式</div><select class="input" style="width:150px"><option>启用（本地+在线）</option><option>仅本地规则</option><option>禁用</option></select></div>
+      <div class="set-row">${sw(true)}<span>性能类 Mod 推荐</span></div>
+      <div class="set-row">${sw(true)}<span>实用类 Mod 推荐</span></div>
+      <div class="set-row">${sw(false)}<span>大型整合包推荐</span></div>`;
+  }else if(id==='account'){
+    b.innerHTML=`
+      <div class="set-row"><div class="lbl2">Microsoft 客户端 ID</div><input class="input" style="width:300px" placeholder="（可选，留空使用内置）" /></div>
+      <div class="small muted" style="margin:0 0 8px 120px">使用设备代码登录，无需客户端密钥也可登录微软账号。</div>
+      <div class="set-row"><select class="input" style="width:300px"><option>Steve（离线）</option><option>Alex_Ms（微软）</option></select><button class="btn ghost sm">设为当前</button><button class="btn ghost sm">删除</button></div>
+      <div class="set-row"><button class="btn sm">Microsoft 登录</button></div>
+      <div class="set-row"><input class="input" style="width:160px" placeholder="离线玩家名" /><button class="btn ghost sm">添加离线账号</button></div>
+      <div class="set-row" style="margin-top:14px"><b>Authlib-Injector</b></div>
+      <div class="set-row"><input class="input" style="width:220px" placeholder="服务器地址" /><input class="input" style="width:140px;margin-left:8px" placeholder="邮箱" /><input class="input" style="width:120px;margin-left:8px" placeholder="密码" /><button class="btn ghost sm" style="margin-left:8px">添加</button></div>`;
+  }else if(id==='ai'){
+    b.innerHTML=`
+      <div class="set-row">${sw(true)}<span>启用 AI 助手</span></div>
+      <div class="set-row"><div class="lbl">部署方式</div><select class="input" style="width:150px"><option>外部 API</option><option>本地 Ollama</option></select></div>
+      <div class="set-row"><div class="lbl">API 地址</div><input class="input" style="width:280px" placeholder="http://localhost:11434" /></div>
+      <div class="set-row"><div class="lbl">模型</div><input class="input" style="width:200px" placeholder="qwen2.5:7b" /></div>
+      <div class="set-row">${sw(false)}<span>崩溃自动分析</span></div>
+      <div class="set-row">${sw(true)}<span>详情页 AI 翻译</span></div>`;
+  }else if(id==='appearance'){
+    b.innerHTML=`
+      <div class="set-row"><div class="lbl">主题</div><select class="input" style="width:120px"><option>暗色</option><option>亮色</option></select></div>
+      <div class="set-row"><div class="lbl">主题色</div><input class="input" style="width:100px" value="#3B82F6" /><span style="width:24px;height:24px;border-radius:4px;background:#3B82F6;display:inline-block;margin-left:8px"></span></div>
+      <div class="set-row"><div class="lbl">背景图片</div><input class="input" style="width:240px" placeholder="（可选）" /><button class="btn ghost sm">浏览</button></div>
+      <div class="set-row"><div class="lbl">字体缩放</div><input type="range" min="0.8" max="1.5" step="0.1" value="1" style="width:200px" /><span style="margin-left:8px">1.0x</span></div>
+      <div class="set-row">${sw(true)}<span>高 DPI 适配</span></div>
+      <div class="set-row">${sw(false)}<span>显示控件边框</span></div>`;
+  }else if(id==='about'){
+    b.innerHTML=`
+      <div class="set-row"><span>版本</span><b>Chert Launcher v2.5.6（公测）</b></div>
+      <div class="set-row">${sw(true)}<span>自动检查更新</span></div>
+      <button class="btn sm" style="margin:6px 0" onclick="toast('已是最新版本')">检查更新</button>
+      <div class="small muted" style="margin-top:8px">Apache License 2.0 · 与 Mojang / Microsoft 无关，非官方产品。<br>主仓库：github.com/BingJian-REMIX/Chert-WPF</div>`;
+  }
+}
+
+/* ============ 弹窗 / Toast ============ */
+function showModal(m){document.getElementById('overlay').classList.add('show');
+  document.querySelectorAll('#overlay .modal').forEach(x=>x.style.display=x.dataset.m===m?'block':'none');}
+function hideModal(){document.getElementById('overlay').classList.remove('show');}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')hideModal();});
+function toast(msg){const h=document.getElementById('toastHost');const t=document.createElement('div');
+  t.className='toast';t.innerHTML=`<div class="flex" style="align-items:stretch"><span class="bar"></span><div style="padding:10px 12px;flex:1"><b style="font-size:13px">提示</b><div class="small muted" style="margin-top:3px">${msg}</div></div><button onclick="this.parentNode.parentNode.remove()" style="background:transparent;border:none;color:var(--fg2);cursor:pointer;padding:6px">✕</button></div>`;
+  h.appendChild(t);setTimeout(()=>{t.style.transition='opacity .3s';t.style.opacity='0';setTimeout(()=>t.remove(),300);},4000);}
+
+/* ============ 下载队列弹窗 ============ */
+document.getElementById('dlBtn').addEventListener('click',()=>document.getElementById('dlPop').classList.toggle('show'));
+
+/* ============ 全局搜索回车 ============ */
+document.getElementById('globalSearch').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const v=e.target.value.trim();if(v){selectTab('Download');document.getElementById('dlSearch').value=v;toast('已跳转到下载中心：'+v);}}
+});
+
+/* ============ 窗口控制（演示） ============ */
+document.getElementById('btnClose').addEventListener('click',()=>toast('演示：关闭窗口'));
+let max=false;
+document.getElementById('btnMax').addEventListener('click',()=>{max=!max;
+  document.getElementById('win').style.width=max?'100%':'min(1100px,100%)';
+  document.getElementById('win').style.height=max?'100vh':'min(720px,93vh)';});
+document.getElementById('btnMin').addEventListener('click',()=>toast('演示：最小化到托盘'));
+
+/* ============ 初始化 ============ */
+// 首屏：游戏页为当前选中（索引贴高亮 + 细线 + 标题栏/页面渐隐带取游戏绿）
+document.querySelector('.tab[data-kind="Game"]').classList.add('active');
+titlebar.style.background='var(--game)';
+pageTint.style.setProperty('--tint','var(--game)');
+buildSidebar('Game');
+// 支持 URL hash 直达某页（#download / #toolbox / #settings），便于展示
+const h=(location.hash||'').replace('#','').toLowerCase();
+const map={download:'Download',toolbox:'Toolbox',settings:'Settings'};
+if(map[h]) selectTab(map[h]);
+// 工具箱面板直达：#toolbox-<面板id>（如 #toolbox-perf / #toolbox-aichat）
+else if(h.indexOf('toolbox-')===0){
+  selectTab('Toolbox');
+  const pid=h.slice(8);
+  if(SIDEBAR.Toolbox.some(x=>x.id===pid)){ sbSel=pid; updateSbSel(); renderToolboxPanel(pid); }
+}
+</script>
+</body>
+</html>
