@@ -15,7 +15,12 @@
       <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener" data-t="nav.github">GitHub</a>
     </nav>
     <div class="nav-right">
-      <button class="lang-toggle" type="button">EN</button>
+      <select class="lang-select" aria-label="语言切换">
+        <option value="zh">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="en">English</option>
+        <option value="lzh">文言文</option>
+      </select>
       <a href="/chert/" class="btn btn-primary" style="padding:7px 14px;font-size:13.5px" data-t="nav.get">⬇ 下载燧石</a>
     </div>
   </div></header>`;
