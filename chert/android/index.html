@@ -1,132 +1,32 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-i18n="android.title">燧石 · Android — 开发中 | RLRS Studio</title>
-    <meta name="description" data-i18n-attr='{"content":"android.desc"}' content="燧石 · Android 是 RLRS 工作室正在开发的移动端 Minecraft 工具箱,将燧石的核心能力带到手机端,敬请期待。" />
-    <meta name="theme-color" content="#0a0c10" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href="https://remix-laser-raising-studio.github.io/chert/android/" />
-    <meta property="og:type" content="website" />
-    <meta property="og:title" data-i18n-attr='{"content":"android.ogtitle"}' content="燧石 · Android — 开发中" />
-    <meta property="og:description" data-i18n-attr='{"content":"android.ogdesc"}' content="移动端 Minecraft 工具箱,开发中,敬请期待。" />
-    <meta property="og:url" content="https://remix-laser-raising-studio.github.io/chert/android/" />
-    <meta property="og:site_name" content="RLRS Studio" />
-    <meta property="og:locale" content="zh_CN" />
-    <link rel="stylesheet" href="/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0c10">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <meta property="og:site_name" content="RLRS Studio">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <title>燧石启动器 Android 版 | RLRS Studio</title>
+  <meta name="robots" content="noindex">
+  <meta property="og:title" content="Chert Launcher for Android">
 </head>
-<body>
-
-    <canvas id="particles-canvas" data-count="50" data-speed="0.2" data-dist="120"></canvas>
-
-    <div class="page">
-
-        <!-- 统一导航 -->
-        <nav class="site-nav">
-            <a href="/" class="brand">
-                <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true">
-                    <path d="M15 49 L33 16 L42 16 L24 49 Z" />
-                    <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
-                </svg>
-                <span><span class="mk">✦</span> RLRS</span> Studio
-            </a>
-            <div class="nav-links">
-                <a href="/chert/" class="link" data-i18n="nav.launcher">燧石启动器</a>
-                <a href="/sr/" class="link" data-i18n="nav.sr">崩铁工具</a>
-                <a href="/join/" class="link" data-i18n="nav.join">加入我们</a>
-                <a href="https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Launcher-2.5.6-win-x64.zip" data-download data-platform="wpf" data-variant="full" class="btn btn-primary nav-cta" data-i18n="nav.get">⬇ 获取燧石</a>
-                <div class="lang-switcher" role="group" aria-label="Language"></div>
-            </div>
-        </nav>
-
-        <!-- Hero -->
-        <section class="hero">
-            <span class="icon-big">📱</span>
-            <h1 class="tagline" data-i18n="android.title2">燧石 · Android</h1>
-            <div class="brand-full" style="margin-bottom:14px">MOBILE · 开发中</div>
-            <div class="status">
-                <span class="status-dot" style="background: var(--gold);"></span>
-                <span class="status-text" style="color: var(--gold);" data-i18n="android.status">● 正在构建</span>
-            </div>
-        </section>
-
-        <section class="card reveal" style="max-width: 600px; margin: 24px auto 0;">
-            <p class="desc" data-i18n-html="android.desc2">将燧石的核心能力带到移动端。<br />让手机也能管理 Minecraft。</p>
-
-            <ul class="roadmap">
-                <li class="done" data-i18n="android.road1">项目架构设计</li>
-                <li class="done" data-i18n="android.road2">UI 原型</li>
-                <li data-i18n="android.road3">核心功能移植</li>
-                <li data-i18n="android.road4">内测版发布</li>
-                <li data-i18n="android.road5">公测上线</li>
-            </ul>
-
-            <span class="btn disabled" data-i18n="android.btn">暂未开放下载</span>
-        </section>
-
-        <!-- 统一页脚 -->
-        <footer class="site-footer">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <div class="fb-logo">
-                        <svg class="mark-glyph" viewBox="0 0 64 64" fill="#ffd700" aria-hidden="true" style="width:22px;height:22px">
-                            <path d="M15 49 L33 16 L42 16 L24 49 Z" />
-                            <path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6" />
-                        </svg>
-                        <span><span class="mk">✦</span> RLRS</span> Studio
-                    </div>
-                    <p data-i18n="footer.desc">REMIX 激越工作室 · 一支热爱游戏工具与技术的独立开发小队，探索技术与创意的边界。</p>
-                </div>
-                <div class="footer-col">
-                    <h4 data-i18n="footer.col1">产品</h4>
-                    <a href="/chert/" data-i18n="footer.l.mclcs">燧石启动器</a>
-                    <a href="/chert/wpf/" data-i18n="footer.l.wpf">燧石 · Windows</a>
-                    <a href="/chert/android/" data-i18n="footer.l.android">燧石 · Android</a>
-                    <a href="/sr/" data-i18n="footer.l.sr">崩铁工具集</a>
-                </div>
-                <div class="footer-col">
-                    <h4 data-i18n="footer.col2">资源</h4>
-                    <a href="https://cnb.cool/RLRS-Studio/Chert-WPF" target="_blank" rel="noopener" data-i18n="footer.l.src">源代码</a>
-                    <a href="https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/latest" target="_blank" rel="noopener" data-i18n="footer.l.release">下载发布</a>
-                    <a href="/join/" data-i18n="footer.l.join">加入我们</a>
-                    <a href="/chert/wpf/ui-preview.html" target="_blank" rel="noopener" data-i18n="footer.l.preview">界面预览</a>
-                </div>
-                <div class="footer-col">
-                    <h4 data-i18n="footer.col3">联系</h4>
-                    <a href="mailto:bingjianremix@outlook.com" data-i18n="footer.l.email">邮箱</a>
-                    <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener" data-i18n="footer.l.bili">B 站</a>
-                    <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener" data-i18n="footer.l.cnb">cnb.cool</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <span><span data-i18n="footer.copy">© RLRS Studio · 由 BingJian_REMIX 创立</span> <span id="year">2026</span></span>
-                <div class="footer-socials">
-                    <a href="/" data-i18n="footer.l.home">首页</a>
-                    <a href="/chert/" data-i18n="footer.l.mclcs2">燧石</a>
-                    <a href="/sr/" data-i18n="footer.l.sr2">崩铁工具</a>
-                    <a href="/join/" data-i18n="footer.l.join2">加入我们</a>
-                </div>
-            </div>
-        </footer>
-
-    </div>
-
-    <script src="/js/particles.js"></script>
-    <script src="/js/i18n.js"></script>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-        const nav = document.querySelector('.site-nav');
-        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 12);
-        window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach((e) => {
-                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-        document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
-    </script>
-    <script src="/js/download.js"></script>
+<body data-nav="download">
+  <main class="page">
+    <section class="hero"><div class="container" style="text-align:center;max-width:640px">
+      <span class="eyebrow"><span class="dot"></span>Android · <span data-t="dl.4tag"></span></span>
+      <h1 data-t="dl.4t"></h1>
+      <p class="lead" style="margin:14px auto 30px" data-t="dl.4d"></p>
+      <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener" class="btn btn-primary btn-lg" data-t="dl.4m"></a>
+      <p style="margin-top:22px;font-size:13.5px;color:var(--text-3)">v2.5.6 → <a href="/changelog/" style="color:var(--accent)">changelog</a> · <a href="/chert/" style="color:var(--accent)">Windows 版下载</a></p>
+    </div></section>
+  </main>
+  <script src="/js/site-i18n.js"></script>
+  <script src="/js/layout.js"></script>
+  <script src="/js/release.js"></script>
+  <script src="/js/embers.js"></script>
+  <script src="/js/seasonal.js"></script>
 </body>
 </html>

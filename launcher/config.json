@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "updated_at": "2026-09-23T00:00:00+08:00",
+  "seasons": [
+    {
+      "key": "mid_autumn",
+      "start": "09-15",
+      "end": "10-08",
+      "priority": 10
+    },
+    {
+      "key": "national_day",
+      "start": "10-01",
+      "end": "10-07",
+      "priority": 5
+    },
+    {
+      "key": "anniversary",
+      "start": "01-01",
+      "end": "01-07",
+      "priority": 8
+    }
+  ],
+  "active_override": null
+}

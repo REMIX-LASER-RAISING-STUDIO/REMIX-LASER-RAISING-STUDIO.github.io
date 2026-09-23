@@ -1,0 +1,6 @@
+/launcher/config.json
+  Cache-Control: max-age=300
+/data/release.json
+  Cache-Control: max-age=600
+/assets/*
+  Cache-Control: max-age=86400
