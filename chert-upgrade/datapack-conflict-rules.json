@@ -1,0 +1,51 @@
+[
+  {
+    "Id": "recipe-override",
+    "Pattern": "/recipes/",
+    "Description": "配方被覆盖，可能导致合成表缺失",
+    "Advice": "调整数据包加载顺序，或合并两个包的配方定义",
+    "Severity": 2
+  },
+  {
+    "Id": "loot-override",
+    "Pattern": "/loot_tables/",
+    "Description": "战利品表被覆盖，掉落物会以后加载的包为准",
+    "Advice": "若两个包都需生效，请手动合并战利品表的 pools",
+    "Severity": 2
+  },
+  {
+    "Id": "tag-override",
+    "Pattern": "/tags/",
+    "Description": "标签被整体覆盖而非合并",
+    "Advice": "在标签 JSON 中加入 \"replace\": false 可改为追加合并",
+    "Severity": 2
+  },
+  {
+    "Id": "advancement-override",
+    "Pattern": "/advancements/",
+    "Description": "进度被覆盖，成就树可能断裂",
+    "Advice": "重命名其中一个包的进度 ID 以避免碰撞",
+    "Severity": 1
+  },
+  {
+    "Id": "function-override",
+    "Pattern": "/functions/",
+    "Description": "函数被覆盖，另一个包的逻辑不会执行",
+    "Advice": "改用各自命名空间下的函数，并由 tick.json 统一调度",
+    "Severity": 2
+  },
+  {
+    "Id": "worldgen-override",
+    "Pattern": "/worldgen/",
+    "Description": "世界生成配置被覆盖，可能导致地形不一致",
+    "Advice": "世界生成冲突风险高，建议只保留一个包",
+    "Severity": 2
+  },
+  {
+    "Id": "vanilla-namespace",
+    "Pattern": "data/minecraft/",
+    "Description": "直接覆盖原版 minecraft 命名空间",
+    "Advice": "尽量使用自有命名空间，仅在必要时覆盖原版内容",
+    "Severity": 2
+  }
+]
