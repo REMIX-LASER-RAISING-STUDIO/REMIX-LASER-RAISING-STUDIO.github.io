@@ -11,10 +11,12 @@
     "lightDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64.zip",
     "guiAvailable": true,
     "guiDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.6.0/Chert-Launcher-2.6.0-win-x64-gui.zip",
-    "guiLightDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64.zip",
+    "guiLightDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64-gui.zip",
     "cliAvailable": true,
     "cliDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.6.0/chert-cli-2.6.0-win-x64.zip",
-    "changelog": "## Chert Launcher 2.6.0（正式版）\n\n双端同源的核心重构，并带来一批体验优化。\n\n### 通知与界面\n- **安卓布局（UiStyle=android）下的 Toast 改为安卓式通知卡片**：顶部显示品牌图标 +「燧石启动器」应用名 + 相对时间戳（1 分钟内显示「刚刚」），其余布局外观不变。Windows / Linux 同构实现。\n- 更新弹窗与下载流程梳理，分离 GUI / CLI 安装包（GUI 用户可少下载约 44% 体积）。\n\n### 平台与分发\n- Windows / Linux 同步至 2.6.0；安装包从 CNB Release 直链分发（同时镜像至 GitHub Release），内置自动更新读取本页 latest.json。\n- 四个包：GUI+CLI 合体自包含、GUI+CLI 合体轻量、仅 GUI 自包含、仅 CLI 自包含。轻量版需目标机已安装 .NET 10 桌面运行时。"
+    "cliLightAvailable": true,
+    "cliLightDownloadUrl": "https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.6.0/chert-cli-light-2.6.0-win-x64.zip",
+    "changelog": "## Chert Launcher 2.6.0（正式版）\n\n双端同源的核心重构，并带来一批体验优化。\n\n### 通知与界面\n- **安卓布局（UiStyle=android）下的 Toast 改为安卓式通知卡片**：顶部显示品牌图标 +「燧石启动器」应用名 + 相对时间戳（1 分钟内显示「刚刚」），其余布局外观不变。Windows / Linux 同构实现。\n- 更新弹窗与下载流程梳理，分离 GUI / CLI 安装包（GUI 用户可少下载约 44% 体积）。\n\n### 平台与分发\n- Windows / Linux 同步至 2.6.0；安装包从 CNB Release 直链分发（同时镜像至 GitHub Release），内置自动更新读取本页 latest.json。\n- 四个包：GUI+CLI 合体自包含、GUI+CLI 合体轻量、仅 GUI 自包含、仅 CLI 自包含。轻量版需目标机已安装 .NET 10 桌面运行时。六个包：GUI+CLI 合体自包含、GUI+CLI 合体轻量、仅 GUI 自包含、仅 CLI 自包含、仅 GUI 轻量、仅 CLI 轻量。"
   },
   "linux": {
     "version": "2.6.0",
