@@ -163,3 +163,19 @@ footer{border-top:1px solid var(--line);padding:46px 0 32px;background:rgba(12,1
 .lang-select:hover{color:var(--text);border-color:var(--text-3)}
 .lang-select:focus{outline:none;border-color:var(--accent)}
 .lang-select option{background:var(--bg-2);color:var(--text)}
+
+/* ===== 照片底滚动广告 + 视频占位（工作室影像展示型，与启动器官网区分） ===== */
+.photo-ad{position:relative;overflow:hidden;min-height:210px;display:flex;align-items:center;
+  background:#0b0d11 url("/assets/studio-bg.jpg") center/cover no-repeat;
+  background-image:linear-gradient(120deg,rgba(10,12,16,.6),rgba(10,12,16,.3)),url("/assets/studio-bg.jpg");
+  background-size:cover;background-position:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.photo-ad-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,12,16,.88),rgba(10,12,16,.4) 50%,rgba(10,12,16,.88))}
+.marquee{position:relative;z-index:1;width:100%;overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marquee-track{display:inline-flex;animation:scroll 28s linear infinite;will-change:transform}
+.marquee-track span{display:inline-block;padding:18px 0;font-size:15px;font-weight:600;color:var(--text);letter-spacing:.02em}
+.marquee-track span::after{content:"◆";margin:0 38px;color:var(--accent);font-size:11px;vertical-align:middle}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.marquee-track{animation:none}}
+
+.video-block{position:relative;aspect-ratio:16/9;max-width:880px;margin:0 auto;border:1px dashed var(--line);border-radius:var(--radius);background:rgba(17,20,28,.6);display:grid;place-items:center;gap:10px;color:var(--text-3);text-align:center}
+.video-ph{width:66px;height:66px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:26px}

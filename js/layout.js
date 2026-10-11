@@ -10,7 +10,7 @@
       <span>RLRS Studio</span></a>
     <nav class="nav-links">
       <a href="/" data-nav="home" data-t="nav.home">首页</a>
-      <a href="/chert/" data-nav="download" data-t="nav.download">下载</a>
+      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-nav="download" data-t="nav.download">下载</a>
       <a href="/changelog/" data-nav="changelog" data-t="nav.changelog">更新日志</a>
       <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener" data-t="nav.github">GitHub</a>
       <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-t="nav.launcher">启动器官网</a>
@@ -22,7 +22,7 @@
         <option value="en">English</option>
         <option value="lzh">文言文</option>
       </select>
-      <a href="/chert/" class="btn btn-primary" style="padding:7px 14px;font-size:13.5px" data-t="nav.get">⬇ 下载燧石</a>
+      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary" style="padding:7px 14px;font-size:13.5px" data-t="nav.get">⬇ 下载燧石</a>
     </div>
   </div></header>`;
   const foot = `<footer><div class="container">
@@ -37,9 +37,9 @@
         <a href="/join/" data-t="foot.p3"></a>
       </nav>
       <nav><b data-t="foot.r"></b>
-        <a href="/chert/" data-t="foot.r1"></a>
+        <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-t="foot.r1"></a>
         <a href="/changelog/" data-t="foot.r2"></a>
-        <a href="/chert/wpf/ui-preview.html" target="_blank" rel="noopener" data-t="foot.r3"></a>
+        <a href="https://chert-launcher.github.io/preview.html" target="_blank" rel="noopener" data-t="foot.r3"></a>
         <a href="https://github.com/BingJian-REMIX/Chert-WPF/blob/main/LICENSE" target="_blank" rel="noopener" data-t="foot.r4"></a>
       </nav>
       <nav><b data-t="foot.c"></b>
