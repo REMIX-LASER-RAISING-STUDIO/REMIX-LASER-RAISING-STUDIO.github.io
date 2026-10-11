@@ -13,6 +13,7 @@
       <a href="/chert/" data-nav="download" data-t="nav.download">下载</a>
       <a href="/changelog/" data-nav="changelog" data-t="nav.changelog">更新日志</a>
       <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener" data-t="nav.github">GitHub</a>
+      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-t="nav.launcher">启动器官网</a>
     </nav>
     <div class="nav-right">
       <select class="lang-select" aria-label="语言切换">

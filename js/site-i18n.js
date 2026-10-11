@@ -113,6 +113,34 @@
     "foot.rights":"© {year} RLRS Studio · REMIX 激越工作室。非官所為，與 Mojang / Microsoft 無涉。Minecraft 乃 Mojang Synergies AB 之商標。"
   },
   };
+  // === v2.6.0 官网重构：项目枢纽 + 启动器官网互链文案 ===
+  const HUB = {
+    zh: { "nav.launcher":"启动器官网",
+      "hub.k":"工作室项目","hub.t":"我们做的东西","hub.s":"从 Minecraft 启动器到崩铁工具，RLRS Studio 持续打磨好用的游戏工具。",
+      "hub.chert.t":"燧石启动器 Chert Launcher","hub.chert.d":"双端同源的 Minecraft 启动器：崩溃自愈、15+ 工具箱、极速下载。Windows 已发布 2.6.0，Linux 开发中，Android 规划中。","hub.chert.tag":"Windows · 2.6.0",
+      "hub.sr.t":"崩铁工具","hub.sr.d":"崩坏：星穹铁道玩家工具集——总伤计算器与全角色全光锥抽卡模拟器，免费开源，打开即用。","hub.sr.tag":"进行中",
+      "hub.join.t":"加入社区","hub.join.d":"QQ 群、Bilibili、GitHub 讨论区，一起玩转我们的工具、反馈建议。","hub.join.tag":"开放",
+      "hub.log.t":"更新日志","hub.log.d":"查看燧石启动器与工作室所有项目的发布历史与更新内容。","hub.log.tag":"最新 2.6.0" },
+    "zh-TW": { "nav.launcher":"啟動器官網",
+      "hub.k":"工作室項目","hub.t":"我們做的東西","hub.s":"從 Minecraft 啟動器到崩鐵工具，RLRS Studio 持續打磨好用的遊戲工具。",
+      "hub.chert.t":"燧石啟動器 Chert Launcher","hub.chert.d":"雙端同源的 Minecraft 啟動器：崩潰自愈、15+ 工具箱、極速下載。Windows 已發布 2.6.0，Linux 開發中，Android 規劃中。","hub.chert.tag":"Windows · 2.6.0",
+      "hub.sr.t":"崩鐵工具","hub.sr.d":"崩壞：星穹鐵道玩家工具集——總傷計算機與全角色全光錐抽卡模擬器，免費開源，打開即用。","hub.sr.tag":"進行中",
+      "hub.join.t":"加入社群","hub.join.d":"QQ 群、Bilibili、GitHub 討論區，一起玩轉我們的工具、回饋建議。","hub.join.tag":"開放",
+      "hub.log.t":"更新日誌","hub.log.d":"查看燧石啟動器與工作室所有項目的發布歷史與更新內容。","hub.log.tag":"最新 2.6.0" },
+    en: { "nav.launcher":"Launcher site",
+      "hub.k":"STUDIO PROJECTS","hub.t":"What we build","hub.s":"From a Minecraft launcher to HSR tools — RLRS Studio keeps shipping game tools that just work.",
+      "hub.chert.t":"Chert Launcher","hub.chert.d":"A cross-platform Minecraft launcher: crash self-healing, 15+ toolbox, fast downloads. Windows 2.6.0 out now; Linux in dev, Android planned.","hub.chert.tag":"Windows · 2.6.0",
+      "hub.sr.t":"HSR Tools","hub.sr.d":"Honkai: Star Rail toolkit — total-damage calculator and full roster/light-cone gacha simulator. Free and open source.","hub.sr.tag":"In progress",
+      "hub.join.t":"Join the community","hub.join.d":"QQ group, Bilibili, GitHub discussions — hang out, share builds and send feedback.","hub.join.tag":"Open",
+      "hub.log.t":"Changelog","hub.log.d":"Release history and notes for Chert Launcher and all studio projects.","hub.log.tag":"Latest 2.6.0" },
+    lzh: { "nav.launcher":"啟動器之網",
+      "hub.k":"工作室之目","hub.t":"吾輩之所營","hub.s":"自 Minecraft 啟動器至崩鐵之器，RLRS Studio 恆琢磨其便用之遊戲器。",
+      "hub.chert.t":"燧石啟動器 Chert Launcher","hub.chert.d":"雙端同源之 Minecraft 啟動器：崩壞自癒、十五有餘之器、極速之下載。Windows 已頒 2.6.0，Linux 方作，Android 方規。","hub.chert.tag":"Windows · 2.6.0",
+      "hub.sr.t":"崩鐵之器","hub.sr.d":"崩壞：星穹鐵道之玩家器集——總傷之算與全角色全光錐抽卡之擬，免費開源，啟即用之。","hub.sr.tag":"方作",
+      "hub.join.t":"入我輩","hub.join.d":"QQ 群、Bilibili、GitHub 之論，共戲其器、獻其議。","hub.join.tag":"開",
+      "hub.log.t":"更迭錄","hub.log.d":"觀燧石啟動器與工作室諸目之頒布沿革與更之內容。","hub.log.tag":"最新 2.6.0" }
+  };
+  ["zh","zh-TW","en","lzh"].forEach(L=>Object.assign(DICT[L],HUB[L]));
   const KEY="rlrs-site-lang";
   const LANGS=["zh","zh-TW","en","lzh"];
   function detect(){
