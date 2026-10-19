@@ -4,147 +4,424 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0c10">
+  
+  <!-- 移动端及 iOS 适配 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- 基础 SEO -->
+  <title>RLRS Studio — 把想法做成真正好用的工具</title>
+  <meta name="description" content="RLRS Studio 是一个独立工作室，专注于开发纯粹、本地优先、无服务器依赖的极客桌面软件。旗下拥有燧石启动器 (Chert) 等产品。">
+  <meta name="keywords" content="RLRS Studio, Chert, 燧石启动器, Minecraft启动器, 极客, 虚拟磁盘, 化学实验室">
+  <link rel="canonical" href="https://remix-laser-raising-studio.github.io/">
+  
+  <!-- 社交分享卡片 (OG) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="RLRS Studio — 独立极客工作室">
+  <meta property="og:description" content="从批处理脚本到现代化系统工具，我们只用极致的代码与算力，死磕底层的稳定与体验。">
+  <meta property="og:url" content="https://remix-laser-raising-studio.github.io/">
+  <meta property="og:image" content="https://remix-laser-raising-studio.github.io/og-image.jpg"> <!-- 建议以后做一张 1200x630 的预览图传上去 -->
+
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="stylesheet" href="/css/style.css">
-  <meta property="og:site_name" content="RLRS Studio">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary">
-  <title>燧石启动器 Chert Launcher — 开箱即用的 Minecraft 启动器 | RLRS Studio</title>
-  <meta name="description" content="燧石启动器（Chert Launcher）：崩溃自愈、15+ 内置工具、极速下载的 Minecraft 启动器，支持简体、繁体、English 与文言文。适用于 Windows 10/11。">
-  <meta property="og:title" content="燧石启动器 Chert Launcher">
-  <meta property="og:description" content="崩溃自愈、15+ 内置工具、极速下载的 Minecraft 启动器，支持四语界面。">
-  <meta property="og:url" content="https://remix-laser-raising-studio.github.io/">
-</head>
-<body data-nav="home">
-  <main class="page">
-    <section class="hero"><div class="container hero-grid">
-      <div>
-        <span class="eyebrow"><span class="dot"></span><span data-t="hero.eyebrow"></span></span>
-        <h1 data-t="hero.title"></h1>
-        <p class="lead" data-t="hero.lead"></p>
-        <div class="hero-cta">
-          <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary btn-lg" data-t="hero.cta1"></a>
-          <a href="https://cnb.cool/RLRS-Studio/Chert-WPF" target="_blank" rel="noopener" class="btn btn-ghost btn-lg" data-t="hero.cta2"></a>
-        </div>
-        <div class="hero-meta">
-          <div><b data-t="hero.m1v"></b><span data-t="hero.m1"></span></div>
-          <div><b data-t="hero.m2v"></b><span data-t="hero.m2"></span></div>
-          <div><b data-t="hero.m3v"></b><span data-t="hero.m3"></span></div>
-        </div>
-      </div>
-      <div class="window">
-        <div class="window-bar"><i></i><i></i><i></i><span>Chert Launcher.exe</span></div>
-        <div class="window-body">
-          <div class="mock-row">
-            <div class="mock-side"><i class="on"></i><i></i><i></i><i></i></div>
-            <div class="mock-main"><i class="m"></i><i class="s"></i><i></i><i class="s"></i><div class="mock-btn"></div></div>
-          </div>
-          <i class="mock-line" style="height:10px;border-radius:5px;background:linear-gradient(90deg,var(--card),var(--bg-2),var(--card));background-size:200% 100%;animation:shim 2.2s infinite"></i>
-          <style>@keyframes shim{to{background-position:-200% 0}}</style>
-        </div>
-      </div>
-    </div>    </section>
+  
+  <style>
+    :root {
+      --bg: #07090f;
+      --text: #e9edf5;
+      --muted: #8a93a6;
+      --border: rgba(255,255,255,0.08);
+      --card-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
+      --accent: #4f8cff;
+      --accent2: #a855f7;
+      --font: "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* 平滑滚动 */
+    html { scroll-behavior: smooth; }
+    
+    /* 自定义暗黑滚动条 */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
 
-    <section class="photo-ad" aria-label="studio showcase"><div class="photo-ad-overlay"></div>
-      <div class="marquee"><div class="marquee-track"><span data-t="ad.s"></span><span data-t="ad.s"></span></div></div>
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* 背景网格光效 */
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+      background: radial-gradient(800px 600px at 20% -10%, rgba(79, 140, 255, 0.15), transparent 70%),
+                  radial-gradient(600px 500px at 90% 20%, rgba(168, 85, 247, 0.1), transparent 70%);
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
+      background-size: 64px 64px;
+      -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
+      mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* 锚点偏移，避免被导航栏遮挡 */
+    section { scroll-margin-top: 80px; }
+
+    /* 导航栏 */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      background: rgba(7, 9, 15, 0.7); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      height: 64px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+    .logo-mark {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 20px -4px var(--accent);
+    }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
+    .nav-links a { color: var(--muted); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      font-size: 13px; padding: 8px 16px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+      transition: 0.2s;
+    }
+    .nav-cta:hover { background: rgba(255,255,255,0.12); }
+
+    /* Hero 区 */
+    .hero { padding: 160px 0 100px; text-align: center; }
+    .hero h1 {
+      font-size: clamp(40px, 6vw, 72px); font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.03em; margin-bottom: 24px;
+    }
+    .hero h1 .grad {
+      background: linear-gradient(100deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px); color: var(--muted);
+      max-width: 640px; margin: 0 auto 40px; font-weight: 400;
+    }
+    .hero-tags { display: flex; justify-content: center; gap: 12px; font-family: monospace; color: var(--accent); font-size: 13px; flex-wrap: wrap; }
+    .hero-tags span { padding: 4px 12px; border: 1px solid var(--border); border-radius: 99px; background: rgba(79,140,255,0.05); }
+
+    /* 区块通用 */
+    .section { padding: 80px 0; }
+    .section-header { margin-bottom: 48px; display: flex; align-items: flex-end; justify-content: space-between; }
+    .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+    .section-header p { color: var(--muted); font-size: 15px; margin-top: 8px; }
+    
+    /* 产品矩阵 (3列) */
+    .grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    /* 社区入口 (2列) */
+    .grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    
+    @media (max-width: 960px) { .grid-3col { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 768px) { .grid-3col, .grid-2col { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 32px;
+      display: flex; flex-direction: column; transition: 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5); }
+    /* 手机端点击反馈 */
+    .card:active { transform: translateY(0); }
+    
+    .card-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.05); display: grid; place-items: center; margin-bottom: 20px; font-size: 24px; }
+    .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+    .card h3 .sub { font-size: 14px; font-weight: 400; color: var(--muted); }
+    .card .kind { font-size: 12px; color: var(--accent); font-family: monospace; margin-bottom: 16px; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.6; flex-grow: 1; margin-bottom: 24px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .tag { font-size: 12px; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); color: var(--muted); }
+    .tag.active { color: #4ade80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); }
+    .link-arrow { font-size: 20px; color: var(--accent); transition: 0.2s; }
+    .card:hover .link-arrow { transform: translateX(4px); }
+
+    /* 生态标签 */
+    .eco-tags { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+    .eco-tag {
+      padding: 16px 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+      border-radius: 12px; display: flex; align-items: center; gap: 12px; transition: 0.2s;
+    }
+    .eco-tag:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); }
+    .eco-tag .icon { font-size: 20px; }
+    .eco-tag strong { display: block; color: var(--text); font-size: 15px; }
+    .eco-tag span { font-size: 12px; color: var(--muted); }
+
+    /* 理念区 */
+    .philosophy { background: rgba(255,255,255,0.02); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
+    @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
+    .p-item h4 { font-size: 18px; margin-bottom: 12px; color: var(--text); }
+    .p-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* 页脚 */
+    footer { padding: 60px 0 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; }
+    footer p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+    footer .links { display: flex; justify-content: center; gap: 24px; font-size: 14px; flex-wrap: wrap; }
+    footer .links a { transition: 0.2s; }
+    footer .links a:hover { color: var(--accent); }
+    footer .links a.muted { opacity: 0.5; font-size: 12px; }
+    footer .links a.muted:hover { opacity: 1; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        RLRS Studio
+      </div>
+      <div class="nav-links">
+        <a href="#projects">产品矩阵</a>
+        <a href="#community">极客基地</a>
+        <a href="#philosophy">开发理念</a>
+        <a href="https://chert-launcher.github.io" target="_blank">燧石启动器 ↗</a>
+      </div>
+      <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank" class="nav-cta">GitHub 组织</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <h1>把想法，<br>做成<span class="grad">真正好用的工具</span>。</h1>
+        <p>RLRS Studio 是一个单兵作战的独立开发力量。我们拒绝臃肿与云端绑架，只用极致的代码与算力，死磕底层的稳定与体验。</p>
+        <div class="hero-tags">
+          <span>Local-First</span>
+          <span>No Bloatware</span>
+          <span>Serverless</span>
+        </div>
+      </div>
     </section>
 
-    <style>@media (max-width:720px){.hub-cards{grid-template-columns:1fr!important}}</style>
-    <section class="section" id="projects"><div class="container">
-      <div class="section-head"><span class="kicker" data-t="hub.k"></span><h2 data-t="hub.t"></h2><p data-t="hub.s"></p></div>
-      <div class="cards hub-cards" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-        <a class="card" href="https://chert-launcher.github.io" target="_blank" rel="noopener" style="display:block">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
-          <h3 data-t="hub.chert.t"></h3>
-          <p data-t="hub.chert.d"></p>
-          <span class="badge" data-t="hub.chert.tag" style="display:inline-block;margin-top:12px"></span>
-        </a>
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/><path d="M7 7h.01M7 17h.01"/></svg></div>
-          <h3 data-t="hub.server.t"></h3>
-          <p data-t="hub.server.d"></p>
-          <span class="badge" data-t="hub.server.tag" style="display:inline-block;margin-top:12px"></span>
+    <!-- 产品矩阵 -->
+    <section class="section" id="projects">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>产品矩阵</h2>
+            <p>以岩石与结晶为名，构筑属于极客的数字宇宙。</p>
+          </div>
         </div>
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4z"/><path d="M4 8h16v12H4z"/><circle cx="12" cy="14" r="2.2"/></svg></div>
-          <h3 data-t="hub.vd.t"></h3>
-          <p data-t="hub.vd.d"></p>
-          <span class="badge" data-t="hub.vd.tag" style="display:inline-block;margin-top:12px"></span>
+        
+        <div class="grid-3col">
+          <!-- 1. Chert -->
+          <a href="https://chert-launcher.github.io" target="_blank" class="card">
+            <div class="card-icon">⛏️</div>
+            <h3>Chert <span class="sub">燧石启动器</span></h3>
+            <div class="kind">Game Tool / Active</div>
+            <p>硬核的 Minecraft 启动终端。内置 P2P 打洞联机、自愈 HUD 与四套 UI 设计语言，超 300 次严苛提交。</p>
+            <div class="card-footer"><span class="tag active">已发布 · 2.5.6</span><span class="link-arrow">→</span></div>
+          </a>
+
+          <!-- 2. Granite -->
+          <div class="card">
+            <div class="card-icon">🖥️</div>
+            <h3>Granite <span class="sub">极客开服器</span></h3>
+            <div class="kind">Server Tool / In Dev</div>
+            <p>坚如花岗岩的服务端管理面板。无缝对接 Chert 的 P2P 穿透，一键开服、配置可视化、插件依赖检测。</p>
+            <div class="card-footer"><span class="tag">核心开发中</span></div>
+          </div>
+
+          <!-- 3. Basalt -->
+          <div class="card">
+            <div class="card-icon">💽</div>
+            <h3>Basalt <span class="sub">虚拟磁盘</span></h3>
+            <div class="kind">System Utility / In Dev</div>
+            <p>坚如磐石的现代虚拟磁盘管理器。完美支持 VHDX / VMDK，原生只读挂载与安全快照，绝不弄坏镜像。</p>
+            <div class="card-footer"><span class="tag">核心开发中</span></div>
+          </div>
+
+          <!-- 4. Cobalt -->
+          <div class="card">
+            <div class="card-icon">🧪</div>
+            <h3>Cobalt <span class="sub">化学实验室</span></h3>
+            <div class="kind">Simulation / In Dev</div>
+            <p>以深邃钴蓝为灵感的化学模拟工具。可视化反应过程与试剂操作，让实验安全且反复地在屏幕上进行。</p>
+            <div class="card-footer"><span class="tag">核心开发中</span></div>
+          </div>
+
+          <!-- 5. Geode -->
+          <div class="card">
+            <div class="card-icon">💎</div>
+            <h3>Geode <span class="sub">晶洞浏览器</span></h3>
+            <div class="kind">Web Browser / Planning</div>
+            <p>外表是石头，打开是晶洞。追求极致的轻量与纯粹，打造一个毫无臃肿插件、拒绝隐私追踪的浏览器。</p>
+            <div class="card-footer"><span class="tag">概念规划中</span></div>
+          </div>
+
+          <!-- 6. Quartz -->
+          <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Quartz <span class="sub">系统监视器</span></h3>
+            <div class="kind">Performance / Planning</div>
+            <p>像石英一样精准的性能看板。极低占用的 CPU/GPU/网络监控，原生支持现代暗黑 UI 与自定义悬浮窗。</p>
+            <div class="card-footer"><span class="tag">概念规划中</span></div>
+          </div>
         </div>
-        <div class="card">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6M10 3v6L5 18a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/></svg></div>
-          <h3 data-t="hub.chem.t"></h3>
-          <p data-t="hub.chem.d"></p>
-          <span class="badge" data-t="hub.chem.tag" style="display:inline-block;margin-top:12px"></span>
+      </div>
+    </section>
+
+    <!-- 起源项目 (MicroDOS) -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>梦想开始的地方</h2>
+            <p>一些来自过去的代码，见证了一个极客的起点。</p>
+          </div>
         </div>
-        <a class="card" href="/sr/" style="display:block">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/><circle cx="12" cy="12" r="9"/></svg></div>
-          <h3 data-t="hub.sr.t"></h3>
-          <p data-t="hub.sr.d"></p>
-          <span class="badge" data-t="hub.sr.tag" style="display:inline-block;margin-top:12px"></span>
-        </a>
-        <a class="card" href="/join/" style="display:block">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-          <h3 data-t="hub.join.t"></h3>
-          <p data-t="hub.join.d"></p>
-          <span class="badge" data-t="hub.join.tag" style="display:inline-block;margin-top:12px"></span>
-        </a>
-        <a class="card" href="/changelog/" style="display:block">
-          <div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v4H4z"/><path d="M8 12h8M8 16h8M8 20h5"/></svg></div>
-          <h3 data-t="hub.log.t"></h3>
-          <p data-t="hub.log.d"></p>
-          <span class="badge" data-t="hub.log.tag" style="display:inline-block;margin-top:12px"></span>
+        
+        <a href="https://github.com/Bingjianremix/MICRODOS--REMIX" target="_blank" class="card" style="background: #050505; border-color: #333; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
+            <div class="card-icon" style="background: rgba(255,255,255,0.02); color: #888; margin-bottom: 0;">💾</div>
+            <span class="tag" style="border: 1px solid #333; background: transparent; color: #888;">Vintage / Legacy</span>
+          </div>
+          <h3 style="color: #ddd; font-family: inherit;">MicroDOS <span class="sub" style="color: #666; font-size: 14px;">微操作系统模拟</span></h3>
+          <div class="kind" style="color: #888;">Pure Batch Script / Origin</div>
+          <p style="color: #777; max-width: 800px;">
+            这是 RLRS Studio 的最初起点。用纯粹的 Windows 批处理脚本（.bat）构建的 DOS 命令行模拟器。没有现代框架，没有面向对象，只有最底层的逻辑堆砌与纯粹的热爱。虽然简陋，但它是一切极客魔法的原点。
+          </p>
+          <div class="card-footer" style="margin-top: 10px;">
+            <span style="color: #555; font-size: 12px;">C:\&gt; _</span>
+            <span class="link-arrow" style="color: #666;">→</span>
+          </div>
         </a>
       </div>
-    </div></section>
+    </section>
 
-    <section class="section alt"><div class="container">
-      <div class="section-head"><span class="kicker" data-t="feat.k"></span><h2 data-t="feat.t"></h2><p data-t="feat.s"></p></div>
-      <div class="cards">
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/></svg></div>
-          <h3 data-t="feat.1t"></h3><p data-t="feat.1d"></p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96 12 12.01l8.73-5.05M12 22.08V12"/></svg></div>
-          <h3 data-t="feat.2t"></h3><p data-t="feat.2d"></p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8a2 2 0 0 0-3 .8z"/><path d="M12 15l-3-3a22 22 0 0 1 8-11 6 6 0 0 1 6 6 22 22 0 0 1-11 8z"/></svg></div>
-          <h3 data-t="feat.3t"></h3><p data-t="feat.3d"></p></div>
+    <!-- 生态标签 -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="section-header" style="margin-bottom: 24px;">
+          <div>
+            <h2>去中心化生态</h2>
+            <p>基于核心技术剥离出的极客小工具与组件。</p>
+          </div>
+        </div>
+        
+        <div class="eco-tags">
+          <div class="eco-tag">
+            <span class="icon">🌐</span>
+            <div>
+              <strong>Pumice <span style="font-size: 12px; font-weight: normal; color: var(--muted);">浮石网关</span></strong>
+              <span>脱离启动器的纯本地 P2P 联机</span>
+            </div>
+          </div>
+
+          <div class="eco-tag">
+            <span class="icon">⚙️</span>
+            <div>
+              <strong>OpenSource <span style="font-size: 12px; font-weight: normal; color: var(--muted);">开源库</span></strong>
+              <span>WPF 3D 渲染 / P2P 穿透组件白嫖</span>
+            </div>
+          </div>
+
+          <div class="eco-tag">
+            <span class="icon">⌨️</span>
+            <div>
+              <strong>CLI Ecosystem <span style="font-size: 12px; font-weight: normal; color: var(--muted);">终端工具</span></strong>
+              <span>面向极客的自动化脚本生态</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section class="section"><div class="container">
-      <div class="section-head"><span class="kicker">UI</span><h2 data-t="shot.cap"></h2></div>
-        <figure class="shot">
-        <iframe src="https://chert-launcher.github.io/preview.html" title="Chert Launcher UI preview" loading="lazy"></iframe>
-      </figure>
-    </div></section>
+    <!-- 极客基地 -->
+    <section class="section" id="community">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>极客基地</h2>
+            <p>加入内测，或者一起探讨开发。</p>
+          </div>
+        </div>
+        <div class="grid-2col">
+          <!-- 加入我们 -->
+          <a href="/join/" class="card" style="background: linear-gradient(135deg, rgba(79,140,255,0.1), transparent); border-color: rgba(79,140,255,0.3);">
+            <div class="card-icon">🤝</div>
+            <h3>加入极客基地</h3>
+            <div class="kind">Join Us / Community</div>
+            <p>寻找敢于折腾的内测玩家，或者对桌面端开发、底层网络感兴趣的开发者。欢迎加入我们，一起探讨 WPF/C# 技术。</p>
+            <div class="card-footer">
+              <span class="tag active" style="background: var(--accent); color: #fff; border: none;">申请内测 / 加入</span>
+              <span class="link-arrow">→</span>
+            </div>
+          </a>
 
-    <section class="section alt" id="preview-video"><div class="container">
-      <div class="section-head"><span class="kicker" data-t="vid.k"></span><h2 data-t="vid.t"></h2><p data-t="vid.s"></p></div>
-      <div class="video-block"><div class="video-ph">▶</div><p>视频占位 · 即将上线</p></div>
-      <div style="text-align:center;margin-top:22px"><a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary btn-lg" data-t="vid.cta"></a></div>
-    </div></section>
-
-    <section class="section alt"><div class="container">
-      <div class="stats">
-        <div class="stat"><b data-t="stat.1v"></b><span data-t="stat.1"></span></div>
-        <div class="stat"><b data-t="stat.2v"></b><span data-t="stat.2"></span></div>
-        <div class="stat"><b data-t="stat.3v"></b><span data-t="stat.3"></span></div>
-        <div class="stat"><b data-t="stat.4v"></b><span data-t="stat.4"></span></div>
+          <!-- 开发文档 -->
+          <a href="/docs/" class="card">
+            <div class="card-icon">📚</div>
+            <h3>开发者文档</h3>
+            <div class="kind">Hub / Documentation</div>
+            <p>Chert CLI 命令指南、自定义模组开发规范、节日特效接入文档，以及工作室各类开源资源的汇总指引。</p>
+            <div class="card-footer">
+              <span class="tag">查阅文档</span>
+              <span class="link-arrow">→</span>
+            </div>
+          </a>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section class="section center"><div class="container">
-      <div class="section-head center"><h2 data-t="cta.t"></h2><p data-t="cta.s"></p></div>
-      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary btn-lg" data-t="cta.btn"></a>
-    </div></section>
+    <!-- 理念区 -->
+    <section class="section philosophy" id="philosophy">
+      <div class="container">
+        <div class="grid-3">
+          <div class="p-item">
+            <h4>本地优先 / 无服务器</h4>
+            <p>我们相信最好的云就是不需要云。所有数据存在本地，P2P 直连不经过第三方服务器，你的数据只属于你。</p>
+          </div>
+          <div class="p-item">
+            <h4>拒绝臃肿</h4>
+            <p>痛恨那些塞满广告和弹窗的流氓软件。所有的功能都经过精心编排，只为提供最纯粹的极客体验。</p>
+          </div>
+          <div class="p-item">
+            <h4>死磕细节</h4>
+            <p>无论是底层的网络穿透协议，还是 UI 上一个圆角的像素对齐，我们都愿意花几百次提交去打磨。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
-  <script src="/js/site-i18n.js" charset="utf-8"></script>
-  <script src="/js/layout.js" charset="utf-8"></script>
-  <script src="/js/release.js" charset="utf-8"></script>
-  <script src="/js/download.js" charset="utf-8"></script>
-  <script src="/js/embers.js" charset="utf-8"></script>
-  <script src="/js/seasonal.js" charset="utf-8"></script>
-<script src="/festival-fx.js" defer></script>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 RLRS Studio. 保留所有权利。</p>
+      <div class="links">
+        <a href="/join/">加入我们</a>
+        <a href="/changelog/">更新日志</a>
+        <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank">GitHub</a>
+        <!-- 隐藏小玩具 -->
+        <a href="/sr/" class="muted">实验室：SR小工具</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 引入节日特效 JS -->
+  <script src="/festival-fx.js" defer></script>
 </body>
 </html>
