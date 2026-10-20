@@ -4,60 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0c10">
-  
-  <!-- 移动端及 iOS 适配 -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  
-  <!-- 基础 SEO -->
   <title>RLRS Studio — 把想法做成真正好用的工具</title>
-  <meta name="description" content="RLRS Studio 是一个独立工作室，专注于开发纯粹、本地优先、无服务器依赖的极客桌面软件。旗下拥有燧石启动器 (Chert) 等产品。">
-  <meta name="keywords" content="RLRS Studio, Chert, 燧石启动器, Minecraft启动器, 极客, 虚拟磁盘, 化学实验室">
-  <link rel="canonical" href="https://remix-laser-raising-studio.github.io/">
-  
-  <!-- 社交分享卡片 (OG) -->
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="RLRS Studio — 独立极客工作室">
-  <meta property="og:description" content="从批处理脚本到现代化系统工具，我们只用极致的代码与算力，死磕底层的稳定与体验。">
-  <meta property="og:url" content="https://remix-laser-raising-studio.github.io/">
-  <meta property="og:image" content="https://remix-laser-raising-studio.github.io/og-image.jpg"> <!-- 建议以后做一张 1200x630 的预览图传上去 -->
-
+  <meta name="description" content="RLRS Studio 是一个独立工作室，专注于开发纯粹、本地优先、无服务器依赖的极客桌面软件。">
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   
   <style>
     :root {
-      --bg: #07090f;
-      --text: #e9edf5;
-      --muted: #8a93a6;
-      --border: rgba(255,255,255,0.08);
+      --bg: #07090f; --text: #e9edf5; --muted: #8a93a6; --border: rgba(255,255,255,0.08);
       --card-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      --accent: #4f8cff;
-      --accent2: #a855f7;
+      --accent: #4f8cff; --accent2: #a855f7;
       --font: "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     }
-    
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    /* 平滑滚动 */
-    html { scroll-behavior: smooth; }
-    
-    /* 自定义暗黑滚动条 */
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
-    ::-webkit-scrollbar-thumb:hover { background: #555; }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font);
-      line-height: 1.6;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text); font-family: var(--font);
+      line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased;
     }
-    
-    /* 背景网格光效 */
     body::before {
       content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
       background: radial-gradient(800px 600px at 20% -10%, rgba(79, 140, 255, 0.15), transparent 70%),
@@ -71,79 +34,37 @@
       -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
       mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
     }
-
     a { color: inherit; text-decoration: none; }
     .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
-    /* 锚点偏移，避免被导航栏遮挡 */
-    section { scroll-margin-top: 80px; }
-
-    /* 导航栏 */
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-      background: rgba(7, 9, 15, 0.7); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner {
-      height: 64px; display: flex; justify-content: space-between; align-items: center;
-    }
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(7, 9, 15, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-inner { height: 64px; display: flex; justify-content: space-between; align-items: center; }
     .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
-    .logo-mark {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 20px -4px var(--accent);
-    }
+    .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 0 20px -4px var(--accent); }
     .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
     .nav-links a { color: var(--muted); transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
-    .nav-cta {
-      font-size: 13px; padding: 8px 16px; border-radius: 8px;
-      background: rgba(255,255,255,0.06); border: 1px solid var(--border);
-      transition: 0.2s;
-    }
+    .nav-cta { font-size: 13px; padding: 8px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); transition: 0.2s; }
     .nav-cta:hover { background: rgba(255,255,255,0.12); }
 
-    /* Hero 区 */
     .hero { padding: 160px 0 100px; text-align: center; }
-    .hero h1 {
-      font-size: clamp(40px, 6vw, 72px); font-weight: 800; line-height: 1.1;
-      letter-spacing: -0.03em; margin-bottom: 24px;
-    }
-    .hero h1 .grad {
-      background: linear-gradient(100deg, var(--accent), var(--accent2));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-      font-size: clamp(16px, 2vw, 20px); color: var(--muted);
-      max-width: 640px; margin: 0 auto 40px; font-weight: 400;
-    }
+    .hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero h1 .grad { background: linear-gradient(100deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: clamp(16px, 2vw, 20px); color: var(--muted); max-width: 640px; margin: 0 auto 40px; font-weight: 400; }
     .hero-tags { display: flex; justify-content: center; gap: 12px; font-family: monospace; color: var(--accent); font-size: 13px; flex-wrap: wrap; }
     .hero-tags span { padding: 4px 12px; border: 1px solid var(--border); border-radius: 99px; background: rgba(79,140,255,0.05); }
 
-    /* 区块通用 */
     .section { padding: 80px 0; }
     .section-header { margin-bottom: 48px; display: flex; align-items: flex-end; justify-content: space-between; }
     .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
     .section-header p { color: var(--muted); font-size: 15px; margin-top: 8px; }
     
-    /* 产品矩阵 (3列) */
-    .grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    /* 社区入口 (2列) */
+    .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
     .grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    
-    @media (max-width: 960px) { .grid-3col { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 768px) { .grid-3col, .grid-2col { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .grid-2col { grid-template-columns: 1fr; } }
 
-    .card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 20px; padding: 32px;
-      display: flex; flex-direction: column; transition: 0.3s;
-      position: relative; overflow: hidden;
-    }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; transition: 0.3s; position: relative; overflow: hidden; }
     .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5); }
-    /* 手机端点击反馈 */
-    .card:active { transform: translateY(0); }
-    
     .card-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.05); display: grid; place-items: center; margin-bottom: 20px; font-size: 24px; }
     .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
     .card h3 .sub { font-size: 14px; font-weight: 400; color: var(--muted); }
@@ -155,25 +76,20 @@
     .link-arrow { font-size: 20px; color: var(--accent); transition: 0.2s; }
     .card:hover .link-arrow { transform: translateX(4px); }
 
-    /* 生态标签 */
+    /* 极客生态区块 */
     .eco-tags { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-    .eco-tag {
-      padding: 16px 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border);
-      border-radius: 12px; display: flex; align-items: center; gap: 12px; transition: 0.2s;
-    }
+    .eco-tag { padding: 16px 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
     .eco-tag:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); }
     .eco-tag .icon { font-size: 20px; }
     .eco-tag strong { display: block; color: var(--text); font-size: 15px; }
     .eco-tag span { font-size: 12px; color: var(--muted); }
 
-    /* 理念区 */
     .philosophy { background: rgba(255,255,255,0.02); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
     @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
     .p-item h4 { font-size: 18px; margin-bottom: 12px; color: var(--text); }
     .p-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
 
-    /* 页脚 */
     footer { padding: 60px 0 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; }
     footer p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
     footer .links { display: flex; justify-content: center; gap: 24px; font-size: 14px; flex-wrap: wrap; }
@@ -202,7 +118,6 @@
   </nav>
 
   <main>
-    <!-- Hero -->
     <section class="hero">
       <div class="container">
         <h1>把想法，<br>做成<span class="grad">真正好用的工具</span>。</h1>
@@ -225,7 +140,7 @@
           </div>
         </div>
         
-        <div class="grid-3col">
+        <div class="grid-auto">
           <!-- 1. Chert -->
           <a href="https://chert-launcher.github.io" target="_blank" class="card">
             <div class="card-icon">⛏️</div>
@@ -240,7 +155,7 @@
             <div class="card-icon">🖥️</div>
             <h3>Granite <span class="sub">极客开服器</span></h3>
             <div class="kind">Server Tool / In Dev</div>
-            <p>坚如花岗岩的服务端管理面板。无缝对接 Chert 的 P2P 穿透，一键开服、配置可视化、插件依赖检测。</p>
+            <p>坚如花岗岩的服务端管理面板。一键拉取服务端核心、可视化编辑配置、定时备份与崩溃自动重启，告别繁琐的黑框终端。</p>
             <div class="card-footer"><span class="tag">核心开发中</span></div>
           </div>
 
@@ -270,20 +185,11 @@
             <p>外表是石头，打开是晶洞。追求极致的轻量与纯粹，打造一个毫无臃肿插件、拒绝隐私追踪的浏览器。</p>
             <div class="card-footer"><span class="tag">概念规划中</span></div>
           </div>
-
-          <!-- 6. Quartz -->
-          <div class="card">
-            <div class="card-icon">📊</div>
-            <h3>Quartz <span class="sub">系统监视器</span></h3>
-            <div class="kind">Performance / Planning</div>
-            <p>像石英一样精准的性能看板。极低占用的 CPU/GPU/网络监控，原生支持现代暗黑 UI 与自定义悬浮窗。</p>
-            <div class="card-footer"><span class="tag">概念规划中</span></div>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- 起源项目 (MicroDOS) -->
+    <!-- 起源项目 -->
     <section class="section" style="padding-top: 0;">
       <div class="container">
         <div class="section-header">
@@ -317,11 +223,27 @@
         <div class="section-header" style="margin-bottom: 24px;">
           <div>
             <h2>去中心化生态</h2>
-            <p>基于核心技术剥离出的极客小工具与组件。</p>
+            <p>基于核心技术剥离出的极客小工具、组件与开源资产。</p>
           </div>
         </div>
         
         <div class="eco-tags">
+          <div class="eco-tag">
+            <span class="icon">📦</span>
+            <div>
+              <strong>RLRS Hub <span style="font-size: 12px; font-weight: normal; color: var(--muted);">资源枢纽</span></strong>
+              <span>纯静态托管的极客资源与文档索引</span>
+            </div>
+          </div>
+
+          <div class="eco-tag">
+            <span class="icon">🤖</span>
+            <div>
+              <strong>AI Skill <span style="font-size: 12px; font-weight: normal; color: var(--muted);">智能扩展</span></strong>
+              <span>为 Vibe Coding 定制的 AI 技能包</span>
+            </div>
+          </div>
+
           <div class="eco-tag">
             <span class="icon">🌐</span>
             <div>
@@ -345,11 +267,18 @@
               <span>面向极客的自动化脚本生态</span>
             </div>
           </div>
+
+          <div class="eco-tag">
+            <span class="icon">🧩</span>
+            <div>
+              <strong>Chert Plugins <span style="font-size: 12px; font-weight: normal; color: var(--muted);">扩展接口</span></strong>
+              <span>Stream Deck 联动 / 开源插件接口规划中</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 极客基地 -->
     <section class="section" id="community">
       <div class="container">
         <div class="section-header">
@@ -359,7 +288,6 @@
           </div>
         </div>
         <div class="grid-2col">
-          <!-- 加入我们 -->
           <a href="/join/" class="card" style="background: linear-gradient(135deg, rgba(79,140,255,0.1), transparent); border-color: rgba(79,140,255,0.3);">
             <div class="card-icon">🤝</div>
             <h3>加入极客基地</h3>
@@ -371,7 +299,6 @@
             </div>
           </a>
 
-          <!-- 开发文档 -->
           <a href="/docs/" class="card">
             <div class="card-icon">📚</div>
             <h3>开发者文档</h3>
@@ -386,7 +313,6 @@
       </div>
     </section>
 
-    <!-- 理念区 -->
     <section class="section philosophy" id="philosophy">
       <div class="container">
         <div class="grid-3">
@@ -415,13 +341,11 @@
         <a href="/join/">加入我们</a>
         <a href="/changelog/">更新日志</a>
         <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank">GitHub</a>
-        <!-- 隐藏小玩具 -->
         <a href="/sr/" class="muted">实验室：SR小工具</a>
       </div>
     </div>
   </footer>
 
-  <!-- 引入节日特效 JS -->
   <script src="/festival-fx.js" defer></script>
 </body>
 </html>
