@@ -13,6 +13,7 @@
     backdropDim: 0,       // 浅色官网建议 0.22~0.32
     topInset: 0,          // 固定导航高度，如 64
     maxSparks: 1600,
+    festivalPad: 0,       // 档期前后各放宽的天数（0 = 严格只在节日/法定假期内显示）
   };
 
   /* ==================== 农历日期表（按年补充） ==================== */
@@ -26,10 +27,30 @@
     newyearEve: ['2025-01-28','2026-02-16','2027-02-05','2028-01-25','2029-02-12','2030-02-02'],
     spring:     ['2025-01-29','2026-02-17','2027-02-06','2028-01-26','2029-02-13','2030-02-03'],
   };
-  const LUNAR_RANGE = {
-    yuanxiao: 1, qingming: 1, dragonboat: 1, qixi: 1,
-    midautumn: 2, chongyang: 1, newyearEve: 0, spring: 4,
-  };
+  /* 农历节日档期：[key, 节前几天, 节后几天]。0/0 = 只在节日当天生效。
+     春节按「初一到初七」给 6 天余温，其余单日节日一律不放宽。 */
+  const LUNAR_SPAN = [
+    ['newyearEve', 0, 0],
+    ['spring',     0, 6],
+    ['yuanxiao',   0, 0],
+    ['qingming',   0, 0],
+    ['dragonboat', 0, 0],
+    ['qixi',       0, 0],
+    ['midautumn',  0, 0],
+    ['chongyang',  0, 0],
+  ];
+  /* 公历节日档期：[key, 起始「月-日」, 结束「月-日」]。结束早于起始表示跨年，自动顺延到次年。
+     只覆盖真实节日与法定假期，不再做「节前预热」——否则普通日子也会挂特效。 */
+  const SOLAR = [
+    ['newyear',   '12-31', '01-01'],   // 跨年夜 → 元旦
+    ['valentine', '02-14', '02-14'],
+    ['aprilfool', '04-01', '04-01'],
+    ['labor',     '05-01', '05-05'],   // 法定 5 天
+    ['children',  '06-01', '06-01'],
+    ['national',  '10-01', '10-07'],   // 法定 7 天
+    ['halloween', '10-31', '10-31'],
+    ['christmas', '12-24', '12-25'],
+  ];
 
   /* ==================== 工具 ==================== */
   const TAU = Math.PI * 2;
@@ -44,11 +65,43 @@
   }
 
   function today0() { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }
-  function nearDates(list, span) {
+  /** 今天是否落在 list 中某日期的 [前 before 天, 后 after 天] 窗口内。 */
+  function nearDates(list, before, after) {
     const t = today0();
-    return list.some(ds => Math.abs((t - new Date(ds + 'T00:00:00').getTime()) / 864e5) <= span);
+    return list.some(ds => {
+      const gap = (t - new Date(ds + 'T00:00:00').getTime()) / 864e5;
+      return gap >= -before && gap <= after;
+    });
   }
-  function md() { const d = new Date(); return (d.getMonth() + 1) * 100 + d.getDate(); }
+  /** 今天是否落在公历档期内；跨年档期（止早于起）自动顺延到次年。 */
+  function inSolar(today, start, end, pad) {
+    const y = today.getFullYear();
+    for (const yy of [y - 1, y]) {
+      const s = new Date(`${yy}-${start}T00:00:00`);
+      const e = new Date(`${yy}-${end}T00:00:00`);
+      if (e < s) e.setFullYear(e.getFullYear() + 1);
+      s.setDate(s.getDate() - pad);
+      e.setDate(e.getDate() + pad);
+      if (today >= s && today <= e) return true;
+    }
+    return false;
+  }
+  /** 感恩节：11 月第 4 个周四（浮动日期，不能用固定月日）。 */
+  function thanksgivingDay(y) {
+    const firstDow = new Date(y, 10, 1).getDay();   // 11-01 是星期几（0=周日）
+    const offset = (4 - firstDow + 7) % 7;          // 第一个周四的日号偏移
+    return new Date(y, 10, 1 + offset + 21);
+  }
+  function inThanksgiving(today, pad) {
+    const y = today.getFullYear();
+    for (const yy of [y - 1, y]) {
+      const t = thanksgivingDay(yy);
+      const s = new Date(t); s.setDate(s.getDate() - pad);
+      const e = new Date(t); e.setDate(e.getDate() + pad);
+      if (today >= s && today <= e) return true;
+    }
+    return false;
+  }
   function roundRect(g, x, y, w, h, r) {
     r = Math.min(r, w / 2, h / 2);
     g.beginPath();
@@ -62,27 +115,22 @@
 
   /* ==================== 自动识别（优先级从高到低） ==================== */
   function detect() {
-    // 农历节日优先
-    if (nearDates(LUNAR.newyearEve, LUNAR_RANGE.newyearEve)) return 'newyearEve';
-    if (nearDates(LUNAR.spring,     LUNAR_RANGE.spring))     return 'spring';
-    if (nearDates(LUNAR.yuanxiao,   LUNAR_RANGE.yuanxiao))   return 'yuanxiao';
-    if (nearDates(LUNAR.qingming,   LUNAR_RANGE.qingming))   return 'qingming';
-    if (nearDates(LUNAR.dragonboat, LUNAR_RANGE.dragonboat)) return 'dragonboat';
-    if (nearDates(LUNAR.qixi,       LUNAR_RANGE.qixi))       return 'qixi';
-    if (nearDates(LUNAR.midautumn,  LUNAR_RANGE.midautumn))  return 'midautumn';
-    if (nearDates(LUNAR.chongyang,  LUNAR_RANGE.chongyang))  return 'chongyang';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const pad = Math.max(0, CFG.festivalPad | 0);
+
+    // 农历节日优先（数组顺序即优先级）
+    for (const [key, before, after] of LUNAR_SPAN) {
+      if (nearDates(LUNAR[key], before + pad, after + pad)) return key;
+    }
 
     // 公历节日
-    const d = md();
-    if (d >= 1228 || d <= 103) return 'newyear';     // 跨年窗口
-    if (d >= 207 && d <= 216)  return 'valentine';
-    if (d >= 320 && d <= 322)  return 'aprilfool';   // 愚人节前后
-    if (d >= 428 && d <= 506)  return 'labor';
-    if (d >= 526 && d <= 602)  return 'children';
-    if (d >= 926 && d <= 1007) return 'national';
-    if (d >= 1024 && d <= 1101) return 'halloween';
-    if (d >= 1118 && d <= 1129) return 'thanksgiving'; // 11月第四个周四窗口
-    if (d >= 1215 && d <= 1226) return 'christmas';
+    for (const [key, start, end] of SOLAR) {
+      if (inSolar(today, start, end, pad)) return key;
+    }
+
+    // 感恩节（11 月第 4 个周四，浮动日期）
+    if (inThanksgiving(today, pad)) return 'thanksgiving';
 
     return 'none';
   }
