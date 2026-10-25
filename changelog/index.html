@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#0a0c10">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/css/style.css">
+  <style>/* 关键兜底：样式表加载/命中缓存前也保证底色正确 */
+html{background:#07090f}html[data-theme="light"]{background:#f4f6fb}</style>
+  <link rel="stylesheet" href="/css/style.css?v=20261026">
   <meta property="og:site_name" content="RLRS Studio">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
@@ -13,6 +15,8 @@
   <meta name="description" content="燧石启动器（Chert Launcher）更新日志。">
   <meta property="og:title" content="Chert Launcher Changelog">
   <meta property="og:url" content="https://remix-laser-raising-studio.github.io/changelog/">
+<script>/* 主题记忆：与 RLRS Hub 共用同一键，跨页不跳色 */
+try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}</script>
 </head>
 <body data-nav="changelog">
   <main class="page">
@@ -27,8 +31,8 @@
       </p>
     </div></section>
   </main>
-  <script src="/js/site-i18n.js" charset="utf-8"></script>
-  <script src="/js/layout.js" charset="utf-8"></script>
+  <script src="/js/site-i18n.js?v=20261026" charset="utf-8"></script>
+  <script src="/js/layout.js?v=20261026" charset="utf-8"></script>
   <script>
     (function(){
       function fill(w){ if(!w) return;
@@ -39,8 +43,8 @@
         .then(j=>fill(j&&j.wpf)).catch(()=>{});
     })();
   </script>
-  <script src="/js/embers.js" charset="utf-8"></script>
-  <script src="/js/seasonal.js" charset="utf-8"></script>
-<script src="/festival-fx.js" defer></script>
+  <script src="/js/embers.js?v=20261026" charset="utf-8"></script>
+  <script src="/js/seasonal.js?v=20261026" charset="utf-8"></script>
+<script src="/festival-fx.js?v=20261026" defer></script>
 </body>
 </html>

@@ -514,6 +514,15 @@ html[data-theme="light"] .prod:hover,
 html[data-theme="light"] .eco:hover{box-shadow:0 18px 40px rgba(20,30,60,.12)}
 html[data-theme="light"] .pill-beta{background:rgba(180,120,0,.1);color:#a16207;border-color:rgba(180,120,0,.22)}
 html[data-theme="light"] .eco.is-feature{background:linear-gradient(152deg,rgba(47,107,255,.1),transparent 62%),var(--card-strong)}
+/* 亮色：顶栏、页脚与终端风卡片（导航底色原本写死深色，亮色下会糊成一块） */
+html[data-theme="light"] .nav{background:rgba(250,251,254,.86);border-bottom-color:rgba(0,0,0,.08)}
+html[data-theme="light"] .nav-links a:hover{background:rgba(0,0,0,.045)}
+html[data-theme="light"] .nav-links a.active{background:var(--accent-soft);color:var(--accent)}
+html[data-theme="light"] .site-nav{background:rgba(250,251,254,.86);border-bottom-color:rgba(0,0,0,.08)}
+html[data-theme="light"] .legacy{border-color:rgba(0,0,0,.12)}
+html[data-theme="light"] .home-brandline{color:#6b7486}
+html[data-theme="light"] .home-meta b{color:#131820}
+html[data-theme="light"] .home-meta div:first-child b{color:var(--accent)}
 
 /* ---- 响应式 ---- */
 @media (max-width:900px){

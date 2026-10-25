@@ -7,7 +7,9 @@
   <meta name="theme-color" content="#07090f">
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="stylesheet" href="/css/style.css">
+  <style>/* 关键兜底：样式表加载/命中缓存前也保证底色正确 */
+html{background:#07090f}html[data-theme="light"]{background:#f4f6fb}</style>
+  <link rel="stylesheet" href="/css/style.css?v=20261026">
   <style>
     pre { background: rgba(0,0,0,0.4); border: 1px solid var(--border); padding: 20px; border-radius: 12px; overflow-x: auto; margin-bottom: 20px; }
     code { font-family: var(--mono); font-size: 14px; color: var(--text); }
@@ -18,6 +20,8 @@
     .doc-section p, .doc-section li { color: var(--text-2); font-size: 15px; line-height: 1.7; }
     .doc-section ul { padding-left: 20px; margin-bottom: 16px; }
   </style>
+<script>/* 主题记忆：与 RLRS Hub 共用同一键，跨页不跳色 */
+try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}</script>
 </head>
 <body data-nav="docs">
   <main class="page" style="padding-top: 120px; padding-bottom: 80px;">
@@ -63,9 +67,9 @@ location.reload();</code></pre>
     </section>
   </main>
 
-  <script src="/js/site-i18n.js" charset="utf-8"></script>
-  <script src="/js/layout.js" charset="utf-8"></script>
-  <script src="/js/particles.js" charset="utf-8"></script>
-  <script src="/festival-fx.js" defer></script>
+  <script src="/js/site-i18n.js?v=20261026" charset="utf-8"></script>
+  <script src="/js/layout.js?v=20261026" charset="utf-8"></script>
+  <script src="/js/particles.js?v=20261026" charset="utf-8"></script>
+  <script src="/festival-fx.js?v=20261026" defer></script>
 </body>
 </html>
