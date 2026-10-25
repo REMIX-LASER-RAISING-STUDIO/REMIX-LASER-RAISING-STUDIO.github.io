@@ -1,27 +1,179 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RLRS Hub — 极客自留地</title>
-  <style>
-    body { background: #07090f; color: #e9edf5; font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    .container { max-width: 600px; padding: 40px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; text-align: center; }
-    h1 { font-size: 24px; margin-bottom: 20px; }
-    p { color: #8a93a6; line-height: 1.6; }
-    .links { margin-top: 30px; display: flex; gap: 16px; justify-content: center; }
-    .links a { color: #e9edf5; text-decoration: none; padding: 10px 20px; background: rgba(255,255,255,0.05); border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s; }
-    .links a:hover { border-color: #4f8cff; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RLRS Hub — 极客内容集散地</title>
+  <meta name="theme-color" content="#07090f" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
-  <div class="container">
-    <h1>📦 RLRS Hub</h1>
-    <p>这里是 RLRS 成员的数字自留地。<br>目前正在搬运开发日志、AI 技能库与独立小工具。</p>
-    <div class="links">
-      <a href="/sr/">进入 SR 工具箱</a>
-      <a href="/">返回主页</a>
+<body data-nav="hub">
+  <!-- 顶栏：rlrshub 标识 + 搜索 + 主题/语言 -->
+  <header class="hub-topbar">
+    <div class="hub-top-left">
+      <button class="hub-icon-btn" id="sidebarToggle" data-t-title="hub.t.sidebar" aria-label="侧边栏">☰</button>
+      <a class="hub-brand" href="/">rlrshub</a>
     </div>
+    <div class="hub-search">
+      <span class="hub-search-ico">🔍</span>
+      <input type="search" id="hubSearch" data-t-ph="hub.search" placeholder="搜索文档、技能与代码…" />
+    </div>
+    <div class="hub-top-right">
+      <button class="hub-icon-btn" id="themeToggle" data-t-title="hub.t.theme" aria-label="主题">🌙</button>
+      <select class="lang-select" aria-label="语言切换">
+        <option value="zh">简体中文</option>
+        <option value="zh-TW">繁體中文</option>
+        <option value="en">English</option>
+        <option value="lzh">文言文</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="hub-layout" id="hubLayout">
+    <!-- 侧边栏（可收缩为图标栏） -->
+    <aside class="hub-side" id="hubSide">
+      <nav>
+        <a class="hub-cat active" data-cat="all"><span class="ico">🗂️</span><span class="lbl" data-t="hub.nav.all">全部</span></a>
+        <a class="hub-cat" data-cat="docs"><span class="ico">📄</span><span class="lbl" data-t="hub.nav.docs">文档</span></a>
+        <a class="hub-cat" data-cat="skills"><span class="ico">🧩</span><span class="lbl" data-t="hub.nav.skills">开源 Skills</span></a>
+        <a class="hub-cat" data-cat="csharp"><span class="ico">💻</span><span class="lbl" data-t="hub.nav.csharp">开源 C# 库</span></a>
+      </nav>
+    </aside>
+
+    <!-- 内容卡片 -->
+    <main class="hub-main" id="hubMain">
+      <!-- 有内容的卡片 -->
+      <a class="hub-card" data-cat="docs" data-title="开发者文档 docs" href="/docs/">
+        <div class="ico">📘</div>
+        <h3 data-t="hub.card.docs.t">开发者文档</h3>
+        <p data-t="hub.card.docs.d">Chert CLI 命令、节日特效接入与开源组件白皮书。</p>
+        <span class="tag" data-t="hub.nav.docs">文档</span>
+      </a>
+      <a class="hub-card" data-cat="docs" data-title="更新日志 changelog" href="/changelog/">
+        <div class="ico">📝</div>
+        <h3 data-t="hub.card.log.t">更新日志</h3>
+        <p data-t="hub.card.log.d">燧石启动器与工作室各项目的发布历史与更新内容。</p>
+        <span class="tag" data-t="hub.nav.docs">文档</span>
+      </a>
+      <a class="hub-card" data-cat="skills" data-title="崩铁工具集 sr hsr" href="/sr/">
+        <div class="ico">⚔️</div>
+        <h3 data-t="hub.card.sr.t">崩铁工具集</h3>
+        <p data-t="hub.card.sr.d">总伤计算器与全角色全光锥抽卡模拟器，免费开源。</p>
+        <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
+      </a>
+      <a class="hub-card" data-cat="csharp" data-title="源码仓库 source github" href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank" rel="noopener">
+        <div class="ico">🌐</div>
+        <h3 data-t="hub.card.src.t">源码仓库</h3>
+        <p data-t="hub.card.src.d">REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部开源代码。</p>
+        <span class="tag" data-t="hub.nav.csharp">开源 C# 库</span>
+      </a>
+
+      <!-- 正在搬运（无内容，指向加入我们） -->
+      <a class="hub-card ph" data-cat="docs" data-title="api 参考手册" href="/join/">
+        <div class="ico">📄</div>
+        <h3 data-t="hub.ph.t">正在搬运</h3>
+        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
+        <span class="tag" data-t="hub.nav.docs">文档</span>
+      </a>
+      <a class="hub-card ph" data-cat="docs" data-title="部署指南" href="/join/">
+        <div class="ico">📄</div>
+        <h3 data-t="hub.ph.t">正在搬运</h3>
+        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
+        <span class="tag" data-t="hub.nav.docs">文档</span>
+      </a>
+      <a class="hub-card ph" data-cat="skills" data-title="ai 技能库" href="/join/">
+        <div class="ico">🧩</div>
+        <h3 data-t="hub.ph.t">正在搬运</h3>
+        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
+        <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
+      </a>
+      <a class="hub-card ph" data-cat="skills" data-title="构建发布技能" href="/join/">
+        <div class="ico">🧩</div>
+        <h3 data-t="hub.ph.t">正在搬运</h3>
+        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
+        <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
+      </a>
+      <a class="hub-card ph" data-cat="csharp" data-title="mclcs 核心库" href="/join/">
+        <div class="ico">💻</div>
+        <h3 data-t="hub.ph.t">正在搬运</h3>
+        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
+        <span class="tag" data-t="hub.nav.csharp">开源 C# 库</span>
+      </a>
+    </main>
   </div>
+
+  <!-- 背景与脚本（与主站共用） -->
+  <script src="/js/site-i18n.js" charset="utf-8"></script>
+  <script src="/js/particles.js" charset="utf-8"></script>
+  <script src="/festival-fx.js" defer></script>
+  <script>
+    (function(){
+      // 顶栏标题（data-t-title）随语言刷新
+      function refreshTitles(){
+        if(!window.SI18N) return;
+        document.querySelectorAll('[data-t-title]').forEach(el=>{
+          const v=SI18N.t(el.dataset.tTitle);
+          if(v) el.title=v, el.setAttribute('aria-label',v);
+        });
+        const ph=document.getElementById('hubSearch');
+        if(ph) ph.placeholder=SI18N.t('hub.search');
+      }
+      document.addEventListener('DOMContentLoaded',refreshTitles);
+      document.addEventListener('change',e=>{ if(e.target.closest('.lang-select')) setTimeout(refreshTitles,0); });
+
+      // 主题：亮 / 暗（记忆）
+      const KEY_THEME='rlrs-hub-theme';
+      const tBtn=document.getElementById('themeToggle');
+      function applyTheme(t){
+        document.documentElement.setAttribute('data-theme',t);
+        if(tBtn) tBtn.textContent = t==='light' ? '☀️' : '🌙';
+      }
+      applyTheme(localStorage.getItem(KEY_THEME)||'dark');
+      if(tBtn) tBtn.addEventListener('click',()=>{
+        const next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+        localStorage.setItem(KEY_THEME,next); applyTheme(next);
+      });
+
+      // 侧边栏收缩（记忆）
+      const KEY_SIDE='rlrs-hub-side';
+      const side=document.getElementById('hubSide');
+      const layout=document.getElementById('hubLayout');
+      const sBtn=document.getElementById('sidebarToggle');
+      function applySide(collapsed){
+        side.classList.toggle('collapsed',collapsed);
+        if(layout) layout.classList.toggle('collapsed',collapsed);
+        if(sBtn) sBtn.textContent = collapsed ? '»' : '☰';
+      }
+      applySide(localStorage.getItem(KEY_SIDE)==='1');
+      if(sBtn) sBtn.addEventListener('click',()=>{
+        const c=!side.classList.contains('collapsed');
+        localStorage.setItem(KEY_SIDE,c?'1':'0'); applySide(c);
+      });
+
+      // 分类筛选 + 搜索过滤
+      const search=document.getElementById('hubSearch');
+      const cards=Array.from(document.querySelectorAll('.hub-card'));
+      let curCat='all';
+      function filter(){
+        const q=(search.value||'').trim().toLowerCase();
+        cards.forEach(c=>{
+          const okCat = curCat==='all' || c.dataset.cat===curCat;
+          const txt=((c.dataset.title||'')+' '+c.textContent).toLowerCase();
+          const okQ = !q || txt.includes(q);
+          c.style.display = (okCat && okQ) ? '' : 'none';
+        });
+      }
+      search.addEventListener('input',filter);
+      document.querySelectorAll('.hub-cat').forEach(a=>{
+        a.addEventListener('click',()=>{
+          document.querySelectorAll('.hub-cat').forEach(x=>x.classList.remove('active'));
+          a.classList.add('active'); curCat=a.dataset.cat; filter();
+        });
+      });
+      filter();
+    })();
+  </script>
 </body>
 </html>
