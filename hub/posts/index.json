@@ -1,24 +1,33 @@
 {
-  "updated": "2026-10-25",
+  "updated": "2026-10-26",
   "note": "投稿方式：把 .md 文件放进 hub/posts/，再在本文件 posts 数组里追加一条记录（file 相对 hub 目录）。",
   "posts": [
+    {
+      "slug": "launcher-scene-2026-10",
+      "title": "启动器圈这个月：PCL 关了游戏下载，Prism 补了个安全洞",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-25",
+      "tags": ["行业观察", "启动器"],
+      "excerpt": "PCL 2.99.0.0 起不再提供游戏本体下载，Prism 11.1.1 修掉 CurseForge 整合包的路径穿越漏洞。两件事指向同一条线索：合规在收紧，安全在变贵。",
+      "file": "posts/launcher-scene-2026-10.md"
+    },
+    {
+      "slug": "chert-2-6-0",
+      "title": "燧石启动器 2.6.0 内测记录：服务器复用、HUD 自愈与 Ollama 镜像",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-25",
+      "tags": ["燧石启动器", "内测"],
+      "excerpt": "2.6.0 还没正式发布，仍在内测。这里记录这一版在改的四件事，以及目前明确没处理完的部分——想尝鲜的看完再决定装不装。",
+      "file": "posts/chert-2-6-0.md"
+    },
     {
       "slug": "welcome",
       "title": "成员博客上线：这里写什么，怎么投稿",
       "author": "BingJian-REMIX",
-      "date": "2026-10-25",
+      "date": "2026-10-24",
       "tags": ["公告", "社区"],
       "excerpt": "RLRS Hub 的成员博客正式开张。这里放开发日志、技术笔记、踩坑记录和项目复盘，也欢迎成员把文章投到仓库里，页面会自动渲染。",
       "file": "posts/welcome.md"
-    },
-    {
-      "slug": "chert-2-6-0",
-      "title": "燧石启动器 2.6.0：服务器复用、HUD 自愈与 Ollama 镜像",
-      "author": "BingJian-REMIX",
-      "date": "2026-10-19",
-      "tags": ["燧石启动器", "发布"],
-      "excerpt": "2.6.0 集中处理了几件长期烦人的事：重复开服、HUD 抓不到游戏进程、以及 Ollama 拉模型又慢又断。下面是这次的改动与实现思路。",
-      "file": "posts/chert-2-6-0.md"
     }
   ]
 }
