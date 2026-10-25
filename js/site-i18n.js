@@ -66,6 +66,7 @@
     "hub.card.docs.t":"开发者文档","hub.card.docs.d":"Chert CLI 命令、节日特效接入与开源组件白皮书。",
     "hub.card.log.t":"更新日志","hub.card.log.d":"燧石启动器与工作室各项目的发布历史与更新内容。",
     "hub.card.sr.t":"崩铁工具集","hub.card.sr.d":"总伤计算器与全角色全光锥抽卡模拟器，免费开源。",
+    "hub.card.trib.t":"赛博天劫 · 借假修真","hub.card.trib.d":"接通天地灵脉，长按聚气，推演出你的灵根、业火、道心与发际线。",
     "hub.card.src.t":"源码仓库","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部开源代码。",
     "hub.empty.t":"这里还在搬运","hub.empty.d":"该分类暂时没有内容，欢迎加入我们一起把它建起来。"
   },
@@ -135,6 +136,7 @@
     "hub.card.docs.t":"Developer Docs","hub.card.docs.d":"Chert CLI commands, festival-effects integration and open-source component whitepapers.",
     "hub.card.log.t":"Changelog","hub.card.log.d":"Release history and notes for Chert Launcher and all studio projects.",
     "hub.card.sr.t":"HSR Tools","hub.card.sr.d":"Total-damage calculator and full gacha simulator. Free and open source.",
+    "hub.card.trib.t":"Cyber Tribulation · Borrow the False","hub.card.trib.d":"Link the heaven-earth ley line, hold to gather qi, and divine your root bone, karmic fire, dao heart and hairline.",
     "hub.card.src.t":"Source Repos","hub.card.src.d":"All open-source code from REMIX-LASER-RAISING-STUDIO on GitHub.",
     "hub.empty.t":"Still moving in","hub.empty.d":"Nothing here yet — join us and let's build it together."
   },
@@ -204,6 +206,7 @@
     "hub.card.docs.t":"開發者文件","hub.card.docs.d":"Chert CLI 指令、節日特效接入與開源元件白皮書。",
     "hub.card.log.t":"更新日誌","hub.card.log.d":"燧石啟動器與工作室各項目的發布歷史與更新內容。",
     "hub.card.sr.t":"崩鐵工具集","hub.card.sr.d":"總傷計算機與全角色全光錐抽卡模擬器，免費開源。",
+    "hub.card.trib.t":"賽博天劫 · 借假修真","hub.card.trib.d":"接通天地靈脈，長按聚氣，推演出你的靈根、業火、道心與髮際線。",
     "hub.card.src.t":"原始碼倉庫","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部開源程式碼。",
     "hub.empty.t":"這裡還在搬運","hub.empty.d":"該分類暫時沒有內容，歡迎加入我們一起把它建起來。"
   },
@@ -273,6 +276,7 @@
     "hub.card.docs.t":"開發者之文","hub.card.docs.d":"Chert CLI 之令、節日特效接入與開源元件之白書。",
     "hub.card.log.t":"更迭錄","hub.card.log.d":"燧石啟動器與工作室諸目之頒布沿革與更之內容。",
     "hub.card.sr.t":"崩鐵之器","hub.card.sr.d":"總傷之算與全角色全光錐抽卡之擬，免費開源。",
+    "hub.card.trib.t":"賽博天劫 · 借假修真","hub.card.trib.d":"接天地之靈脈，長按聚氣，推演爾之靈根、業火、道心與髮際。",
     "hub.card.src.t":"源碼之倉","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上之諸開源碼。",
     "hub.empty.t":"此方搬運","hub.empty.d":"此類暫無所容，願入我輩共構之。"
   },
