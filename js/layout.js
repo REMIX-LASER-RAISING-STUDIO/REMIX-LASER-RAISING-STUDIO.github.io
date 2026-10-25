@@ -23,7 +23,9 @@
         <option value="en">English</option>
         <option value="lzh">文言文</option>
       </select>
-      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary" style="padding:7px 14px;font-size:13.5px" data-t="nav.get">⬇ 获取燧石</a>
+      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary nav-get">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v10"/><path d="M8 10.5 12 14.5l4-4"/><path d="M4.5 19.5h15"/></svg>
+        <span data-t="nav.get">获取燧石</span></a>
     </div>
   </div></header>`;
 
@@ -66,9 +68,9 @@
       const key=e.detail; const el=document.querySelector(".season-banner");
       if(!key||!el){ if(el) el.hidden=true; return; }
       el.dataset.t="season."+key; el.hidden=false;
-      if(window.RLRS_I18N) el.textContent=RLRS_I18N.t("season."+key);
+      if(window.SI18N) el.textContent=SI18N.t("season."+key);
     });
-    if(window.RLRS_I18N) RLRS_I18N.apply();
+    if(window.SI18N) SI18N.apply();
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",mount); else mount();
 })();
