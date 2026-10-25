@@ -1,342 +1,98 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0c10">
-  <title>RLRS Studio — 把想法做成真正好用的工具</title>
-  <meta name="description" content="RLRS Studio 是一个独立工作室，专注于开发纯粹、本地优先、无服务器依赖的极客桌面软件。">
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  
-  <style>
-    :root {
-      --bg: #07090f; --text: #e9edf5; --muted: #8a93a6; --border: rgba(255,255,255,0.08);
-      --card-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      --accent: #4f8cff; --accent2: #a855f7;
-      --font: "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg); color: var(--text); font-family: var(--font);
-      line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased;
-    }
-    body::before {
-      content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
-      background: radial-gradient(800px 600px at 20% -10%, rgba(79, 140, 255, 0.15), transparent 70%),
-                  radial-gradient(600px 500px at 90% 20%, rgba(168, 85, 247, 0.1), transparent 70%);
-    }
-    body::after {
-      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-      background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-      background-size: 64px 64px;
-      -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
-      mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
-    }
-    a { color: inherit; text-decoration: none; }
-    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-
-    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(7, 9, 15, 0.7); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
-    .nav-inner { height: 64px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
-    .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 0 20px -4px var(--accent); }
-    .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
-    .nav-links a { color: var(--muted); transition: color 0.2s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-cta { font-size: 13px; padding: 8px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); transition: 0.2s; }
-    .nav-cta:hover { background: rgba(255,255,255,0.12); }
-
-    .hero { padding: 160px 0 100px; text-align: center; }
-    .hero h1 { font-size: clamp(40px, 6vw, 72px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
-    .hero h1 .grad { background: linear-gradient(100deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: clamp(16px, 2vw, 20px); color: var(--muted); max-width: 640px; margin: 0 auto 40px; font-weight: 400; }
-    .hero-tags { display: flex; justify-content: center; gap: 12px; font-family: monospace; color: var(--accent); font-size: 13px; flex-wrap: wrap; }
-    .hero-tags span { padding: 4px 12px; border: 1px solid var(--border); border-radius: 99px; background: rgba(79,140,255,0.05); }
-
-    .section { padding: 80px 0; }
-    .section-header { margin-bottom: 48px; display: flex; align-items: flex-end; justify-content: space-between; }
-    .section-header h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
-    .section-header p { color: var(--muted); font-size: 15px; margin-top: 8px; }
-    
-    .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-    .grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    @media (max-width: 768px) { .grid-2col { grid-template-columns: 1fr; } }
-
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; transition: 0.3s; position: relative; overflow: hidden; }
-    .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.15); box-shadow: 0 20px 40px -20px rgba(0,0,0,0.5); }
-    .card-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(255,255,255,0.05); display: grid; place-items: center; margin-bottom: 20px; font-size: 24px; }
-    .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-    .card h3 .sub { font-size: 14px; font-weight: 400; color: var(--muted); }
-    .card .kind { font-size: 12px; color: var(--accent); font-family: monospace; margin-bottom: 16px; }
-    .card p { color: var(--muted); font-size: 14px; line-height: 1.6; flex-grow: 1; margin-bottom: 24px; }
-    .card-footer { display: flex; align-items: center; justify-content: space-between; }
-    .tag { font-size: 12px; padding: 4px 10px; border-radius: 6px; background: rgba(255,255,255,0.05); color: var(--muted); }
-    .tag.active { color: #4ade80; background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.2); }
-    .link-arrow { font-size: 20px; color: var(--accent); transition: 0.2s; }
-    .card:hover .link-arrow { transform: translateX(4px); }
-
-    .eco-tags { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
-    .eco-tag { padding: 16px 24px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
-    .eco-tag:hover { background: rgba(255,255,255,0.05); border-color: var(--accent); }
-    .eco-tag .icon { font-size: 20px; }
-    .eco-tag strong { display: block; color: var(--text); font-size: 15px; }
-    .eco-tag span { font-size: 12px; color: var(--muted); }
-
-    .philosophy { background: rgba(255,255,255,0.02); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; text-align: center; }
-    @media (max-width: 768px) { .grid-3 { grid-template-columns: 1fr; } }
-    .p-item h4 { font-size: 18px; margin-bottom: 12px; color: var(--text); }
-    .p-item p { font-size: 14px; color: var(--muted); line-height: 1.7; }
-
-    footer { padding: 60px 0 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; }
-    footer p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
-    footer .links { display: flex; justify-content: center; gap: 24px; font-size: 14px; flex-wrap: wrap; }
-    footer .links a { transition: 0.2s; }
-    footer .links a:hover { color: var(--accent); }
-    footer .links a.muted { opacity: 0.5; font-size: 12px; }
-    footer .links a.muted:hover { opacity: 1; color: var(--muted); }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RLRS Studio — 把想法做成真正好用的工具</title>
+    <meta name="description" content="RLRS Studio 是一个独立工作室，专注于开发纯粹、本地优先的极客桌面软件。" />
+    <meta name="theme-color" content="#07090f" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
-
-  <nav class="nav">
-    <div class="container nav-inner">
-      <div class="logo">
-        <div class="logo-mark"></div>
-        RLRS Studio
-      </div>
-      <div class="nav-links">
-        <a href="#projects">产品矩阵</a>
-        <a href="#community">极客基地</a>
-        <a href="#philosophy">开发理念</a>
-        <a href="https://chert-launcher.github.io" target="_blank">燧石启动器 ↗</a>
-      </div>
-      <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank" class="nav-cta">GitHub 组织</a>
-    </div>
-  </nav>
-
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1>把想法，<br>做成<span class="grad">真正好用的工具</span>。</h1>
-        <p>RLRS Studio 是一个单兵作战的独立开发力量。我们拒绝臃肿与云端绑架，只用极致的代码与算力，死磕底层的稳定与体验。</p>
-        <div class="hero-tags">
-          <span>Local-First</span>
-          <span>No Bloatware</span>
-          <span>Serverless</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="projects">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <h2>产品矩阵</h2>
-            <p>以岩石与结晶为名，构筑属于极客的数字宇宙。</p>
-          </div>
-        </div>
+<body data-nav="home">
+    <main class="page" style="padding-top: 120px; padding-bottom: 80px;">
         
-        <div class="grid-auto">
-          <a href="https://chert-launcher.github.io" target="_blank" class="card">
-            <div class="card-icon">⛏️</div>
-            <h3>Chert <span class="sub">燧石启动器</span></h3>
-            <div class="kind">Game Tool / Active</div>
-            <p>硬核的 Minecraft 启动终端。内置 P2P 打洞联机、自愈 HUD 与四套 UI 设计语言，超 300 次严苛提交。</p>
-            <div class="card-footer"><span class="tag active">已发布 · 2.5.6</span><span class="link-arrow">→</span></div>
-          </a>
+        <!-- Hero -->
+        <section class="hero" style="text-align: center; margin-bottom: 60px;">
+            <div class="badge">✦ RLRS Studio</div>
+            <h1 class="tagline">把想法，做成真正好用的工具。</h1>
+            <p class="desc" style="max-width: 600px; margin: 0 auto;">拒绝臃肿与云端绑架，只用极致的代码与算力，死磕底层的稳定与体验。</p>
+        </section>
 
-          <div class="card">
-            <div class="card-icon">🖥️</div>
-            <h3>Granite <span class="sub">极客开服器</span></h3>
-            <div class="kind">Server Tool / In Dev</div>
-            <p>坚如花岗岩的服务端管理面板。一键拉取服务端核心、可视化编辑配置、定时备份与崩溃自动重启，告别繁琐的黑框终端。</p>
-            <div class="card-footer"><span class="tag">核心开发中</span></div>
-          </div>
-
-          <div class="card">
-            <div class="card-icon">💽</div>
-            <h3>Basalt <span class="sub">虚拟磁盘</span></h3>
-            <div class="kind">System Utility / In Dev</div>
-            <p>坚如磐石的现代虚拟磁盘管理器。完美支持 VHDX / VMDK，原生只读挂载与安全快照，绝不弄坏镜像。</p>
-            <div class="card-footer"><span class="tag">核心开发中</span></div>
-          </div>
-
-          <div class="card">
-            <div class="card-icon">🧪</div>
-            <h3>Cobalt <span class="sub">化学实验室</span></h3>
-            <div class="kind">Simulation / In Dev</div>
-            <p>以深邃钴蓝为灵感的化学模拟工具。可视化反应过程与试剂操作，让实验安全且反复地在屏幕上进行。</p>
-            <div class="card-footer"><span class="tag">核心开发中</span></div>
-          </div>
-
-          <div class="card">
-            <div class="card-icon">💎</div>
-            <h3>Geode <span class="sub">晶洞浏览器</span></h3>
-            <div class="kind">Web Browser / Planning</div>
-            <p>外表是石头，打开是晶洞。追求极致的轻量与纯粹，打造一个毫无臃肿插件、拒绝隐私追踪的浏览器。</p>
-            <div class="card-footer"><span class="tag">概念规划中</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top: 0;">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <h2>梦想开始的地方</h2>
-            <p>一些来自过去的代码，见证了一个极客的起点。</p>
-          </div>
-        </div>
+        <!-- 工作室项目 (取自 i18n HUB) -->
+        <h2 class="section-title reveal" id="projects" data-t="hub.t">我们做的东西</h2>
+        <p class="reveal" data-t="hub.s" style="text-align: center; color: var(--text-2); margin-bottom: 40px;"></p>
         
-        <a href="https://github.com/Bingjianremix/MICRODOS--REMIX" target="_blank" class="card" style="background: #050505; border-color: #333; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px;">
-            <div class="card-icon" style="background: rgba(255,255,255,0.02); color: #888; margin-bottom: 0;">💾</div>
-            <span class="tag" style="border: 1px solid #333; background: transparent; color: #888;">Vintage / Legacy</span>
-          </div>
-          <h3 style="color: #ddd; font-family: inherit;">MicroDOS <span class="sub" style="color: #666; font-size: 14px;">微操作系统模拟</span></h3>
-          <div class="kind" style="color: #888;">Pure Batch Script / Origin</div>
-          <p style="color: #777; max-width: 800px;">
-            这是 RLRS Studio 的最初起点。用纯粹的 Windows 批处理脚本（.bat）构建的 DOS 命令行模拟器。没有现代框架，没有面向对象，只有最底层的逻辑堆砌与纯粹的热爱。虽然简陋，但它是一切极客魔法的原点。
-          </p>
-          <div class="card-footer" style="margin-top: 10px;">
-            <span style="color: #555; font-size: 12px;">C:\&gt; _</span>
-            <span class="link-arrow" style="color: #666;">→</span>
-          </div>
-        </a>
-      </div>
-    </section>
+        <div class="grid reveal" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+            
+            <!-- Chert -->
+            <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="product-card">
+                <div class="icon">⛏️</div>
+                <h3 data-t="hub.chert.t">燧石启动器</h3>
+                <div class="platform" data-t="hub.chert.tag">Windows · 2.6.0</div>
+                <div class="desc" data-t="hub.chert.d"></div>
+            </a>
 
-    <section class="section" style="padding-top: 0;">
-      <div class="container">
-        <div class="section-header" style="margin-bottom: 24px;">
-          <div>
-            <h2>去中心化生态</h2>
-            <p>基于核心技术剥离出的极客小工具、组件与开源资产。</p>
-          </div>
+            <!-- Chert Server -->
+            <div class="product-card">
+                <div class="icon">🖥️</div>
+                <h3 data-t="hub.server.t">Chert Server</h3>
+                <div class="platform" data-t="hub.server.tag">规划中</div>
+                <div class="desc" data-t="hub.server.d"></div>
+            </div>
+
+            <!-- VD Explorer -->
+            <div class="product-card">
+                <div class="icon">💽</div>
+                <h3 data-t="hub.vd.t">VD Explorer</h3>
+                <div class="platform" data-t="hub.vd.tag">开发中</div>
+                <div class="desc" data-t="hub.vd.d"></div>
+            </div>
+
+            <!-- ChemiLab -->
+            <div class="product-card">
+                <div class="icon">🧪</div>
+                <h3 data-t="hub.chem.t">ChemiLab</h3>
+                <div class="platform" data-t="hub.chem.tag">开发中</div>
+                <div class="desc" data-t="hub.chem.d"></div>
+            </div>
+
+            <!-- SR Tools -->
+            <a href="/sr/" class="product-card">
+                <div class="icon">🌠</div>
+                <h3 data-t="hub.sr.t">崩铁工具</h3>
+                <div class="platform" data-t="hub.sr.tag">进行中</div>
+                <div class="desc" data-t="hub.sr.d"></div>
+            </a>
+
+            <!-- Join & Log -->
+            <a href="/join/" class="product-card">
+                <div class="icon">🤝</div>
+                <h3 data-t="hub.join.t">加入社区</h3>
+                <div class="platform" data-t="hub.join.tag">开放</div>
+                <div class="desc" data-t="hub.join.d"></div>
+            </a>
+            <a href="/changelog/" class="product-card">
+                <div class="icon">📜</div>
+                <h3 data-t="hub.log.t">更新日志</h3>
+                <div class="platform" data-t="hub.log.tag">最新</div>
+                <div class="desc" data-t="hub.log.d"></div>
+            </a>
         </div>
-        
-        <div class="eco-tags">
-          <div class="eco-tag">
-            <span class="icon">📦</span>
-            <div>
-              <strong>RLRS Hub <span style="font-size: 12px; font-weight: normal; color: var(--muted);">资源枢纽</span></strong>
-              <span>纯静态托管的极客资源与文档索引</span>
-            </div>
-          </div>
+    </main>
 
-          <div class="eco-tag">
-            <span class="icon">🤖</span>
-            <div>
-              <strong>AI Skill <span style="font-size: 12px; font-weight: normal; color: var(--muted);">智能扩展</span></strong>
-              <span>为 Vibe Coding 定制的 AI 技能包</span>
-            </div>
-          </div>
-
-          <div class="eco-tag">
-            <span class="icon">🌐</span>
-            <div>
-              <strong>Pumice <span style="font-size: 12px; font-weight: normal; color: var(--muted);">浮石网关</span></strong>
-              <span>脱离启动器的纯本地 P2P 联机</span>
-            </div>
-          </div>
-
-          <div class="eco-tag">
-            <span class="icon">⚙️</span>
-            <div>
-              <strong>OpenSource <span style="font-size: 12px; font-weight: normal; color: var(--muted);">开源库</span></strong>
-              <span>WPF 3D 渲染 / P2P 穿透组件白嫖</span>
-            </div>
-          </div>
-
-          <div class="eco-tag">
-            <span class="icon">⌨️</span>
-            <div>
-              <strong>CLI Ecosystem <span style="font-size: 12px; font-weight: normal; color: var(--muted);">终端工具</span></strong>
-              <span>面向极客的自动化脚本生态</span>
-            </div>
-          </div>
-
-          <div class="eco-tag">
-            <span class="icon">🧩</span>
-            <div>
-              <strong>Chert Plugins <span style="font-size: 12px; font-weight: normal; color: var(--muted);">扩展接口</span></strong>
-              <span>Stream Deck 联动 / 开源插件接口规划中</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="community">
-      <div class="container">
-        <div class="section-header">
-          <div>
-            <h2>极客基地</h2>
-            <p>加入内测，或者一起探讨开发。</p>
-          </div>
-        </div>
-        <div class="grid-2col">
-          <a href="/join/" class="card" style="background: linear-gradient(135deg, rgba(79,140,255,0.1), transparent); border-color: rgba(79,140,255,0.3);">
-            <div class="card-icon">🤝</div>
-            <h3>加入极客基地</h3>
-            <div class="kind">Join Us / Community</div>
-            <p>寻找敢于折腾的内测玩家，或者对桌面端开发、底层网络感兴趣的开发者。欢迎加入我们，一起探讨 WPF/C# 技术。</p>
-            <div class="card-footer">
-              <span class="tag active" style="background: var(--accent); color: #fff; border: none;">申请内测 / 加入</span>
-              <span class="link-arrow">→</span>
-            </div>
-          </a>
-
-          <a href="/docs/" class="card">
-            <div class="card-icon">📚</div>
-            <h3>开发者文档</h3>
-            <div class="kind">Hub / Documentation</div>
-            <p>Chert CLI 命令指南、自定义模组开发规范、节日特效接入文档，以及工作室各类开源资源的汇总指引。</p>
-            <div class="card-footer">
-              <span class="tag">查阅文档</span>
-              <span class="link-arrow">→</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section class="section philosophy" id="philosophy">
-      <div class="container">
-        <div class="grid-3">
-          <div class="p-item">
-            <h4>本地优先 / 无服务器</h4>
-            <p>我们相信最好的云就是不需要云。所有数据存在本地，P2P 直连不经过第三方服务器，你的数据只属于你。</p>
-          </div>
-          <div class="p-item">
-            <h4>拒绝臃肿</h4>
-            <p>痛恨那些塞满广告和弹窗的流氓软件。所有的功能都经过精心编排，只为提供最纯粹的极客体验。</p>
-          </div>
-          <div class="p-item">
-            <h4>死磕细节</h4>
-            <p>无论是底层的网络穿透协议，还是 UI 上一个圆角的像素对齐，我们都愿意花几百次提交去打磨。</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="container">
-      <p>© 2026 RLRS Studio. 保留所有权利。</p>
-      <div class="links">
-        <a href="/join/">加入我们</a>
-        <a href="/changelog/">更新日志</a>
-        <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank">GitHub</a>
-        <a href="/sr/" class="muted">实验室：SR小工具</a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/festival-fx.js" defer></script>
+    <script src="/js/site-i18n.js" charset="utf-8"></script>
+    <script src="/js/layout.js" charset="utf-8"></script>
+    <script src="/js/particles.js" charset="utf-8"></script>
+    <script src="/js/seasonal.js" charset="utf-8"></script>
+    <script>
+        document.querySelectorAll('.reveal').forEach((el) => {
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+            }, { threshold: 0.12 });
+            io.observe(el);
+        });
+    </script>
+    <script src="/festival-fx.js" defer></script>
 </body>
 </html>

@@ -1,8 +1,9 @@
 (function(){
-  // 注入背景层 + 导航 + 页脚，全站单一来源，从此改导航只动这一个文件
+  // 注入背景层 + 导航 + 页脚
   const bg = `<div class="bg-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
               <div class="bg-grid" aria-hidden="true"></div>
-              <canvas id="embers-canvas" data-color="255,215,0" data-count="42"></canvas>`;
+              <canvas id="embers-canvas" data-color="79,140,255" data-count="42"></canvas>`;
+  
   const nav = `<div class="season-banner" data-t="season.mid_autumn" hidden></div>
   <header class="nav"><div class="container nav-inner">
     <a href="/" class="brand" aria-label="RLRS Studio">
@@ -10,10 +11,10 @@
       <span>RLRS Studio</span></a>
     <nav class="nav-links">
       <a href="/" data-nav="home" data-t="nav.home">首页</a>
-      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-nav="download" data-t="nav.download">下载</a>
-      <a href="/changelog/" data-nav="changelog" data-t="nav.changelog">更新日志</a>
-      <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener" data-t="nav.github">GitHub</a>
-      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-t="nav.launcher">启动器官网</a>
+      <a href="/#projects" data-nav="projects" data-t="nav.projects">产品矩阵</a>
+      <a href="/sr/" data-nav="sr" data-t="nav.sr">崩铁工具</a>
+      <a href="/docs/" data-nav="docs" data-t="nav.docs">开发者文档</a>
+      <a href="/join/" data-nav="join" data-t="nav.join">加入我们</a>
     </nav>
     <div class="nav-right">
       <select class="lang-select" aria-label="语言切换">
@@ -22,51 +23,51 @@
         <option value="en">English</option>
         <option value="lzh">文言文</option>
       </select>
-      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary" style="padding:7px 14px;font-size:13.5px" data-t="nav.get">⬇ 下载燧石</a>
+      <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="btn btn-primary" style="padding:7px 14px;font-size:13.5px" data-t="nav.get">⬇ 获取燧石</a>
     </div>
   </div></header>`;
+
   const foot = `<footer><div class="container">
     <div class="foot-grid">
       <div class="foot-brand">
         <a href="/" class="brand"><svg viewBox="0 0 64 64" fill="currentColor" aria-hidden="true" style="width:20px;height:20px"><path d="M15 49 L33 16 L42 16 L24 49 Z"/><path d="M30 49 L40 18 L49 18 L39 49 Z" opacity="0.6"/></svg><span>RLRS Studio</span></a>
-        <p data-t="foot.tag"></p>
+        <p data-t="foot.tag">把想法，做成真正好用的工具。</p>
       </div>
-      <nav><b data-t="foot.p"></b>
-        <a href="/chert/" data-t="foot.p1"></a>
-        <a href="/sr/" data-t="foot.p2"></a>
-        <a href="/join/" data-t="foot.p3"></a>
+      <nav><b data-t="foot.p">产品</b>
+        <a href="https://chert-launcher.github.io" data-t="foot.p1">燧石启动器</a>
+        <a href="/sr/" data-t="foot.p2">崩铁工具集</a>
+        <a href="/hub/" data-t="foot.p3">极客基地</a>
       </nav>
-      <nav><b data-t="foot.r"></b>
-        <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" data-t="foot.r1"></a>
-        <a href="/changelog/" data-t="foot.r2"></a>
-        <a href="https://chert-launcher.github.io/preview.html" target="_blank" rel="noopener" data-t="foot.r3"></a>
-        <a href="https://github.com/BingJian-REMIX/Chert-WPF/blob/main/LICENSE" target="_blank" rel="noopener" data-t="foot.r4"></a>
+      <nav><b data-t="foot.r">资源</b>
+        <a href="/docs/" data-t="foot.r1">开发者文档</a>
+        <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener">CNB 仓库</a>
       </nav>
-      <nav><b data-t="foot.c"></b>
-        <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener" data-t="foot.c1"></a>
-        <a href="https://cnb.cool/RLRS-Studio/Chert-WPF" target="_blank" rel="noopener" data-t="foot.c2"></a>
-        <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener" data-t="foot.c3"></a>
-        <a href="mailto:bingjianremix@outlook.com" data-t="foot.c4"></a>
+      <nav><b data-t="foot.c">支持</b>
+        <a href="/sponsor/" data-t="foot.c1">赞赏支持</a>
+        <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener">Bilibili</a>
+        <a href="mailto:bingjianremix@outlook.com" data-t="foot.c4">邮件联系</a>
       </nav>
     </div>
     <div class="foot-bottom">
-      <span data-t="foot.rights"></span>
-      <span class="mono">Powered by GitHub Pages + Cloudflare</span>
+      <span data-t="foot.rights">© 2026 RLRS Studio. 保留所有权利。</span>
+      <span class="mono">Local-First / Serverless</span>
     </div>
   </div></footer>`;
+  
   function mount(){
     document.body.insertAdjacentHTML("afterbegin", bg + nav);
     document.body.insertAdjacentHTML("beforeend", foot);
     const cur=document.body.dataset.nav;
     if(cur) document.querySelectorAll(`[data-nav="${cur}"]`).forEach(a=>a.classList.add("active"));
-    // 季节横幅：seasonal.js 选中季节后填充文案并显示
+    
     window.addEventListener("seasonchange",e=>{
       const key=e.detail; const el=document.querySelector(".season-banner");
       if(!key||!el){ if(el) el.hidden=true; return; }
       el.dataset.t="season."+key; el.hidden=false;
-      if(window.SI18N) el.textContent=SI18N.t("season."+key);
+      if(window.RLRS_I18N) el.textContent=RLRS_I18N.t("season."+key);
     });
-    if(window.SI18N) SI18N.apply();
+    if(window.RLRS_I18N) RLRS_I18N.apply();
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",mount); else mount();
 })();

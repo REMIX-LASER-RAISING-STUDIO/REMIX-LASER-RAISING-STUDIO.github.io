@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>开发者文档 | RLRS Studio</title>
+  <meta name="theme-color" content="#07090f">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    pre { background: #0d1117; border: 1px solid var(--border); padding: 20px; border-radius: 12px; overflow-x: auto; margin-bottom: 20px; }
+    code { font-family: var(--mono); font-size: 14px; color: var(--text); }
+    .code-comment { color: #8b949e; }
+    .code-string { color: #a5d6ff; }
+    .doc-section { margin-bottom: 48px; }
+    .doc-section h2 { font-size: 22px; margin-bottom: 20px; color: var(--accent); }
+    .doc-section p, .doc-section li { color: var(--text-2); font-size: 15px; line-height: 1.7; }
+    .doc-section ul { padding-left: 20px; margin-bottom: 16px; }
+  </style>
+</head>
+<body data-nav="docs">
+  <main class="page" style="padding-top: 120px;">
+    <section class="hero" style="text-align: center; margin-bottom: 40px;">
+      <div class="badge">✦ 极客手册</div>
+      <h1 class="tagline" data-i18n="docs.title2">开发者文档</h1>
+      <div class="brand-full" style="margin-bottom:14px" data-i18n="docs.desc2">底层技术 · CLI 指南 · 开源生态</div>
+    </section>
+
+    <section class="card reveal" style="max-width: 860px; margin: 0 auto; padding: 40px;">
+      <div class="doc-section">
+        <h2 data-i18n="docs.sec1">Chert CLI 命令行指南</h2>
+        <p>燧石启动器内置了完全对齐 GUI 的 CLI 工具，支持自动化脚本、服务器批量启动与静默更新。</p>
+        <pre><code><span class="code-comment"># 查看当前所有已安装的版本</span>
+chert list
+
+<span class="code-comment"># 静默启动指定版本（跳过启动器 UI）</span>
+chert launch --version 1.20.4
+
+<span class="code-comment"># 导出崩溃日志并提取聊天记录为 Markdown</span>
+chert crash export --md --output=./logs/
+
+<span class="code-comment"># 以 JSON 格式输出当前配置</span>
+chert config --json</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2 data-i18n="docs.sec2">节日特效接入指引</h2>
+        <p>官网使用的 <code>/festival-fx.js</code> 采用纯前端 Canvas 渲染，零依赖。目前支持中秋（月兔）、春节（鞭炮）等数十种节日识别。</p>
+        <pre><code><span class="code-comment">// 强制预览中秋特效</span>
+localStorage.setItem(<span class="code-string">'chert-fx-mode'</span>, <span class="code-string">'midautumn'</span>);
+location.reload();</code></pre>
+      </div>
+
+      <div class="doc-section">
+        <h2 data-i18n="docs.sec3">开源组件与库</h2>
+        <p>我们将逐步释放底层的轮子，供其他开发者白嫖：</p>
+        <ul>
+          <li><strong>WPF 3D 皮肤渲染器</strong>：精准修正 UV 映射，支持纤细手臂模型。</li>
+          <li><strong>P2P 穿透组件 (Pumice Core)</strong>：基于 STUN / UDP 打洞的轻量级联机网关。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/site-i18n.js" charset="utf-8"></script>
+  <script src="/js/layout.js" charset="utf-8"></script>
+  <script src="/js/particles.js" charset="utf-8"></script>
+  <script src="/festival-fx.js" defer></script>
+</body>
+</html>

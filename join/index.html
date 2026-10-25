@@ -1,157 +1,53 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0a0c10">
-  <title>加入我们 — RLRS Studio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>加入极客基地 | RLRS Studio</title>
+  <meta name="theme-color" content="#07090f" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <style>
-    :root {
-      --bg: #07090f; --text: #e9edf5; --muted: #8a93a6; --border: rgba(255,255,255,0.08);
-      --card-bg: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      --accent: #4f8cff; --accent2: #a855f7;
-      --font: "Inter", system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    ::-webkit-scrollbar { width: 10px; }
-    ::-webkit-scrollbar-track { background: var(--bg); }
-    ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
-    ::-webkit-scrollbar-thumb:hover { background: #555; }
-    body {
-      background: var(--bg); color: var(--text); font-family: var(--font);
-      line-height: 1.6; overflow-x: hidden; -webkit-font-smoothing: antialiased;
-    }
-    body::before {
-      content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
-      background: radial-gradient(800px 600px at 20% -10%, rgba(79, 140, 255, 0.15), transparent 70%),
-                  radial-gradient(600px 500px at 90% 20%, rgba(168, 85, 247, 0.1), transparent 70%);
-    }
-    body::after {
-      content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-      background-image: linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);
-      background-size: 64px 64px;
-      -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
-      mask-image: radial-gradient(circle at 50% 0%, #000 40%, transparent 100%);
-    }
-    a { color: inherit; text-decoration: none; }
-    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-
-    .nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-      background: rgba(7, 9, 15, 0.7); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-inner { height: 64px; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-weight: 800; font-size: 18px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
-    .logo-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow: 0 0 20px -4px var(--accent); }
-    .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
-    .nav-links a { color: var(--muted); transition: color 0.2s; }
-    .nav-links a:hover { color: var(--text); }
-    .nav-links a.active { color: var(--text); }
-    .nav-cta { font-size: 13px; padding: 8px 16px; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border); transition: 0.2s; }
-    .nav-cta:hover { background: rgba(255,255,255,0.12); }
-
-    .hero { padding: 140px 0 60px; text-align: center; }
-    .hero h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px; }
-    .hero h1 .grad { background: linear-gradient(100deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 18px; color: var(--muted); max-width: 600px; margin: 0 auto; }
-
-    .section { padding: 40px 0 80px; }
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 40px; max-width: 800px; margin: 0 auto; }
-    
-    .role-list { list-style: none; padding: 0; margin: 24px 0 32px; }
-    .role-list li { margin-bottom: 16px; padding-left: 24px; position: relative; font-size: 16px; color: var(--muted); }
-    .role-list li::before { content: "✦"; position: absolute; left: 0; color: var(--accent); }
-    .role-list strong { color: var(--text); font-weight: 600; }
-
-    .action-row { display: flex; gap: 16px; justify-content: center; margin-bottom: 40px; flex-wrap: wrap; }
-    .btn { display: inline-block; padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 15px; transition: 0.2s; }
-    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 14px rgba(79,140,255,0.3); }
-    .btn-primary:hover { background: #3b7bf0; transform: translateY(-2px); }
-    .btn-ghost { background: rgba(255,255,255,0.05); border: 1px solid var(--border); }
-    .btn-ghost:hover { background: rgba(255,255,255,0.1); }
-
-    .qr-row { display: flex; gap: 32px; justify-content: center; border-top: 1px solid var(--border); padding-top: 40px; }
-    .qr-item { text-align: center; }
-    .qr-item img { width: 140px; height: 140px; border-radius: 12px; border: 1px solid var(--border); padding: 4px; background: #fff; transition: 0.2s; }
-    .qr-item img:hover { transform: scale(1.05); }
-    .qr-item span { display: block; font-size: 13px; color: var(--muted); margin-top: 12px; }
-
-    footer { padding: 60px 0 40px; text-align: center; border-top: 1px solid var(--border); margin-top: 60px; }
-    footer p { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
-    footer .links { display: flex; justify-content: center; gap: 24px; font-size: 14px; flex-wrap: wrap; }
-    footer .links a:hover { color: var(--accent); }
-  </style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
-<body>
-
-  <nav class="nav">
-    <div class="container nav-inner">
-      <a href="/" class="logo"><div class="logo-mark"></div> RLRS Studio</a>
-      <div class="nav-links">
-        <a href="/#projects">产品矩阵</a>
-        <a href="/join/" class="active">加入我们</a>
-        <a href="/docs/">开发者文档</a>
-        <a href="/chert/" target="_blank">燧石启动器 ↗</a>
-      </div>
-      <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank" class="nav-cta">GitHub 组织</a>
-    </div>
-  </nav>
-
-  <main>
-    <section class="hero">
-      <div class="container">
-        <h1>加入<span class="grad">极客基地</span></h1>
-        <p>我们不需要单纯的白嫖用户，我们需要敢于折腾、愿意提供 Bug 反馈的硬核玩家，以及热爱底层技术的开源开发者。</p>
-      </div>
+<body data-nav="join">
+  <main class="page" style="padding-top: 120px; padding-bottom: 80px;">
+    <section class="hero" style="text-align: center; margin-bottom: 40px;">
+      <div class="badge" data-i18n="join.badge">✦ 招贤纳士</div>
+      <h1 class="tagline" data-i18n="join.title2">加入极客基地</h1>
+      <div class="brand-full" style="margin-bottom:14px" data-i18n="join.desc2">RLRS 激越工作室</div>
     </section>
 
-    <section class="section">
-      <div class="container">
-        <div class="card">
-          <ul class="role-list">
-            <li><strong>内测玩家：</strong>敢于折腾，愿意提供详细的 Bug 反馈与体验建议，提前尝鲜未发布的功能。</li>
-            <li><strong>开发者：</strong>擅长 C# / WPF，或者对 P2P 打洞、系统底层 API 有研究，参与 Basalt 等底层工具开发。</li>
-            <li><strong>UI / 视觉设计：</strong>对暗黑风、极简风有独特理解，愿意参与界面打磨与图标设计。</li>
-            <li><strong>社区运营：</strong>维护玩家社群，整理文档与教程，帮助更多新人了解极客文化。</li>
-          </ul>
+    <section class="card reveal" style="max-width: 680px; margin: 0 auto; padding: 40px;">
+      <p class="desc" data-i18n-html="join.desc3" style="text-align: center; margin-bottom: 32px;"></p>
 
-          <div class="action-row">
-            <a href="mailto:bingjianremix@outlook.com" class="btn btn-primary">✉ 邮件联系</a>
-            <a href="https://space.bilibili.com/2090624670" target="_blank" class="btn btn-ghost">B站私信</a>
-          </div>
+      <ul class="roadmap" style="margin-bottom: 32px; list-style: none; padding: 0;">
+        <li data-i18n="join.r1" style="margin-bottom: 12px; color: var(--text);">- 开发者</li>
+        <li data-i18n="join.r2" style="margin-bottom: 12px; color: var(--text);">- 美术与 UI</li>
+        <li data-i18n="join.r3" style="margin-bottom: 12px; color: var(--text);">- 策划与内容</li>
+        <li data-i18n="join.r4" style="margin-bottom: 12px; color: var(--text);">- 社区运营</li>
+      </ul>
 
-          <div class="qr-row">
-            <div class="qr-item">
-              <img src="/join/assets/qrcode-qq.png" alt="QQ 群二维码" loading="lazy" />
-              <span>内测 QQ 交流群</span>
-            </div>
-            <div class="qr-item">
-              <img src="/join/assets/qrcode-bilibili.png" alt="B 站二维码" loading="lazy" />
-              <span>B 站官方号</span>
-            </div>
-          </div>
-        </div>
+      <div class="actions" style="margin-bottom: 32px; justify-content: center; display: flex; gap: 16px;">
+        <a href="mailto:bingjianremix@outlook.com" class="btn btn-primary" data-i18n="join.btn.email"></a>
+        <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener" class="btn btn-ghost" data-i18n="join.btn.bili"></a>
+      </div>
+
+      <div class="qr-row" style="display: flex; gap: 32px; justify-content: center; border-top: 1px solid var(--border); padding-top: 40px;">
+        <figure class="qr" style="text-align: center; margin: 0;">
+          <img src="/join/assets/qrcode-qq.png" alt="QQ 群" style="width: 140px; height: 140px; border-radius: 12px; border: 1px solid var(--border); padding: 4px; background: #fff;" />
+          <figcaption data-i18n="join.qr.qq" style="margin-top: 12px; font-size: 13px; color: var(--text-2);"></figcaption>
+        </figure>
+        <figure class="qr" style="text-align: center; margin: 0;">
+          <img src="/join/assets/qrcode-bilibili.png" alt="B 站" style="width: 140px; height: 140px; border-radius: 12px; border: 1px solid var(--border); padding: 4px; background: #fff;" />
+          <figcaption data-i18n="join.qr.bili" style="margin-top: 12px; font-size: 13px; color: var(--text-2);"></figcaption>
+        </figure>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>© 2026 RLRS Studio. 保留所有权利。</p>
-      <div class="links">
-        <a href="/join/">加入我们</a>
-        <a href="/docs/">开发者文档</a>
-        <a href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank">GitHub</a>
-        <a href="/sr/" style="opacity: 0.5; font-size: 12px;">实验室：SR小工具</a>
-      </div>
-    </div>
-  </footer>
-
+  <script src="/js/site-i18n.js" charset="utf-8"></script>
+  <script src="/js/layout.js" charset="utf-8"></script>
+  <script src="/js/particles.js" charset="utf-8"></script>
   <script src="/festival-fx.js" defer></script>
 </body>
 </html>

@@ -1,10 +1,14 @@
-:root{
-  --bg:#0a0c10; --bg-2:#0e1118; --card:#11141c; --line:rgba(255,255,255,.07);
-  --text:#eceff5; --text-2:#a8aebc; --text-3:#6a7080;
-  --accent:#ffd700; --accent-ink:#141003; --accent-soft:rgba(255,215,0,.12);
-  --radius:14px; --maxw:1120px;
-  --font:"Inter","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
-  --mono:"JetBrains Mono","Cascadia Code",Consolas,monospace;
+:root {
+  --bg: #07090f;
+  --bg-2: #0d1117;
+  --card: rgba(255, 255, 255, 0.03);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #e9edf5;
+  --text-2: #8a93a6; 
+  --accent: #4f8cff;
+  --accent-2: #a855f7;
+  --radius: 16px;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
