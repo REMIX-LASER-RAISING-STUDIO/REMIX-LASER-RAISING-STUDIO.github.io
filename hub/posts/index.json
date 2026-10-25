@@ -28,6 +28,69 @@
       "tags": ["公告", "社区"],
       "excerpt": "RLRS Hub 的成员博客正式开张。这里放开发日志、技术笔记、踩坑记录和项目复盘，也欢迎成员把文章投到仓库里，页面会自动渲染。",
       "file": "posts/welcome.md"
+    },
+    {
+      "slug": "release-6-packages",
+      "title": "4 个包变成 6 个包：发布流水线里的三次翻车",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-11",
+      "tags": ["发布", "工程化"],
+      "excerpt": "三次翻车都发生在同一天下午的 22 分钟里，而且都是「构建成功、包也在、就是不能用」。发布脚本最大的特点是沉默。",
+      "file": "posts/release-6-packages.md"
+    },
+    {
+      "slug": "p2p-hole-punching",
+      "title": "没有服务器的联机：一次握手码，两个 NAT 洞",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-08",
+      "tags": ["P2P", "网络", "技术复盘"],
+      "excerpt": "不用服务器，两台启动器交换一段码就直连。从握手码、STUN 判 NAT 到 UDP 打洞，还包括一次 7% 概率静默放行的校验 bug。",
+      "file": "posts/p2p-hole-punching.md"
+    },
+    {
+      "slug": "music-lyrics",
+      "title": "给启动器装个音乐播放器：歌词、六个音源与一次翻唱事故",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-06",
+      "tags": ["音乐", "技术复盘"],
+      "excerpt": "LRC 解析与二分查找不算难，难的是「晴天」搜出来是翻唱版——测试全绿、产品是错的。以及六个音源平台的聚合结构。",
+      "file": "posts/music-lyrics.md"
+    },
+    {
+      "slug": "ui-styles-motion",
+      "title": "让 WPF 不像 WPF：四套界面风格与一次动画体系重构",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-01",
+      "tags": ["界面", "动画", "技术复盘"],
+      "excerpt": "一天里做了两批动画，第二批开盘就在修第一批的错。WPF 的过渡生硬和稀缺是两个可定位的根因，不是审美问题。",
+      "file": "posts/ui-styles-motion.md"
+    },
+    {
+      "slug": "rename-chert",
+      "title": "改名比想象中难：从 MCLCS 到 Chert",
+      "author": "BingJian-REMIX",
+      "date": "2026-09-13",
+      "tags": ["品牌", "项目复盘"],
+      "excerpt": "四天五步。第一次只改展示名，第二天就回退了——半改不如不改。外加 305 个文件的命名空间迁移和一次 Run.Text 启动崩溃。",
+      "file": "posts/rename-chert.md"
+    },
+    {
+      "slug": "skin-3d-uv",
+      "title": "一块皮肤的六个面：3D 预览里的 UV 连环坑",
+      "author": "BingJian-REMIX",
+      "date": "2026-09-12",
+      "tags": ["皮肤编辑器", "技术复盘"],
+      "excerpt": "改了六次，其中两次是推翻自己上一次的修法。同一个症状——纹理位置不对——可以由四个不同层次的 bug 产生。",
+      "file": "posts/skin-3d-uv.md"
+    },
+    {
+      "slug": "ms-login-device-code",
+      "title": "微软登录这三天：我们推翻了自己三次",
+      "author": "BingJian-REMIX",
+      "date": "2026-09-02",
+      "tags": ["认证", "技术复盘"],
+      "excerpt": "从授权码流到让用户手动复制地址栏，最后回到设备代码流。教训是：把「功能不可用」当成平台限制之前，先怀疑自己端点写错了。",
+      "file": "posts/ms-login-device-code.md"
     }
   ]
 }
