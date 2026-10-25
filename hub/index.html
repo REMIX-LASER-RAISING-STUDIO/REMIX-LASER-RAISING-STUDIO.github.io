@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RLRS Hub — 极客内容集散地</title>
+  <title>RLRS Hub 极客专栏 | RLRS Studio</title>
   <meta name="theme-color" content="#07090f" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -19,7 +19,7 @@
   <header class="hub-topbar">
     <div class="hub-top-left">
       <button class="hub-icon-btn" id="sidebarToggle" data-t-title="hub.t.sidebar" aria-label="侧边栏">☰</button>
-      <a class="hub-brand" href="/">rlrshub</a>
+      <a class="hub-brand" href="/" title="RLRS Studio">rlrshub</a>
     </div>
     <div class="hub-search">
       <span class="hub-search-ico">🔍</span>
@@ -37,7 +37,7 @@
   </header>
 
   <div class="hub-layout" id="hubLayout">
-    <!-- 侧边栏（可收缩为图标栏） -->
+    <!-- 侧边栏（贴左，可收缩为图标栏） -->
     <aside class="hub-side" id="hubSide">
       <nav>
         <a class="hub-cat active" data-cat="all"><span class="ico">🗂️</span><span class="lbl" data-t="hub.nav.all">全部</span></a>
@@ -47,65 +47,21 @@
       </nav>
     </aside>
 
-    <!-- 内容卡片 -->
+    <!-- 内容区：只展示真正有内容的条目 -->
     <main class="hub-main" id="hubMain">
-      <!-- 有内容的卡片 -->
-      <a class="hub-card" data-cat="docs" data-title="开发者文档 docs" href="/docs/">
-        <div class="ico">📘</div>
-        <h3 data-t="hub.card.docs.t">开发者文档</h3>
-        <p data-t="hub.card.docs.d">Chert CLI 命令、节日特效接入与开源组件白皮书。</p>
-        <span class="tag" data-t="hub.nav.docs">文档</span>
-      </a>
-      <a class="hub-card" data-cat="docs" data-title="更新日志 changelog" href="/changelog/">
-        <div class="ico">📝</div>
-        <h3 data-t="hub.card.log.t">更新日志</h3>
-        <p data-t="hub.card.log.d">燧石启动器与工作室各项目的发布历史与更新内容。</p>
-        <span class="tag" data-t="hub.nav.docs">文档</span>
-      </a>
-      <a class="hub-card" data-cat="skills" data-title="崩铁工具集 sr hsr" href="/sr/">
+      <a class="hub-card" data-cat="skills" data-title="崩铁工具集 sr hsr 星铁 总伤计算器 抽卡模拟器" href="/sr/">
         <div class="ico">⚔️</div>
         <h3 data-t="hub.card.sr.t">崩铁工具集</h3>
         <p data-t="hub.card.sr.d">总伤计算器与全角色全光锥抽卡模拟器，免费开源。</p>
         <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
       </a>
-      <a class="hub-card" data-cat="csharp" data-title="源码仓库 source github" href="https://github.com/REMIX-LASER-RAISING-STUDIO" target="_blank" rel="noopener">
-        <div class="ico">🌐</div>
-        <h3 data-t="hub.card.src.t">源码仓库</h3>
-        <p data-t="hub.card.src.d">REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部开源代码。</p>
-        <span class="tag" data-t="hub.nav.csharp">开源 C# 库</span>
-      </a>
 
-      <!-- 正在搬运（无内容，指向加入我们） -->
-      <a class="hub-card ph" data-cat="docs" data-title="api 参考手册" href="/join/">
-        <div class="ico">📄</div>
-        <h3 data-t="hub.ph.t">正在搬运</h3>
-        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
-        <span class="tag" data-t="hub.nav.docs">文档</span>
-      </a>
-      <a class="hub-card ph" data-cat="docs" data-title="部署指南" href="/join/">
-        <div class="ico">📄</div>
-        <h3 data-t="hub.ph.t">正在搬运</h3>
-        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
-        <span class="tag" data-t="hub.nav.docs">文档</span>
-      </a>
-      <a class="hub-card ph" data-cat="skills" data-title="ai 技能库" href="/join/">
-        <div class="ico">🧩</div>
-        <h3 data-t="hub.ph.t">正在搬运</h3>
-        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
-        <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
-      </a>
-      <a class="hub-card ph" data-cat="skills" data-title="构建发布技能" href="/join/">
-        <div class="ico">🧩</div>
-        <h3 data-t="hub.ph.t">正在搬运</h3>
-        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
-        <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
-      </a>
-      <a class="hub-card ph" data-cat="csharp" data-title="mclcs 核心库" href="/join/">
-        <div class="ico">💻</div>
-        <h3 data-t="hub.ph.t">正在搬运</h3>
-        <p data-t="hub.ph.d">内容还在迁移中，欢迎加入我们一起把它建起来。</p>
-        <span class="tag" data-t="hub.nav.csharp">开源 C# 库</span>
-      </a>
+      <!-- 空态：当前分类没有内容时显示（不是卡片，指向加入我们） -->
+      <div class="hub-empty" id="hubEmpty" hidden>
+        <span class="hub-empty-ico">📭</span>
+        <p><b data-t="hub.empty.t">这里还在搬运</b><span data-t="hub.empty.d">该分类暂时没有内容，欢迎加入我们一起把它建起来。</span></p>
+        <a class="hub-empty-link" href="/join/" data-t="nav.join">加入我们 →</a>
+      </div>
     </main>
   </div>
 
@@ -157,18 +113,23 @@
         localStorage.setItem(KEY_SIDE,c?'1':'0'); applySide(c);
       });
 
-      // 分类筛选 + 搜索过滤
+      // 分类筛选 + 搜索过滤（无命中时显示空态）
       const search=document.getElementById('hubSearch');
+      const empty=document.getElementById('hubEmpty');
       const cards=Array.from(document.querySelectorAll('.hub-card'));
       let curCat='all';
       function filter(){
         const q=(search.value||'').trim().toLowerCase();
+        let shown=0;
         cards.forEach(c=>{
           const okCat = curCat==='all' || c.dataset.cat===curCat;
           const txt=((c.dataset.title||'')+' '+c.textContent).toLowerCase();
           const okQ = !q || txt.includes(q);
-          c.style.display = (okCat && okQ) ? '' : 'none';
+          const vis = okCat && okQ;
+          c.style.display = vis ? '' : 'none';
+          if(vis) shown++;
         });
+        if(empty) empty.hidden = shown>0;
       }
       search.addEventListener('input',filter);
       document.querySelectorAll('.hub-cat').forEach(a=>{

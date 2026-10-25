@@ -1,6 +1,6 @@
 (function(){
   const DICT={
-  zh:{ "nav.home":"首页","nav.download":"下载","nav.changelog":"更新日志","nav.github":"GitHub","nav.get":"⬇ 下载燧石",
+  zh:{ "nav.home":"首页","nav.download":"下载","nav.changelog":"更新日志","nav.github":"GitHub","nav.get":"⬇ 下载燧石","nav.projects":"产品矩阵","nav.sr":"崩铁工具","nav.docs":"开发者文档","nav.join":"加入我们",
     "season.mid_autumn":"🌕 中秋主题已上线","season.national_day":"🇨🇳 国庆主题已上线","season.anniversary":"🎉 周年庆主题已上线",
     "hero.eyebrow":"v{ver} {stage} · 支持 Windows 10/11","hero.title":"一款<span class='accent'>开箱即用</span>的 Minecraft 启动器",
     "hero.lead":"安装、崩溃修复、Mod 管理、下载加速——都交给燧石。你的时间，值得花在游戏里，而不是折腾启动器。",
@@ -23,7 +23,7 @@
     "log.t":"更新日志","log.s":"燧石启动器的发布历史与每次更新内容。",
     "foot.tag":"独立游戏工具工作室 · 燧石启动器与崩铁工具开发者",
     "foot.p":"产品","foot.r":"资源","foot.c":"社区",
-    "foot.p1":"燧石启动器","foot.p2":"崩铁工具","foot.p3":"加入社群",
+    "foot.p1":"燧石启动器","foot.p2":"崩铁工具","foot.p3":"极客基地","foot.p4":"极客专栏",
     "foot.r1":"下载","foot.r2":"更新日志","foot.r3":"UI 预览","foot.r4":"开源许可",
     "foot.c1":"GitHub（镜像）","foot.c2":"CNB（主仓库）","foot.c3":"Bilibili","foot.c4":"联系我们",
     "foot.rights":"© {year} RLRS Studio · REMIX 激越工作室。非官方项目，与 Mojang / Microsoft 无关。Minecraft 是 Mojang Synergies AB 的商标。",
@@ -58,9 +58,10 @@
     "hub.card.docs.t":"开发者文档","hub.card.docs.d":"Chert CLI 命令、节日特效接入与开源组件白皮书。",
     "hub.card.log.t":"更新日志","hub.card.log.d":"燧石启动器与工作室各项目的发布历史与更新内容。",
     "hub.card.sr.t":"崩铁工具集","hub.card.sr.d":"总伤计算器与全角色全光锥抽卡模拟器，免费开源。",
-    "hub.card.src.t":"源码仓库","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部开源代码。"
+    "hub.card.src.t":"源码仓库","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部开源代码。",
+    "hub.empty.t":"这里还在搬运","hub.empty.d":"该分类暂时没有内容，欢迎加入我们一起把它建起来。"
   },
-  en:{ "nav.home":"Home","nav.download":"Download","nav.changelog":"Changelog","nav.github":"GitHub","nav.get":"⬇ Get Chert",
+  en:{ "nav.home":"Home","nav.download":"Download","nav.changelog":"Changelog","nav.github":"GitHub","nav.get":"⬇ Get Chert","nav.projects":"Products","nav.sr":"HSR Tools","nav.docs":"Docs","nav.join":"Join us",
     "season.mid_autumn":"🌕 Mid-Autumn theme is live","season.national_day":"🇨🇳 National Day theme is live","season.anniversary":"🎉 Anniversary theme is live",
     "hero.eyebrow":"v{ver} {stage} · Windows 10/11","hero.title":"A Minecraft launcher that <span class='accent'>just works</span>.",
     "hero.lead":"Installs, crash recovery, mods and fast downloads — Chert handles it all. Your time belongs in the game, not fighting the launcher.",
@@ -83,7 +84,7 @@
     "log.t":"Changelog","log.s":"Release history and what changed in each Chert Launcher update.",
     "foot.tag":"Indie game tools studio · makers of Chert Launcher and HSR tools",
     "foot.p":"Product","foot.r":"Resources","foot.c":"Community",
-    "foot.p1":"Chert Launcher","foot.p2":"HSR Tools","foot.p3":"Join us",
+    "foot.p1":"Chert Launcher","foot.p2":"HSR Tools","foot.p3":"Geek Base","foot.p4":"Geek Hub",
     "foot.r1":"Download","foot.r2":"Changelog","foot.r3":"UI Preview","foot.r4":"License (Apache-2.0)",
     "foot.c1":"GitHub (mirror)","foot.c2":"CNB (main repo)","foot.c3":"Bilibili","foot.c4":"Contact",
     "foot.rights":"© {year} RLRS Studio · REMIX 激越工作室. Not affiliated with Mojang / Microsoft. Minecraft is a trademark of Mojang Synergies AB.",
@@ -118,9 +119,10 @@
     "hub.card.docs.t":"Developer Docs","hub.card.docs.d":"Chert CLI commands, festival-effects integration and open-source component whitepapers.",
     "hub.card.log.t":"Changelog","hub.card.log.d":"Release history and notes for Chert Launcher and all studio projects.",
     "hub.card.sr.t":"HSR Tools","hub.card.sr.d":"Total-damage calculator and full gacha simulator. Free and open source.",
-    "hub.card.src.t":"Source Repos","hub.card.src.d":"All open-source code from REMIX-LASER-RAISING-STUDIO on GitHub."
+    "hub.card.src.t":"Source Repos","hub.card.src.d":"All open-source code from REMIX-LASER-RAISING-STUDIO on GitHub.",
+    "hub.empty.t":"Still moving in","hub.empty.d":"Nothing here yet — join us and let's build it together."
   },
-  "zh-TW":{ "nav.home":"首頁","nav.download":"下載","nav.changelog":"更新日誌","nav.github":"GitHub","nav.get":"⬇ 下載燧石",
+  "zh-TW":{ "nav.home":"首頁","nav.download":"下載","nav.changelog":"更新日誌","nav.github":"GitHub","nav.get":"⬇ 下載燧石","nav.projects":"產品矩陣","nav.sr":"崩鐵工具","nav.docs":"開發者文件","nav.join":"加入我們",
     "season.mid_autumn":"🌕 中秋主題已上線","season.national_day":"🇨🇳 國慶主題已上線","season.anniversary":"🎉 週年慶主題已上線",
     "hero.eyebrow":"v{ver} {stage} · 支援 Windows 10/11","hero.title":"一款<span class='accent'>開箱即用</span>的 Minecraft 啟動器",
     "hero.lead":"安裝、崩潰修復、Mod 管理、下載加速——都交給燧石。你的時間，值得花在遊戲裡，而不是折騰啟動器。",
@@ -143,7 +145,7 @@
     "log.t":"更新日誌","log.s":"燧石啟動器的發布歷史與每次更新內容。",
     "foot.tag":"獨立遊戲工具工作室 · 燧石啟動器與崩鐵工具開發者",
     "foot.p":"產品","foot.r":"資源","foot.c":"社群",
-    "foot.p1":"燧石啟動器","foot.p2":"崩鐵工具","foot.p3":"加入社群",
+    "foot.p1":"燧石啟動器","foot.p2":"崩鐵工具","foot.p3":"極客基地","foot.p4":"極客專欄",
     "foot.r1":"下載","foot.r2":"更新日誌","foot.r3":"UI 預覽","foot.r4":"開源許可",
     "foot.c1":"GitHub（鏡像）","foot.c2":"CNB（主倉庫）","foot.c3":"Bilibili","foot.c4":"聯絡我們",
     "foot.rights":"© {year} RLRS Studio · REMIX 激越工作室。非官方專案，與 Mojang / Microsoft 無關。Minecraft 是 Mojang Synergies AB 的商標。",
@@ -178,9 +180,10 @@
     "hub.card.docs.t":"開發者文件","hub.card.docs.d":"Chert CLI 指令、節日特效接入與開源元件白皮書。",
     "hub.card.log.t":"更新日誌","hub.card.log.d":"燧石啟動器與工作室各項目的發布歷史與更新內容。",
     "hub.card.sr.t":"崩鐵工具集","hub.card.sr.d":"總傷計算機與全角色全光錐抽卡模擬器，免費開源。",
-    "hub.card.src.t":"原始碼倉庫","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部開源程式碼。"
+    "hub.card.src.t":"原始碼倉庫","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上的全部開源程式碼。",
+    "hub.empty.t":"這裡還在搬運","hub.empty.d":"該分類暫時沒有內容，歡迎加入我們一起把它建起來。"
   },
-  lzh:{ "nav.home":"首頁","nav.download":"下載","nav.changelog":"更迭錄","nav.github":"GitHub","nav.get":"⬇ 取燧石",
+  lzh:{ "nav.home":"首頁","nav.download":"下載","nav.changelog":"更迭錄","nav.github":"GitHub","nav.get":"⬇ 取燧石","nav.projects":"諸作","nav.sr":"崩鐵之器","nav.docs":"開發之文","nav.join":"入我輩",
     "season.mid_autumn":"🌕 中秋之儀已啟","season.national_day":"🇨🇳 國慶之儀已啟","season.anniversary":"🎉 週年之儀已啟",
     "hero.eyebrow":"v{ver} {stage} · 適 Windows 10/11","hero.title":"一<span class='accent'>開箱即用</span>之 Minecraft 啟動器",
     "hero.lead":"安裝、崩壞修復、Mod 之管、下載加速——盡付燧石。爾時當用於游戲，毋耗於調啟動器。",
@@ -203,7 +206,7 @@
     "log.t":"更迭錄","log.s":"燧石啟動器之頒布沿革，與每更之所易。",
     "foot.tag":"獨立之遊戲器作室 · 燧石啟動器與崩鐵之器作者",
     "foot.p":"產","foot.r":"資","foot.c":"社",
-    "foot.p1":"燧石啟動器","foot.p2":"崩鐵之器","foot.p3":"入我輩",
+    "foot.p1":"燧石啟動器","foot.p2":"崩鐵之器","foot.p3":"極客之基","foot.p4":"極客之欄",
     "foot.r1":"下載","foot.r2":"更迭錄","foot.r3":"UI 之預覽","foot.r4":"開源之許",
     "foot.c1":"GitHub（鏡）","foot.c2":"CNB（主倉）","foot.c3":"Bilibili","foot.c4":"聯於我",
     "foot.rights":"© {year} RLRS Studio · REMIX 激越工作室。非官所為，與 Mojang / Microsoft 無涉。Minecraft 乃 Mojang Synergies AB 之商標。",
@@ -238,7 +241,8 @@
     "hub.card.docs.t":"開發者之文","hub.card.docs.d":"Chert CLI 之令、節日特效接入與開源元件之白書。",
     "hub.card.log.t":"更迭錄","hub.card.log.d":"燧石啟動器與工作室諸目之頒布沿革與更之內容。",
     "hub.card.sr.t":"崩鐵之器","hub.card.sr.d":"總傷之算與全角色全光錐抽卡之擬，免費開源。",
-    "hub.card.src.t":"源碼之倉","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上之諸開源碼。"
+    "hub.card.src.t":"源碼之倉","hub.card.src.d":"REMIX-LASER-RAISING-STUDIO 在 GitHub 上之諸開源碼。",
+    "hub.empty.t":"此方搬運","hub.empty.d":"此類暫無所容，願入我輩共構之。"
   },
   };
   // === v2.6.0 官网重构：项目枢纽 + 启动器官网互链文案 + VD/ChemiLab/节日特效 + 照片广告/视频位 ===

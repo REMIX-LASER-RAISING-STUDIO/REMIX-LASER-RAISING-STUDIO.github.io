@@ -36,7 +36,8 @@
       <nav><b data-t="foot.p">产品</b>
         <a href="https://chert-launcher.github.io" data-t="foot.p1">燧石启动器</a>
         <a href="/sr/" data-t="foot.p2">崩铁工具集</a>
-        <a href="/hub/" data-t="foot.p3">极客基地</a>
+        <a href="/hub/" data-t="foot.p4">极客专栏</a>
+        <a href="/join/" data-t="foot.p3">极客基地</a>
       </nav>
       <nav><b data-t="foot.r">资源</b>
         <a href="/docs/" data-t="foot.r1">开发者文档</a>

@@ -198,15 +198,17 @@ footer{border-top:1px solid var(--line);padding:46px 0 32px;background:var(--foo
 .hub-icon-btn{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--bg-2);color:var(--text);font-size:16px;cursor:pointer;transition:.15s}
 .hub-icon-btn:hover{color:var(--accent);border-color:var(--accent)}
 
-.hub-layout{position:relative;z-index:1;display:grid;grid-template-columns:220px 1fr;gap:26px;max-width:var(--maxw);margin:0 auto;padding:26px 18px 80px;align-items:start}
-.hub-layout.collapsed{grid-template-columns:64px 1fr}
-.hub-side nav{display:flex;flex-direction:column;gap:4px;position:sticky;top:84px}
+/* 布局：侧边栏紧贴屏幕左缘，内容区自适应 */
+.hub-layout{position:relative;z-index:1;display:grid;grid-template-columns:220px minmax(0,1fr);gap:0;max-width:none;margin:0;padding:0;align-items:stretch;min-height:calc(100vh - 60px)}
+.hub-layout.collapsed{grid-template-columns:64px minmax(0,1fr)}
+.hub-side{position:sticky;top:60px;align-self:start;height:calc(100vh - 60px);box-sizing:border-box;padding:18px 12px;border-right:1px solid var(--line);overflow-y:auto;overflow-x:hidden;background:rgba(10,12,16,.55);backdrop-filter:blur(10px)}
+.hub-side nav{display:flex;flex-direction:column;gap:4px;position:static}
 .hub-cat{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;color:var(--text-2);font-size:14.5px;cursor:pointer;transition:.15s;border:1px solid transparent}
 .hub-cat .ico{font-size:17px;line-height:1;flex:none}
 .hub-cat:hover{color:var(--text);background:var(--bg-2)}
 .hub-cat.active{color:var(--accent);background:var(--accent-soft);border-color:rgba(79,140,255,.3);font-weight:600}
 
-.hub-main{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:18px;align-content:start}
+.hub-main{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:18px;align-content:start;padding:26px 30px 80px;max-width:1180px}
 .hub-card{position:relative;background:var(--card-strong);border:1px solid var(--line);border-radius:var(--radius);padding:22px;display:flex;flex-direction:column;gap:10px;transition:.18s;color:inherit}
 .hub-card:hover{transform:translateY(-3px);border-color:rgba(255,215,0,.35)}
 .hub-card .ico{width:44px;height:44px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-size:22px;margin-bottom:4px}
@@ -217,18 +219,30 @@ footer{border-top:1px solid var(--line);padding:46px 0 32px;background:var(--foo
 .hub-card.ph .ico{background:var(--bg-2);color:var(--text-3)}
 .hub-card.ph h3{color:var(--text-2)}
 
+/* 空态（非卡片）：当前分类无内容时提示并指向加入我们 */
+.hub-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;gap:10px;padding:64px 20px 72px;text-align:center;color:var(--text-3)}
+.hub-empty[hidden]{display:none}
+.hub-empty-ico{font-size:38px;opacity:.55;line-height:1}
+.hub-empty p{display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.75;color:var(--text-3)}
+.hub-empty p b{font-size:15.5px;color:var(--text-2)}
+.hub-empty-link{font-size:14px;font-weight:600;color:var(--accent)}
+.hub-empty-link:hover{text-decoration:underline}
+
 /* 侧边栏收缩：收成图标栏 */
 .hub-side.collapsed{width:64px}
 .hub-side.collapsed .lbl{display:none}
 .hub-side.collapsed nav a{justify-content:center;padding:11px}
 .hub-side.collapsed .hub-cat .ico{font-size:19px}
 html[data-theme="light"] .hub-topbar{background:rgba(255,255,255,.82)}
+html[data-theme="light"] .hub-side{background:rgba(255,255,255,.72)}
 
 @media (max-width:900px){
   .hub-topbar{flex-wrap:wrap;height:auto;padding:10px 14px;gap:10px}
   .hub-search{order:3;flex-basis:100%;max-width:none;margin:4px 0 0}
-  .hub-layout{grid-template-columns:1fr;gap:18px;padding:18px 14px 70px}
+  .hub-layout{grid-template-columns:1fr;gap:0;padding:0;min-height:0}
   .hub-layout.collapsed{grid-template-columns:1fr}
+  .hub-side{position:static;height:auto;padding:12px 14px;border-right:none;border-bottom:1px solid var(--line);backdrop-filter:none}
+  .hub-main{padding:18px 14px 70px;max-width:none}
   .hub-side nav{flex-direction:row;flex-wrap:wrap;position:static;gap:8px}
   .hub-side.collapsed .lbl{display:inline}
   .hub-side.collapsed nav a{justify-content:flex-start;padding:11px 14px}
