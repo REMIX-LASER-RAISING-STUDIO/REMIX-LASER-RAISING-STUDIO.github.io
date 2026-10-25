@@ -12,75 +12,119 @@
 <body data-nav="home">
     <main class="page" style="padding-top: 120px; padding-bottom: 80px;">
         
-        <!-- Hero -->
+        <!-- Hero 区域 -->
         <section class="hero" style="text-align: center; margin-bottom: 60px;">
-            <div class="badge">✦ RLRS Studio</div>
+            <div class="badge">✦ 独立极客工作室</div>
             <h1 class="tagline">把想法，做成真正好用的工具。</h1>
+            <div class="brand-full" style="margin-bottom:14px">LOCAL-FIRST · SERVERLESS</div>
             <p class="desc" style="max-width: 600px; margin: 0 auto;">拒绝臃肿与云端绑架，只用极致的代码与算力，死磕底层的稳定与体验。</p>
         </section>
 
-        <!-- 工作室项目 (取自 i18n HUB) -->
-        <h2 class="section-title reveal" id="projects" data-t="hub.t">我们做的东西</h2>
-        <p class="reveal" data-t="hub.s" style="text-align: center; color: var(--text-2); margin-bottom: 40px;"></p>
-        
-        <div class="grid reveal" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+        <!-- 核心产品矩阵 -->
+        <h2 class="section-title reveal" id="projects">— 核心产品矩阵 —</h2>
+        <div class="grid reveal" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 60px;">
             
-            <!-- Chert -->
-            <a href="https://chert-launcher.github.io" target="_blank" rel="noopener" class="product-card">
+            <!-- 1. Chert -->
+            <a href="https://chert-launcher.github.io" target="_blank" class="product-card">
                 <div class="icon">⛏️</div>
-                <h3 data-t="hub.chert.t">燧石启动器</h3>
-                <div class="platform" data-t="hub.chert.tag">Windows · 2.6.0</div>
-                <div class="desc" data-t="hub.chert.d"></div>
+                <h3>Chert <span style="font-size:14px; color:var(--text-2)">燧石启动器</span></h3>
+                <div class="platform" style="color: #4ade80;">● 已发布 · 2.5.6</div>
+                <div class="desc">硬核的 Minecraft 启动终端。内置 P2P 打洞联机、自愈 HUD 与四套 UI 设计语言。</div>
             </a>
 
-            <!-- Chert Server -->
+            <!-- 2. Granite -->
             <div class="product-card">
                 <div class="icon">🖥️</div>
-                <h3 data-t="hub.server.t">Chert Server</h3>
-                <div class="platform" data-t="hub.server.tag">规划中</div>
-                <div class="desc" data-t="hub.server.d"></div>
+                <h3>Granite <span style="font-size:14px; color:var(--text-2)">极客开服器</span></h3>
+                <div class="platform">核心开发中</div>
+                <div class="desc">坚如花岗岩的服务端管理面板。一键拉取核心、可视化编辑配置与崩溃自动重启。</div>
             </div>
 
-            <!-- VD Explorer -->
+            <!-- 3. Basalt -->
             <div class="product-card">
                 <div class="icon">💽</div>
-                <h3 data-t="hub.vd.t">VD Explorer</h3>
-                <div class="platform" data-t="hub.vd.tag">开发中</div>
-                <div class="desc" data-t="hub.vd.d"></div>
+                <h3>Basalt <span style="font-size:14px; color:var(--text-2)">虚拟磁盘</span></h3>
+                <div class="platform">核心开发中</div>
+                <div class="desc">坚如磐石的现代虚拟磁盘管理器。完美支持 VHDX / VMDK，原生只读挂载与安全快照。</div>
             </div>
 
-            <!-- ChemiLab -->
+            <!-- 4. Pumice -->
+            <div class="product-card">
+                <div class="icon">🌐</div>
+                <h3>Pumice <span style="font-size:14px; color:var(--text-2)">P2P 联机网关</span></h3>
+                <div class="platform">概念规划中</div>
+                <div class="desc">基于自研 UDP 打洞技术的纯本地联机利器。脱离启动器限制，任何 TCP/UDP 端口一键映射。</div>
+            </div>
+
+            <!-- 5. Cobalt -->
             <div class="product-card">
                 <div class="icon">🧪</div>
-                <h3 data-t="hub.chem.t">ChemiLab</h3>
-                <div class="platform" data-t="hub.chem.tag">开发中</div>
-                <div class="desc" data-t="hub.chem.d"></div>
+                <h3>Cobalt <span style="font-size:14px; color:var(--text-2)">化学实验室</span></h3>
+                <div class="platform">核心开发中</div>
+                <div class="desc">以深邃钴蓝为灵感的化学模拟工具。可视化反应过程与试剂操作，让实验安全且反复进行。</div>
             </div>
 
-            <!-- SR Tools -->
-            <a href="/sr/" class="product-card">
-                <div class="icon">🌠</div>
-                <h3 data-t="hub.sr.t">崩铁工具</h3>
-                <div class="platform" data-t="hub.sr.tag">进行中</div>
-                <div class="desc" data-t="hub.sr.d"></div>
+            <!-- 6. Geode -->
+            <div class="product-card">
+                <div class="icon">💎</div>
+                <h3>Geode <span style="font-size:14px; color:var(--text-2)">开发者浏览器</span></h3>
+                <div class="platform">概念规划中</div>
+                <div class="desc">基于 Rust 打造的极简浏览器，内置本地预览服务器与开发网站纯净模式。</div>
+            </div>
+        </div>
+
+        <!-- 极客生态 -->
+        <h2 class="section-title reveal">— 极客生态 —</h2>
+        <div class="grid reveal" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-bottom: 60px;">
+            <!-- RLRS Hub -->
+            <a href="/hub/" class="product-card" style="background: linear-gradient(135deg, rgba(79,140,255,0.1), transparent); border-color: rgba(79,140,255,0.3);">
+                <div class="icon">📦</div>
+                <h3>RLRS Hub <span style="font-size:14px; color:var(--text-2)">极客专栏</span></h3>
+                <div class="platform">内容共建</div>
+                <div class="desc">成员开发日志、AI 技能库与星铁等各类小工具集散地。</div>
             </a>
 
-            <!-- Join & Log -->
+            <!-- 极客基地 -->
             <a href="/join/" class="product-card">
                 <div class="icon">🤝</div>
-                <h3 data-t="hub.join.t">加入社区</h3>
-                <div class="platform" data-t="hub.join.tag">开放</div>
-                <div class="desc" data-t="hub.join.d"></div>
+                <h3>极客基地 <span style="font-size:14px; color:var(--text-2)">加入我们</span></h3>
+                <div class="platform">开放中</div>
+                <div class="desc">寻找内测玩家与开源开发者，一起探讨底层技术。</div>
             </a>
-            <a href="/changelog/" class="product-card">
-                <div class="icon">📜</div>
-                <h3 data-t="hub.log.t">更新日志</h3>
-                <div class="platform" data-t="hub.log.tag">最新</div>
-                <div class="desc" data-t="hub.log.d"></div>
+            
+            <!-- 开发者文档 -->
+            <a href="/docs/" class="product-card">
+                <div class="icon">📚</div>
+                <h3>开发者文档 <span style="font-size:14px; color:var(--text-2)">Docs</span></h3>
+                <div class="platform">持续更新</div>
+                <div class="desc">Chert CLI 命令指南、节日特效接入指引与开源组件白皮书。</div>
             </a>
         </div>
+
+        <!-- 精神传承 -->
+        <h2 class="section-title reveal">— 精神传承 —</h2>
+        <div class="grid reveal" style="grid-template-columns: 1fr; margin-bottom: 60px;">
+            <a href="https://github.com/Bingjianremix/MICRODOS--REMIX" target="_blank" class="product-card" style="background: #050505; border-color: #333; font-family: var(--mono);">
+                <div class="icon" style="color: #888;">💾</div>
+                <h3 style="color: #ddd;">MicroDOS <span style="font-size:14px; color:#666">微操作系统模拟</span></h3>
+                <div class="platform" style="color: #888;">Vintage / Legacy</div>
+                <div class="desc" style="color: #777; max-width: 800px;">
+                    这是 RLRS Studio 的最初起点。用纯粹的 Windows 批处理脚本（.bat）构建的 DOS 命令行模拟器。没有现代框架，没有面向对象，只有最底层的逻辑堆砌与纯粹的热爱。虽然简陋，但它是一切极客魔法的原点。
+                </div>
+            </a>
+        </div>
+
+        <!-- 底部跑马灯 -->
+        <section class="photo-ad" style="margin-top: 60px; border-radius: var(--radius); overflow: hidden;">
+            <div class="marquee" style="background: var(--card); padding: 16px; border: 1px solid var(--border);">
+                <div class="marquee-track" style="color: var(--accent); font-weight: bold; font-family: var(--mono);">
+                    <span>RLRS Studio · 燧石启动器 2.6.0 已发布 · 虚拟磁盘管理器 Basalt 开发中 · 化学实验室 Cobalt 开发中 · Granite 规划中 · 更多作品在路上</span>
+                </div>
+            </div>
+        </section>
     </main>
 
+    <!-- 脚本 -->
     <script src="/js/site-i18n.js" charset="utf-8"></script>
     <script src="/js/layout.js" charset="utf-8"></script>
     <script src="/js/particles.js" charset="utf-8"></script>
@@ -88,7 +132,7 @@
     <script>
         document.querySelectorAll('.reveal').forEach((el) => {
             const io = new IntersectionObserver((entries) => {
-                entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+                entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('reveal-in', 'in'); io.unobserve(e.target); } });
             }, { threshold: 0.12 });
             io.observe(el);
         });
