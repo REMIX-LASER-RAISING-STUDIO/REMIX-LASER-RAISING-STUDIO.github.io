@@ -17,16 +17,16 @@
 
   <!-- 顶栏：rlrshub 标识 + 搜索 + 主题/语言 -->
   <header class="hub-topbar">
-    <div class="hub-top-left">
-      <button class="hub-icon-btn" id="sidebarToggle" data-t-title="hub.t.sidebar" aria-label="侧边栏">☰</button>
-      <a class="hub-brand" href="/" title="RLRS Studio">rlrshub</a>
-    </div>
+    <a class="hub-brand" href="/" title="RLRS Studio">rlrshub</a>
     <div class="hub-search">
-      <span class="hub-search-ico">🔍</span>
-      <input type="search" id="hubSearch" data-t-ph="hub.search" placeholder="搜索文档、技能与代码…" />
+      <svg class="hub-search-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.6 4.6"/></svg>
+      <input type="search" id="hubSearch" data-t-ph="hub.search" placeholder="搜索文章、工具与代码…" />
     </div>
     <div class="hub-top-right">
-      <button class="hub-icon-btn" id="themeToggle" data-t-title="hub.t.theme" aria-label="主题">🌙</button>
+      <button class="hub-icon-btn" id="themeToggle" data-t-title="hub.t.theme" aria-label="主题">
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4 17 7M7 17l-1.6 1.6"/></svg>
+      </button>
       <select class="lang-select" aria-label="语言切换">
         <option value="zh">简体中文</option>
         <option value="zh-TW">繁體中文</option>
@@ -36,29 +36,59 @@
     </div>
   </header>
 
-  <div class="hub-layout" id="hubLayout">
-    <!-- 侧边栏（贴左，可收缩为图标栏） -->
+  <div class="hub-layout">
+    <!-- 侧边栏：靠左，鼠标悬浮时展开 -->
     <aside class="hub-side" id="hubSide">
       <nav>
-        <a class="hub-cat active" data-cat="all"><span class="ico">🗂️</span><span class="lbl" data-t="hub.nav.all">全部</span></a>
-        <a class="hub-cat" data-cat="docs"><span class="ico">📄</span><span class="lbl" data-t="hub.nav.docs">文档</span></a>
-        <a class="hub-cat" data-cat="skills"><span class="ico">🧩</span><span class="lbl" data-t="hub.nav.skills">开源 Skills</span></a>
-        <a class="hub-cat" data-cat="csharp"><span class="ico">💻</span><span class="lbl" data-t="hub.nav.csharp">开源 C# 库</span></a>
+        <a class="hub-cat active" data-cat="all">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+          <span class="lbl" data-t="hub.nav.all">全部</span>
+        </a>
+        <a class="hub-cat" data-cat="blog">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5h7.5L18.5 8v12.5H6z"/><path d="M13.5 3.5V8H18"/><path d="M9 12.2h6M9 15.6h4.2"/></svg>
+          <span class="lbl" data-t="hub.nav.blog">成员博客</span>
+        </a>
+        <a class="hub-cat" data-cat="tools">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 1 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9l-3.8 3.8z"/></svg>
+          <span class="lbl" data-t="hub.nav.tools">在线工具</span>
+        </a>
+        <a class="hub-cat" data-cat="csharp">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 7.5 4 12l4.6 4.5M15.4 7.5 20 12l-4.6 4.5M13.6 5l-3.2 14"/></svg>
+          <span class="lbl" data-t="hub.nav.csharp">开源 C# 库</span>
+        </a>
+        <a class="hub-cat" data-cat="skills">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.6 3.6 8 12 12.4 20.4 8z"/><path d="m3.6 12.6 8.4 4.4 8.4-4.4"/><path d="m3.6 17 8.4 4.4 8.4-4.4"/></svg>
+          <span class="lbl" data-t="hub.nav.skills">开源 Skills</span>
+        </a>
       </nav>
     </aside>
 
-    <!-- 内容区：只展示真正有内容的条目 -->
-    <main class="hub-main" id="hubMain">
-      <a class="hub-card" data-cat="skills" data-title="崩铁工具集 sr hsr 星铁 总伤计算器 抽卡模拟器" href="/sr/">
-        <div class="ico">⚔️</div>
-        <h3 data-t="hub.card.sr.t">崩铁工具集</h3>
-        <p data-t="hub.card.sr.d">总伤计算器与全角色全光锥抽卡模拟器，免费开源。</p>
-        <span class="tag" data-t="hub.nav.skills">开源 Skills</span>
-      </a>
+    <!-- 内容区：CSDN 式列表 -->
+    <main class="hub-main">
+      <div class="hub-bar">
+        <h2 id="hubCatTitle" data-t="hub.sec.all">全部内容</h2>
+        <span class="hub-count" id="hubCount"></span>
+      </div>
 
-      <!-- 空态：当前分类没有内容时显示（不是卡片，指向加入我们） -->
+      <div class="hub-list" id="hubList">
+        <!-- 成员博客：由 hub/posts/index.json 动态渲染 -->
+        <div id="blogList" class="hub-blog-list"></div>
+
+        <!-- 在线工具 -->
+        <a class="hub-item" data-cat="tools" href="/sr/" data-search="崩铁工具集 sr hsr 星铁 总伤计算器 抽卡模拟器 在线工具">
+          <h3 class="hub-item-title" data-t="hub.card.sr.t">崩铁工具集</h3>
+          <p class="hub-item-desc" data-t="hub.card.sr.d">总伤计算器与全角色全光锥抽卡模拟器，免费开源。</p>
+          <div class="hub-item-meta">
+            <span class="hub-item-tag" data-t="hub.nav.tools">在线工具</span>
+            <span class="hub-item-sep"></span>
+            <span>免登录 · 浏览器直接可用</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- 空态（非卡片）：当前分类无内容时提示并指向加入我们 -->
       <div class="hub-empty" id="hubEmpty" hidden>
-        <span class="hub-empty-ico">📭</span>
+        <svg class="hub-empty-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13.5 6 5h12l2.5 8.5"/><path d="M3.5 13.5h5l1 2.2h5l1-2.2h5V19h-17z"/></svg>
         <p><b data-t="hub.empty.t">这里还在搬运</b><span data-t="hub.empty.d">该分类暂时没有内容，欢迎加入我们一起把它建起来。</span></p>
         <a class="hub-empty-link" href="/join/" data-t="nav.join">加入我们 →</a>
       </div>
@@ -71,73 +101,110 @@
   <script src="/festival-fx.js" defer></script>
   <script>
     (function(){
-      // 顶栏标题（data-t-title）随语言刷新
+      function escH(s){
+        return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }
+
+      /* 顶栏标题 / 搜索占位随语言刷新 */
       function refreshTitles(){
         if(!window.SI18N) return;
-        document.querySelectorAll('[data-t-title]').forEach(el=>{
-          const v=SI18N.t(el.dataset.tTitle);
-          if(v) el.title=v, el.setAttribute('aria-label',v);
+        document.querySelectorAll('[data-t-title]').forEach(function(el){
+          var v=SI18N.t(el.dataset.tTitle);
+          if(v){ el.title=v; el.setAttribute('aria-label',v); }
         });
-        const ph=document.getElementById('hubSearch');
+        var ph=document.getElementById('hubSearch');
         if(ph) ph.placeholder=SI18N.t('hub.search');
       }
       document.addEventListener('DOMContentLoaded',refreshTitles);
-      document.addEventListener('change',e=>{ if(e.target.closest('.lang-select')) setTimeout(refreshTitles,0); });
+      document.addEventListener('change',function(e){
+        if(e.target.closest('.lang-select')) setTimeout(function(){ refreshTitles(); updateTitle(); filter(); },0);
+      });
 
-      // 主题：亮 / 暗（记忆）
-      const KEY_THEME='rlrs-hub-theme';
-      const tBtn=document.getElementById('themeToggle');
-      function applyTheme(t){
-        document.documentElement.setAttribute('data-theme',t);
-        if(tBtn) tBtn.textContent = t==='light' ? '☀️' : '🌙';
-      }
+      /* 主题：亮 / 暗（记忆，SVG 图标切换） */
+      var KEY_THEME='rlrs-hub-theme';
+      function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); }
       applyTheme(localStorage.getItem(KEY_THEME)||'dark');
-      if(tBtn) tBtn.addEventListener('click',()=>{
-        const next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+      var tBtn=document.getElementById('themeToggle');
+      if(tBtn) tBtn.addEventListener('click',function(){
+        var next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
         localStorage.setItem(KEY_THEME,next); applyTheme(next);
       });
 
-      // 侧边栏收缩（记忆）
-      const KEY_SIDE='rlrs-hub-side';
-      const side=document.getElementById('hubSide');
-      const layout=document.getElementById('hubLayout');
-      const sBtn=document.getElementById('sidebarToggle');
-      function applySide(collapsed){
-        side.classList.toggle('collapsed',collapsed);
-        if(layout) layout.classList.toggle('collapsed',collapsed);
-        if(sBtn) sBtn.textContent = collapsed ? '»' : '☰';
-      }
-      applySide(localStorage.getItem(KEY_SIDE)==='1');
-      if(sBtn) sBtn.addEventListener('click',()=>{
-        const c=!side.classList.contains('collapsed');
-        localStorage.setItem(KEY_SIDE,c?'1':'0'); applySide(c);
-      });
+      /* 分类 + 搜索过滤 */
+      var search=document.getElementById('hubSearch');
+      var empty=document.getElementById('hubEmpty');
+      var countEl=document.getElementById('hubCount');
+      var titleEl=document.getElementById('hubCatTitle');
+      var curCat='all';
 
-      // 分类筛选 + 搜索过滤（无命中时显示空态）
-      const search=document.getElementById('hubSearch');
-      const empty=document.getElementById('hubEmpty');
-      const cards=Array.from(document.querySelectorAll('.hub-card'));
-      let curCat='all';
+      var CAT_TITLE={all:'hub.sec.all',blog:'hub.sec.blog',tools:'hub.sec.tools',csharp:'hub.sec.csharp',skills:'hub.sec.skills'};
+      function updateTitle(){
+        if(!titleEl) return;
+        var k=CAT_TITLE[curCat]||'hub.sec.all';
+        titleEl.setAttribute('data-t',k);
+        if(window.SI18N) titleEl.textContent=SI18N.t(k);
+      }
+
       function filter(){
-        const q=(search.value||'').trim().toLowerCase();
-        let shown=0;
-        cards.forEach(c=>{
-          const okCat = curCat==='all' || c.dataset.cat===curCat;
-          const txt=((c.dataset.title||'')+' '+c.textContent).toLowerCase();
-          const okQ = !q || txt.includes(q);
-          const vis = okCat && okQ;
-          c.style.display = vis ? '' : 'none';
+        var q=(search.value||'').trim().toLowerCase();
+        var items=Array.prototype.slice.call(document.querySelectorAll('.hub-item'));
+        var shown=0;
+        items.forEach(function(el){
+          var okCat = curCat==='all' || el.dataset.cat===curCat;
+          var hay=((el.dataset.search||'')+' '+el.textContent).toLowerCase();
+          var okQ = !q || hay.indexOf(q)>-1;
+          var vis = okCat && okQ;
+          el.style.display = vis ? '' : 'none';
           if(vis) shown++;
         });
         if(empty) empty.hidden = shown>0;
+        if(countEl){
+          var unit = (window.SI18N && SI18N.lang==='en') ? ' items' : ' 项';
+          countEl.textContent = shown + unit;
+        }
       }
       search.addEventListener('input',filter);
-      document.querySelectorAll('.hub-cat').forEach(a=>{
-        a.addEventListener('click',()=>{
-          document.querySelectorAll('.hub-cat').forEach(x=>x.classList.remove('active'));
-          a.classList.add('active'); curCat=a.dataset.cat; filter();
+
+      document.querySelectorAll('.hub-cat').forEach(function(a){
+        a.addEventListener('click',function(){
+          document.querySelectorAll('.hub-cat').forEach(function(x){ x.classList.remove('active'); });
+          a.classList.add('active');
+          curCat=a.dataset.cat;
+          updateTitle(); filter();
         });
       });
+
+      /* 成员博客：读取 hub/posts/index.json 渲染列表 */
+      fetch('posts/index.json',{cache:'no-store'})
+        .then(function(r){ if(!r.ok) throw new Error('index '+r.status); return r.json(); })
+        .then(function(data){
+          var posts=(data.posts||[]).slice().sort(function(a,b){
+            return String(b.date||'').localeCompare(String(a.date||''));
+          });
+          var box=document.getElementById('blogList');
+          if(!box) return;
+          box.innerHTML=posts.map(function(p){
+            var tags=(p.tags||[]).map(function(t){ return '<span class="hub-item-tag">'+escH(t)+'</span>'; }).join('');
+            var hay=[p.title,p.excerpt,p.author,(p.tags||[]).join(' ')].join(' ');
+            return '<article class="hub-item" data-cat="blog" data-search="'+escH(hay)+'">'+
+              '<h3 class="hub-item-title"><a href="/hub/post.html?p='+encodeURIComponent(p.slug)+'">'+escH(p.title)+'</a></h3>'+
+              '<p class="hub-item-desc">'+escH(p.excerpt||'')+'</p>'+
+              '<div class="hub-item-meta">'+
+                '<span class="hub-item-author">'+escH(p.author||'RLRS Studio')+'</span>'+
+                '<span class="hub-item-sep"></span>'+
+                '<span>'+escH(p.date||'')+'</span>'+
+                (tags?'<span class="hub-item-sep"></span>'+tags:'')+
+              '</div>'+
+            '</article>';
+          }).join('');
+          filter();
+        })
+        .catch(function(){
+          // 索引读取失败（本地 file:// 或尚未投稿）：静默保留其它条目
+          filter();
+        });
+
+      updateTitle();
       filter();
     })();
   </script>

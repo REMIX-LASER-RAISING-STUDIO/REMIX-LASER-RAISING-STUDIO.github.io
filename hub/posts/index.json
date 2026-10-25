@@ -1,0 +1,24 @@
+{
+  "updated": "2026-10-25",
+  "note": "投稿方式：把 .md 文件放进 hub/posts/，再在本文件 posts 数组里追加一条记录（file 相对 hub 目录）。",
+  "posts": [
+    {
+      "slug": "welcome",
+      "title": "成员博客上线：这里写什么，怎么投稿",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-25",
+      "tags": ["公告", "社区"],
+      "excerpt": "RLRS Hub 的成员博客正式开张。这里放开发日志、技术笔记、踩坑记录和项目复盘，也欢迎成员把文章投到仓库里，页面会自动渲染。",
+      "file": "posts/welcome.md"
+    },
+    {
+      "slug": "chert-2-6-0",
+      "title": "燧石启动器 2.6.0：服务器复用、HUD 自愈与 Ollama 镜像",
+      "author": "BingJian-REMIX",
+      "date": "2026-10-19",
+      "tags": ["燧石启动器", "发布"],
+      "excerpt": "2.6.0 集中处理了几件长期烦人的事：重复开服、HUD 抓不到游戏进程、以及 Ollama 拉模型又慢又断。下面是这次的改动与实现思路。",
+      "file": "posts/chert-2-6-0.md"
+    }
+  ]
+}

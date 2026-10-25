@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>阅读 | RLRS Hub</title>
+  <meta name="theme-color" content="#07090f" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body data-nav="hub">
+  <div class="bg-aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <canvas id="embers-canvas" data-color="79,140,255" data-count="42"></canvas>
+
+  <header class="hub-topbar">
+    <a class="hub-brand" href="/" title="RLRS Studio">rlrshub</a>
+    <a class="post-topback" href="/hub/" data-t="post.back">返回专栏</a>
+    <div class="hub-top-right">
+      <button class="hub-icon-btn" id="themeToggle" data-t-title="hub.t.theme" aria-label="主题">
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"/></svg>
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4 17 7M7 17l-1.6 1.6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="post-wrap">
+    <article class="post-article">
+      <header class="post-head">
+        <h1 class="post-title" id="postTitle"></h1>
+        <div class="post-meta" id="postMeta"></div>
+      </header>
+      <div class="md-body" id="postBody">
+        <p class="post-state" id="postState" data-t="post.loading">正在加载文章…</p>
+      </div>
+      <footer class="post-foot">
+        <a class="post-back" href="/hub/" data-t="post.back">返回专栏</a>
+      </footer>
+    </article>
+  </main>
+
+  <script src="/js/site-i18n.js" charset="utf-8"></script>
+  <script src="/js/md-renderer.js" charset="utf-8"></script>
+  <script src="/js/particles.js" charset="utf-8"></script>
+  <script src="/festival-fx.js" defer></script>
+  <script>
+    (function(){
+      function escH(s){
+        return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+      }
+
+      /* 主题（与 hub 首页共用记忆） */
+      var KEY_THEME='rlrs-hub-theme';
+      function applyTheme(t){ document.documentElement.setAttribute('data-theme',t); }
+      applyTheme(localStorage.getItem(KEY_THEME)||'dark');
+      var tBtn=document.getElementById('themeToggle');
+      if(tBtn) tBtn.addEventListener('click',function(){
+        var next=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+        localStorage.setItem(KEY_THEME,next); applyTheme(next);
+      });
+
+      var body=document.getElementById('postBody');
+      var state=document.getElementById('postState');
+      var titleEl=document.getElementById('postTitle');
+      var metaEl=document.getElementById('postMeta');
+
+      function fail(msg){
+        body.innerHTML='<p class="post-state">'+escH(msg)+'</p>'+
+          '<p class="post-state-link"><a href="/hub/">← 返回专栏</a></p>';
+      }
+
+      var slug=new URLSearchParams(location.search).get('p');
+      if(!slug){ fail('没有指定文章。'); return; }
+
+      fetch('posts/index.json',{cache:'no-store'})
+        .then(function(r){ if(!r.ok) throw new Error('索引读取失败 ('+r.status+')'); return r.json(); })
+        .then(function(data){
+          var post=(data.posts||[]).filter(function(p){ return p.slug===slug; })[0];
+          if(!post) throw new Error('文章不存在：'+slug);
+
+          titleEl.textContent=post.title||slug;
+          document.title=(post.title||slug)+' | RLRS Hub';
+          metaEl.innerHTML=
+            '<span class="hub-item-author">'+escH(post.author||'RLRS Studio')+'</span>'+
+            '<span class="hub-item-sep"></span>'+
+            '<span>'+escH(post.date||'')+'</span>'+
+            (post.tags&&post.tags.length?'<span class="hub-item-sep"></span>'+post.tags.map(function(t){
+              return '<span class="hub-item-tag">'+escH(t)+'</span>';
+            }).join(''):'');
+
+          return fetch(post.file,{cache:'no-store'})
+            .then(function(r){ if(!r.ok) throw new Error('正文读取失败 ('+r.status+')'); return r.text(); })
+            .then(function(md){
+              if(!window.MD) throw new Error('渲染器未加载');
+              body.innerHTML=MD.render(md);
+              buildToc();
+            });
+        })
+        .catch(function(e){ fail(e.message||'加载失败'); });
+
+      /* 正文标题较多时生成目录 */
+      function buildToc(){
+        var hs=Array.prototype.slice.call(body.querySelectorAll('h2,h3'));
+        if(hs.length<3) return;
+        var nav=document.createElement('nav');
+        nav.className='md-toc';
+        nav.innerHTML='<b class="md-toc-t">目录</b>'+hs.map(function(h){
+          return '<a class="md-toc-a'+(h.tagName==='H3'?' lv3':'')+'" href="#'+h.id+'">'+escH(h.textContent)+'</a>';
+        }).join('');
+        var art=document.querySelector('.post-article');
+        if(art) art.insertBefore(nav, body);
+      }
+    })();
+  </script>
+</body>
+</html>
