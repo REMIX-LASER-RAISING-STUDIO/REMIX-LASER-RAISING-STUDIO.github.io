@@ -1,7 +1,25 @@
 {
-  "updated": "2026-10-26",
+  "updated": "2026-11-01",
   "note": "投稿方式：把 .md 文件放进 hub/posts/，再在本文件 posts 数组里追加一条记录（file 相对 hub 目录）。",
   "posts": [
+    {
+      "slug": "code-archaeology-mclb-to-chert",
+      "title": "代码考古：从 MCLB 到 Chert，一个启动器的三次投胎",
+      "author": "BingJian-REMIX",
+      "date": "2026-11-01",
+      "tags": ["代码考古", "燧石启动器", "复盘"],
+      "excerpt": "所有伟大的软件，最初可能都只是一个随时会崩溃的 .bat 脚本。翻开 history 分支，看看燧石启动器是如何从泥坑里爬出来的。",
+      "file": "posts/code-archaeology-mclb-to-chert.md"
+    },
+    {
+      "slug": "microdos-bat-os",
+      "title": "MicroDOS：用尽一生知识的纯 BAT 艺术",
+      "author": "BingJian-REMIX",
+      "date": "2026-11-01",
+      "tags": ["代码考古", "BAT", "回忆"],
+      "excerpt": "在拥有 C# 和 19 亿 Token 之前，我曾用一个 .bat 文件，硬生生敲出了一个「操作系统」。",
+      "file": "posts/microdos-bat-os.md"
+    },
     {
       "slug": "launcher-scene-2026-10",
       "title": "启动器圈这个月：PCL 关了游戏下载，Prism 补了个安全洞",
