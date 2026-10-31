@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>/* 关键兜底：样式表加载/命中缓存前也保证底色正确 */
 html{background:#07090f}html[data-theme="light"]{background:#f4f6fb}</style>
-    <link rel="stylesheet" href="/css/style.css?v=20261026b" />
+    <link rel="stylesheet" href="/css/style.css?v=20261101" />
 <script>/* 主题记忆：与 RLRS Hub 共用同一键，跨页不跳色 */
 try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}</script>
 </head>
@@ -114,6 +114,15 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
                 </div>
 
                 <div class="prod">
+                    <span class="prod-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12.4" rx="8.2" ry="6.4" transform="rotate(-12 12 12.4)"/><path d="M8.2 9.9c1.6-1.5 4.3-2 6.4-1.1"/></svg></span>
+                    <div class="prod-top">
+                        <h3 data-t="home.pebble.t">Pebble 移动端文件管理器</h3>
+                        <span class="pill pill-dev" data-t="home.pebble.tag">开发中</span>
+                    </div>
+                    <p data-t="home.pebble.d">深度集成 Git 能力的手机端文件管理器。在移动端直接浏览、修改并提交仓库，不必等回到电脑前。</p>
+                </div>
+
+                <div class="prod">
                     <span class="prod-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="M3 9h18"/><path d="M6.5 6.8h.01M9.5 6.8h.01"/></svg></span>
                     <div class="prod-top">
                         <h3 data-t="home.geode.t">Geode 开发者浏览器</h3>
@@ -191,10 +200,10 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
 
 </main>
 
-<script src="/js/site-i18n.js?v=20261026b" charset="utf-8"></script>
-<script src="/js/layout.js?v=20261026b" charset="utf-8"></script>
-<script src="/js/particles.js?v=20261026b" charset="utf-8"></script>
-<script src="/js/seasonal.js?v=20261026b" charset="utf-8"></script>
+<script src="/js/site-i18n.js?v=20261101" charset="utf-8"></script>
+<script src="/js/layout.js?v=20261101" charset="utf-8"></script>
+<script src="/js/particles.js?v=20261101" charset="utf-8"></script>
+<script src="/js/seasonal.js?v=20261101" charset="utf-8"></script>
 <script>
     // 滚动渐显（CSS 里 .reveal 定义 opacity/transform，这里只负责触发）
     (function () {
@@ -217,6 +226,6 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
         });
     })();
 </script>
-<script src="/festival-fx.js?v=20261026b" defer></script>
+<script src="/festival-fx.js?v=20261101" defer></script>
 </body>
 </html>
