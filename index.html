@@ -9,7 +9,8 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <style>/* 关键兜底：样式表加载/命中缓存前也保证底色正确 */
 html{background:#07090f}html[data-theme="light"]{background:#f4f6fb}</style>
-    <link rel="stylesheet" href="/css/style.css?v=20261101" />
+    <link rel="stylesheet" href="/css/style.css?v=20261108" />
+    <link rel="stylesheet" href="/css/ai-assistant.css?v=20261108" />
 <script>/* 主题记忆：与 RLRS Hub 共用同一键，跨页不跳色 */
 try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}</script>
 </head>
@@ -38,7 +39,7 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
                 </div>
 
                 <div class="home-meta">
-                    <div><b>6</b><span data-t="home.m1s">产品线</span></div>
+                    <div><b>8</b><span data-t="home.m1s">产品线</span></div>
                     <div><b>4</b><span data-t="home.m2s">站点语言</span></div>
                     <div><b>0</b><span data-t="home.m3s">云端依赖</span></div>
                 </div>
@@ -131,6 +132,15 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
                     <p data-t="home.geode.d">基于 Rust 打造的极简浏览器，内置本地预览服务器与开发网站纯净模式。</p>
                 </div>
 
+                <div class="prod">
+                    <span class="prod-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+                    <div class="prod-top">
+                        <h3 data-t="home.breccia.t">Breccia 安全透视</h3>
+                        <span class="pill pill-dev" data-t="home.breccia.tag">核心开发中</span>
+                    </div>
+                    <p data-t="home.breccia.d">极客级 PE 结构分析与安全工具。基于 PeNet 解析底层，秒级查壳并高亮标红敏感注入 API。</p>
+                </div>
+
             </div>
         </div>
     </section>
@@ -146,7 +156,7 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
                     <span class="eco-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v18H6.5A1.5 1.5 0 0 1 5 19.5z"/><path d="M9 7.5h6"/></svg></span>
                     <h3 data-t="home.hub.t">RLRS Hub 极客专栏</h3>
                     <span class="eco-tag" data-t="home.hub.tag">内容共建</span>
-                    <p data-t="home.hub.d">成员开发日志、AI 技能库与星铁等各类小工具集散地。</p>
+                    <p data-t="home.hub.d">成员开发日志、技术笔记与在线工具，持续更新。</p>
                     <span class="eco-go"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13"/><path d="M13 7l5 5-5 5"/></svg></span>
                 </a>
 
@@ -192,18 +202,37 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
     <section class="home-marquee">
         <div class="marquee">
             <div class="marquee-track">
-                <span data-t="ad.s">RLRS Studio · 燧石启动器 2.6.0 内测中 · 虚拟磁盘 Basalt 开发中 · 化学实验室 Cobalt 开发中 · 极客开服器 Granite 开发中 · P2P 网关 Pumice 规划中 · 开发者浏览器 Geode 规划中 · 更多作品在路上</span>
-                <span data-t="ad.s" aria-hidden="true">RLRS Studio · 燧石启动器 2.6.0 内测中 · 虚拟磁盘 Basalt 开发中 · 化学实验室 Cobalt 开发中 · 极客开服器 Granite 开发中 · P2P 网关 Pumice 规划中 · 开发者浏览器 Geode 规划中 · 更多作品在路上</span>
+                <span data-t="ad.s">RLRS Studio · 燧石启动器 2.6.0 内测中 · Breccia 安全透视开发中 · 虚拟磁盘 Basalt 开发中 · 化学实验室 Cobalt 开发中 · 手机文件管理器 Pebble 开发中 · 极客开服器 Granite 开发中 · P2P 网关 Pumice 规划中 · 开发者浏览器 Geode 规划中 · 更多作品在路上</span>
+                <span data-t="ad.s" aria-hidden="true">RLRS Studio · 燧石启动器 2.6.0 内测中 · Breccia 安全透视开发中 · 虚拟磁盘 Basalt 开发中 · 化学实验室 Cobalt 开发中 · 手机文件管理器 Pebble 开发中 · 极客开服器 Granite 开发中 · P2P 网关 Pumice 规划中 · 开发者浏览器 Geode 规划中 · 更多作品在路上</span>
             </div>
         </div>
     </section>
 
 </main>
 
-<script src="/js/site-i18n.js?v=20261101" charset="utf-8"></script>
-<script src="/js/layout.js?v=20261101" charset="utf-8"></script>
-<script src="/js/particles.js?v=20261101" charset="utf-8"></script>
-<script src="/js/seasonal.js?v=20261101" charset="utf-8"></script>
+<!-- ===================== AI 问答终端（样式/脚本外链） ===================== -->
+<button class="ai-fab" id="aiFab" aria-label="打开 AI 问答终端" title="伪 AI 问答终端">
+    <span class="fab-icon">&gt;_<span>?</span></span>
+</button>
+
+<div class="ai-dialog" id="aiDialog" role="dialog" aria-label="伪 AI 问答终端">
+    <div class="ai-dialog-header">
+        <div class="dots"><i></i><i></i><i></i></div>
+        <span class="title" data-t="ai.title">rlrs://<b>mock-ai</b> — ask anything</span>
+        <button class="close-btn" id="aiClose" aria-label="关闭对话框" title="关闭">×</button>
+    </div>
+    <div class="ai-dialog-body" id="aiBody"></div>
+    <div class="ai-dialog-footer">
+        <span class="prompt-sign">$</span>
+        <input type="text" id="aiInput" placeholder="输入问题，回车发送…" autocomplete="off" spellcheck="false" aria-label="输入问题">
+        <button id="aiSend" aria-label="发送" title="发送">→</button>
+    </div>
+</div>
+
+<script src="/js/site-i18n.js?v=20261108" charset="utf-8"></script>
+<script src="/js/layout.js?v=20261108" charset="utf-8"></script>
+<script src="/js/particles.js?v=20261108" charset="utf-8"></script>
+<script src="/js/seasonal.js?v=20261108" charset="utf-8"></script>
 <script>
     // 滚动渐显（CSS 里 .reveal 定义 opacity/transform，这里只负责触发）
     (function () {
@@ -226,6 +255,7 @@ try{if(localStorage.getItem("rlrs-hub-theme")==="light")document.documentElement
         });
     })();
 </script>
-<script src="/festival-fx.js?v=20261101" defer></script>
+<script src="/js/ai-assistant.js?v=20261108" charset="utf-8" defer></script>
+<script src="/festival-fx.js?v=20261108" defer></script>
 </body>
 </html>
