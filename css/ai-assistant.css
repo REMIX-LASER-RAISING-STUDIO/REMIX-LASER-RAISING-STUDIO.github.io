@@ -8,8 +8,8 @@ html[data-theme="light"] { --term-bg: rgb(15, 19, 25); }
 /* ===== Mock AI 问答终端 ===== */
     .ai-fab {
       /* 右下 20px/46px 是全站 festival-fx.js 的「节日特效」悬浮按钮（z-index 极高）。
-         这里上移一个身位，避免两个圆按钮叠在一起；对话框同步上移。 */
-      position: fixed; right: 24px; bottom: 84px; z-index: 999;
+         这里上移一整段，两个圆之间留 46px（小屏 30px），避免蓝色光晕把下方按钮糊在一起。 */
+      position: fixed; right: 24px; bottom: 112px; z-index: 999;
       width: 56px; height: 56px; border-radius: 50%;
       background: var(--accent); color: var(--accent-ink);
       display: flex; align-items: center; justify-content: center;
@@ -39,9 +39,10 @@ html[data-theme="light"] { --term-bg: rgb(15, 19, 25); }
 
     /* 对话框 */
     .ai-dialog {
-      position: fixed; right: 24px; bottom: 152px; z-index: 1000;
+      position: fixed; right: 24px; bottom: 180px; z-index: 1000;
       width: 400px; max-width: calc(100vw - 48px);
-      max-height: 560px; height: 540px;
+      /* 窗口变矮时自动收缩，保证对话框顶部不被视口裁掉 */
+      max-height: min(560px, calc(100vh - 200px)); height: 540px;
       border-radius: 18px;
       background: var(--term-bg);
       border: 1px solid var(--border);
@@ -214,13 +215,13 @@ html[data-theme="light"] { --term-bg: rgb(15, 19, 25); }
     /* 小屏幕适配 */
     @media (max-width: 520px) {
       .ai-dialog {
-        right: 12px; bottom: 140px;
+        right: 12px; bottom: 158px;
         width: calc(100vw - 24px);
-        height: 460px; max-height: 70vh;
+        height: 460px; max-height: min(70vh, calc(100vh - 180px));
         border-radius: 16px;
       }
-      /* 小屏同样避让节日特效按钮（bottom 20~66），保持 12px 间距 */
-      .ai-fab { right: 16px; bottom: 78px; width: 50px; height: 50px; font-size: 16px; }
+      /* 小屏同样避让节日特效按钮（bottom 20~66），留 30px 间距 */
+      .ai-fab { right: 16px; bottom: 96px; width: 50px; height: 50px; font-size: 16px; }
     }
 
 /* 无障碍：跟随站点已有的 reduced-motion 约定 */
