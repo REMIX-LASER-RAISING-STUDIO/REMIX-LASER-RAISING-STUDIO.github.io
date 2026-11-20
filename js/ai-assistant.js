@@ -6,8 +6,8 @@
 const KnowledgeBase = {
   // ==================== 1. 品牌与工作室 ====================
   'rlrs': `RLRS Studio（REMIX 激越工作室）是一个独立极客工作室。\n\n我们的理念是 **LOCAL-FIRST（本地优先）** 与 **SERVERLESS（无服务端依赖）**。\n\n我们不信任臃肿的 Electron 套壳，也不喜欢强制登录的云端绑架。我们只写纯粹的代码，把数据控制权还给用户。`,
-  '工作室': `RLRS Studio 致力于开发纯粹、本地优先的极客桌面软件。\n\n目前有 8 条核心产品线（含内测与规划中），涵盖游戏启动器、系统底层工具、安全分析器与化学模拟等。\n\n我们非官方项目，与 Mojang / Microsoft 无关。`,
-  '技术栈': `RLRS Studio 的技术栈选择极其硬核：\n\n• **C# / .NET 8+ / WPF**：用于绝大多数桌面端工具（Chert, Basalt, Breccia, Aether）。\n• **MAUI**：用于移动端跨平台（Pebble）。\n• **Rust**：用于极简浏览器内核（Geode）。\n• **C/C++**：底层 PE 解析与 P2P 网络打洞模块。\n\n拒绝 PHP，拒绝为了 KPI 引入的过度封装。`,
+  '工作室': `RLRS Studio 致力于开发纯粹、本地优先的极客桌面软件。\n\n目前有 13 条生态产品线（含内测与规划中），另有 Cobalt 化学实验室等工作室独立软件，涵盖游戏启动器、系统底层工具、安全分析器、网络基建与凭证管理等。\n\n我们非官方项目，与 Mojang / Microsoft 无关。`,
+  '技术栈': `RLRS Studio 的技术栈选择极其硬核：\n\n• **C# / .NET 8+ / WPF**：用于绝大多数桌面端工具（Chert, Basalt, Breccia）。\n• **Rust**：用于同步核心（Stratic）与极简浏览器内核（Geode）。\n• **Kotlin**：用于移动端（Agate，独立重写）。\n• **C/C++**：底层 PE 解析与 P2P 网络打洞模块。\n\n拒绝 PHP，拒绝为了 KPI 引入的过度封装。`,
   '开发': `我们的软件大都采用本地优先架构。\n\n例如 Chert 启动器，所有的配置、缓存、存档都在本地；P2P 联机也是通过 UDP 打洞直连，不经过我们的中转服务器。\n\n我们相信：最好的云端服务，就是不需要云端。`,
 
   // ==================== 2. Chert 燧石启动器 ====================
@@ -15,15 +15,16 @@ const KnowledgeBase = {
   '燧石': `燧石启动器（Chert）是我们的主打产品。\n\n你可以把它看作一个「终端风」的 Minecraft 启动器，内置 P2P 联机、自愈 HUD 和高度可定制的界面。\n\n版本：2.6.0-beta，目前正在内测。\n下载：请访问燧石官网（首页「前往燧石官网」按钮）。`,
   'hud': `Chert 的“自愈 HUD”是一个特色功能。\n\n它会在游戏画面顶层叠加一个极简的监控面板，显示实时帧率、内存占用和网络延迟。如果检测到内存泄漏或掉帧，HUD 会自动触发清理逻辑，并尝试修复启动器核心文件。`,
   'p2p': `RLRS Studio 的 P2P 能力主要来自两项技术：\n\n1. **Chert 内置联机**：基于自研 UDP 打洞技术，房主创建房间后，其他人直连 IP，无中心服务器中转。\n2. **Pumice 网关**：脱离启动器限制，任何 TCP/UDP 端口一键映射。\n\n它们的目标都是：没有云端服务器，只有点对点。`,
-  'minecraft': `是的，我们是一群 Minecraft 老玩家。\n\nChert 和 Granite 都是围绕 MC 生态开发的工具，但我们与 Mojang 没有任何官方关联。\n\nMinecraft 是 Mojang Synergies AB 的商标。`,
+  'minecraft': `是的，我们是一群 Minecraft 老玩家。\n\nChert 和 Bedrock 都是围绕 MC 生态开发的工具，但我们与 Mojang 没有任何官方关联。\n\nMinecraft 是 Mojang Synergies AB 的商标。`,
 
   // ==================== 3. Basalt 虚拟磁盘 ====================
   'basalt': `Basalt（玄武岩）是一个现代虚拟磁盘管理器。\n\n目标特性：\n• 完美支持 VHDX / VMDK 格式\n• 原生只读挂载\n• 安全快照与差分盘管理\n• 纯内存流解析，不产生临时垃圾文件\n\n当前状态：核心开发中，尚未发布。`,
   '虚拟磁盘': `Basalt 虚拟磁盘是产品矩阵中的一员。\n\n它专注于 VHDX / VMDK 格式，提供原生只读挂载和安全快照能力，底层追求极致稳定。\n\n它还将深度联动 Chert 启动器，支持将 7z 压缩包直接流式封装为 VHD。`,
 
-  // ==================== 4. Granite 极客开服器 ====================
-  'granite': `Granite（花岗岩）是面向 Minecraft 服务端的极客开服器。\n\n定位：坚如磐石的服务端管理面板。\n功能：一键拉取核心（Paper/Fabric/Forge）、可视化编辑 server.properties、崩溃自动重启。\n\n当前状态：核心开发中，尚未开放下载。`,
-  '开服器': `Granite 极客开服器正在开发中。\n\n它旨在简化 Minecraft 服务端的部署与管理，提供可视化配置和自动恢复能力。\n\n如果你想第一时间体验，可以关注「极客基地」加入内测。`,
+  // ==================== 4. Bedrock 服务器面板 ====================
+  'bedrock': `Bedrock（基岩）是面向 Minecraft 服务端的极客开服器与管理面板（Linux 优先，含 Windows 客户端）。\n\n功能：一键拉取核心、可视化配置编辑、崩溃自动重启与远程管理。\n\n当前状态：概念规划中。`,
+  'granite': `Granite 是 Bedrock（服务器面板）的旧称，现已更名。\n\n定位不变：面向 Minecraft 服务端的极客开服器与管理面板。`,
+  '开服器': `Bedrock 服务器面板正在规划中。\n\n它旨在简化 Minecraft 服务端的部署与管理，提供可视化配置和自动恢复能力。\n\n如果你想第一时间体验，可以关注「极客基地」加入内测。`,
 
   // ==================== 5. Breccia (原 Obsidian) 安全透视 ====================
   'breccia': `Breccia（角砾岩）是极客级 PE（可执行文件）结构分析与安全透视工具。\n\n核心特性：\n• 拖拽 EXE/DLL 即时解析（基于 PeNet）\n• 基础信息提取（架构/编译时间/入口点/SHA256）\n• 查壳警报（自动识别 UPX0/UPX1/VMP 等）\n• 导入表透视与敏感 API 高亮（如 CreateRemoteThread、VirtualAllocEx 等注入常用 API）\n\n当前状态：核心开发中。`,
@@ -32,16 +33,22 @@ const KnowledgeBase = {
   '查壳': `Breccia 的查壳逻辑非常简单粗暴：读取 PE 的节区表（Sections）。\n\n如果发现名为 \`UPX0\`、\`UPX1\`、\`.vmp\`、\`.themida\` 等节区，直接在 UI 顶部标红提示“检测到加壳”。\n\n这对快速判断恶意软件或破解程序非常有效。`,
   '敏感api': `在 Breccia 中，我们会遍历导入表（Import Directory）。\n\n如果发现目标程序调用了以下 API，会使用红色字体高亮警告：\n• \`CreateRemoteThread\`\n• \`VirtualAllocEx\`\n• \`WriteProcessMemory\`\n• \`NtCreateThreadEx\`\n\n这通常意味着该程序具有进程注入或内存马行为。`,
 
-  // ==================== 6. Aether 以太跨端枢纽 ====================
-  'aether': `Aether（以太）是 RLRS Studio 的跨端数据同步枢纽。\n\n它是一个基于 WPF 的本地后台守护程序，内置了智能 Git 引擎（防抖提交）和基于 HttpListener 的局域网双端文件透视服务。\n\n状态：概念规划中。`,
-  '以太': `Aether（以太）负责打通 PC 与移动端（Pebble）的数据流转。\n\n它采用“防抖提交策略”（Immediate / Delay30M / Delay1H）来自动处理本地仓库的 Git Commit，避免频繁修改导致的提交风暴。`,
+  // ==================== 6. Stratic 同步核心 ====================
+  'stratic': `Stratic（同步核心）是 RLRS Studio 的分层文件同步引擎核心（原名 Aether）。\n\n它为整个 RLRS 全家桶提供增量同步与冲突合并的底层能力，采用 Rust 实现，追求可靠与高性能。\n\n状态：概念规划中。`,
+  'aether': `Aether 是 Stratic（同步核心）的旧称，现已更名。\n\n它负责打通多端数据流转，内置智能 Git 引擎（防抖提交）与局域网双端文件透视服务。`,
+  '以太': `Stratic（同步核心，旧称 Aether）负责打通 PC 与移动端（Agate）的数据流转。\n\n它采用“防抖提交策略”（Immediate / Delay30M / Delay1H）来自动处理本地仓库的 Git Commit，避免频繁修改导致的提交风暴。`,
 
   // ==================== 7. 其他产品线 ====================
   'pumice': `Pumice（浮石）是 P2P 联机网关项目。\n\n基于自研 UDP 打洞技术，目标是让任何 TCP/UDP 端口都能一键映射，脱离特定启动器的限制。\n\n状态：概念规划中。`,
-  'cobalt': `Cobalt（钴）是化学实验室模拟工具。\n\n灵感来自深邃钴蓝，提供可视化反应过程与试剂操作，让实验安全且可反复进行。\n\n状态：核心开发中。`,
-  'pebble': `Pebble（卵石）是移动端文件管理器，深度集成 Git 能力。\n\n你可以在手机上直接浏览、修改并提交仓库，不必回到电脑前。它还支持动态 Web 服务器和内置的 Diff 视图。\n\n状态：开发中。`,
-  '卵石': `Pebble（卵石）是我们的移动端效率工具。\n\n它结合了 Git 引擎和文件管理，让你能在 Android 设备上直接进行代码审阅、Diff 查看和提交。完全契合我们“随时随地极客”的理念。`,
+  'cobalt': `Cobalt（钴）是工作室独立软件（不属于 13 条生态产品线）中的化学实验室模拟工具。\n\n灵感来自深邃钴蓝，提供可视化反应过程与试剂操作，让实验安全且可反复进行。\n\n状态：核心开发中。`,
+  'agate': `Agate（玛瑙，旧称 Pebble）是移动端文件管理器，深度集成 Git 能力。\n\n你可以在手机上直接浏览、修改并提交仓库，不必回到电脑前。它还支持动态 Web 服务器和内置的 Diff 视图。\n\n状态：开发中。`,
+  'pebble': `Pebble 是 Agate（玛瑙）移动端文件管理器的旧称，现已更名。\n\n功能不变：手机上直接浏览、修改并提交 Git 仓库，内置 Diff 视图。`,
+  '玛瑙': `Agate（玛瑙）是我们的移动端效率工具。\n\n它结合了 Git 引擎和文件管理，让你能在 Android 设备上直接进行代码审阅、Diff 查看和提交。完全契合我们“随时随地极客”的理念。`,
   'geode': `Geode（晶洞）是一款基于 Rust 的极简开发者浏览器。\n\n规划中的特性：本地预览服务器、开发网站纯净模式（自动去广告与追踪脚本）。\n\n状态：概念规划中。`,
+  'lithic': `Lithic（石器）是本地凭证密钥保险库。\n\n集中管理令牌、密码与密钥，本地加密存储，杜绝明文泄露。\n\n状态：概念规划中。`,
+  'magnetite': `Magnetite（磁铁矿）是媒体处理管线。\n\n转码、压缩与格式归一，把杂乱的音视频素材整理成规范资产。\n\n状态：概念规划中。`,
+  'rhyolite': `Rhyolite（流纹岩）是隔离运行环境沙盒。\n\n让可疑程序在受控沙盒中执行，与宿主系统互不干扰，用完即焚。\n\n状态：概念规划中。`,
+  'cobble': `Cobble（卵石）是跨设备剪贴板。\n\n手机与电脑之间无缝同步文本与图片，复制一次，处处粘贴。\n\n状态：概念规划中。`,
 
   // ==================== 8. 历史与社区 ====================
   'microdos': `MicroDOS 是 RLRS Studio 的最初起点——一个用 Windows 批处理脚本（.bat）构建的 DOS 命令行模拟器。\n\n没有现代框架，没有面向对象，只有最底层的逻辑堆砌。它简陋但纯粹，是一切极客魔法的原点。`,
@@ -50,17 +57,17 @@ const KnowledgeBase = {
   '加入': `想加入 RLRS Studio？\n\n我们正在寻找内测玩家（需要提供 Bug 反馈）与开源开发者（熟悉 C# / Rust 或底层逆向）。\n\n入口：导航栏「加入我们」→ 极客基地。\n或者直接发邮件到页脚的联系邮箱。`,
 
   // ==================== 9. Git 深度集成 ====================
-  'git': `Git 不仅仅是工具，更是极客的底层基建。\n\n在 RLRS Studio 的生态中，Git 被深度集成到了各个终端：\n\n• **Pebble（卵石）**：在手机端直接浏览代码、查看 Diff 差异并提交（底层基于 LibGit2Sharp）。\n• **Aether（以太）**：内置智能防抖引擎，连续修改代码时只触发一次自动 Commit。\n• **Breccia（角砾岩）**：虽然不直接操作仓库，但支持解析与 Git 相关的底层二进制。\n\n告别命令行繁琐，但保留 Git 的灵魂。`,
-  '仓库': `我们对待代码仓库的态度极其严肃。\n\n在移动端 **Pebble** 中，我们甚至做了深度的防呆设计：禁止多选操作或覆盖 \`.git\` 文件夹及系统级隐藏目录，直接拦截并弹窗提示。\n\n毕竟，没有什么比误删 .git 目录更让人心肺骤停的了。`,
-  '版本控制': `RLRS Studio 的跨端枢纽 **Aether（以太）** 正在打造一套智能 Git 推送策略。\n\n它支持 Immediate（立即）、Delay30M（延迟30分）、Delay1H（延迟1小时）以及 NotifyOnly（仅通知）等防抖逻辑，确保你的代码在云端和本地之间无缝流转。`,
-  'commit': `Aether（以太）的智能 Commit 机制非常人性化。\n\n一旦触发自动提交，底层的 \`PushStrategyManager\` 会生成统一的 Commit Message：\n\`Aether Auto-Sync\`\n\n配合文件系统监听（FileSystemWatcher），即使你连续保存 100 次，也只会产生一次干净的提交记录。`,
+  'git': `Git 不仅仅是工具，更是极客的底层基建。\n\n在 RLRS Studio 的生态中，Git 被深度集成到了各个终端：\n\n• **Agate（玛瑙）**：在手机端直接浏览代码、查看 Diff 差异并提交。\n• **Stratic（同步核心）**：内置智能防抖引擎，连续修改代码时只触发一次自动 Commit。\n• **Breccia（角砾岩）**：虽然不直接操作仓库，但支持解析与 Git 相关的底层二进制。\n\n告别命令行繁琐，但保留 Git 的灵魂。`,
+  '仓库': `我们对待代码仓库的态度极其严肃。\n\n在移动端 **Agate** 中，我们甚至做了深度的防呆设计：禁止多选操作或覆盖 \`.git\` 文件夹及系统级隐藏目录，直接拦截并弹窗提示。\n\n毕竟，没有什么比误删 .git 目录更让人心肺骤停的了。`,
+  '版本控制': `RLRS Studio 的同步核心 **Stratic** 正在打造一套智能 Git 推送策略。\n\n它支持 Immediate（立即）、Delay30M（延迟30分）、Delay1H（延迟1小时）以及 NotifyOnly（仅通知）等防抖逻辑，确保你的代码在云端和本地之间无缝流转。`,
+  'commit': `Stratic（同步核心）的智能 Commit 机制非常人性化。\n\n一旦触发自动提交，底层的 \`PushStrategyManager\` 会生成统一的 Commit Message：\n\`Stratic Auto-Sync\`\n\n配合文件系统监听（FileSystemWatcher），即使你连续保存 100 次，也只会产生一次干净的提交记录。`,
 
   // ==================== 10. 基础闲聊与兜底 ====================
-  '下载': `下载渠道汇总：\n\n• Chert 燧石启动器 → 首页「前往燧石官网」\n• 开发者文档 → 导航栏「开发者文档」\n• 其他工具（Breccia/Basalt/Granite 等）多数仍在开发中，暂未开放下载。\n\n注：本站为静态站点，不直接托管二进制文件。`,
-  '你好': `你好，极客。\n\n我是 RLRS Studio 的伪 AI 助手——纯本地逻辑，零 API 调用。\n\n你可以问我关于 Chert、Breccia、Basalt、Granite、Aether 等产品线的问题，或者试试「技术栈」「查壳」「开源」。`,
-  'hello': `Hello, geek.\n\n我是 RLRS Studio 的伪 AI 助手。纯本地知识库，不联网。\n\n试试问：Chert、Breccia、Basalt、Granite、技术栈、查壳、开源……`,
-  '帮助': `你可以问我这些关键词：\n\n• **产品**：Chert / Breccia / Basalt / Granite / Aether / Pumice / Cobalt / Pebble / Geode\n• **技术**：技术栈 / P2P / 查壳 / 敏感 API / HUD / Git / 仓库\n• **其他**：下载 / 开源 / 文档 / 加入 / MicroDOS / 你好\n\n或者随便问，我会尽力用极客幽默回应。`,
-  'help': `Try these keywords:\n\n• **Products**: Chert / Breccia / Basalt / Granite / Aether / Pumice / Cobalt / Pebble / Geode\n• **Tech**: tech stack / P2P / packer detection / sensitive API / HUD / Git / repo\n• **Misc**: download / open source / docs / join / MicroDOS / hello\n\nOr just ask — local logic will do its best.`
+  '下载': `下载渠道汇总：\n\n• Chert 燧石启动器 → 首页「前往燧石官网」\n• 开发者文档 → 导航栏「开发者文档」\n• 其他工具（Breccia/Basalt/Bedrock 等）多数仍在开发中，暂未开放下载。\n\n注：本站为静态站点，不直接托管二进制文件。`,
+  '你好': `你好，极客。\n\n我是 RLRS Studio 的伪 AI 助手——纯本地逻辑，零 API 调用。\n\n你可以问我关于 Chert、Breccia、Basalt、Agate、Stratic 等产品线的问题，或者试试「技术栈」「查壳」「开源」。`,
+  'hello': `Hello, geek.\n\n我是 RLRS Studio 的伪 AI 助手。纯本地知识库，不联网。\n\n试试问：Chert、Breccia、Basalt、Agate、Stratic、技术栈、查壳、开源……`,
+  '帮助': `你可以问我这些关键词：\n\n• **产品**：Chert / Breccia / Basalt / Bedrock / Agate / Stratic / Lithic / Magnetite / Rhyolite / Cobble / Pumice / Cobalt / Geode\n• **技术**：技术栈 / P2P / 查壳 / 敏感 API / HUD / Git / 仓库\n• **其他**：下载 / 开源 / 文档 / 加入 / MicroDOS / 你好\n\n或者随便问，我会尽力用极客幽默回应。`,
+  'help': `Try these keywords:\n\n• **Products**: Chert / Breccia / Basalt / Bedrock / Agate / Stratic / Lithic / Magnetite / Rhyolite / Cobble / Pumice / Cobalt / Geode\n• **Tech**: tech stack / P2P / packer detection / sensitive API / HUD / Git / repo\n• **Misc**: download / open source / docs / join / MicroDOS / hello\n\nOr just ask — local logic will do its best.`
 };
 
       // 预处理：把 KnowledgeBase 的键构建为可匹配的数组
@@ -68,7 +75,7 @@ const kbKeys = Object.keys(KnowledgeBase);
 
       // 兜底回复：单文件预览版漏了定义，未命中知识库时会抛 ReferenceError
       const FallbackResponses = [
-        `嗯……这个问题超出了我的本地知识库。\n\n我是纯本地伪 AI，不联网、不调 API。\n\n试试问我：Chert、Breccia、Basalt、Granite、Aether、Pumice、Cobalt、Pebble、Geode，或者输入「帮助」查看全部关键词。`,
+        `嗯……这个问题超出了我的本地知识库。\n\n我是纯本地伪 AI，不联网、不调 API。\n\n试试问我：Chert、Breccia、Basalt、Bedrock、Agate、Stratic、Lithic、Cobble、Geode，或者输入「帮助」查看全部关键词。`,
         `知识库里没找到对应条目。\n\n不如换个关键词？比如「技术栈」「P2P」「查壳」「敏感 API」「Git」「开源」「下载」。\n\n（提示：输入「帮助」可以看到完整清单。）`,
         `抱歉，本地词典暂未收录该问题。\n\n我可以聊产品线、底层技术、Git 集成与工作室历史。输入「帮助」看看能问什么。`
       ];
@@ -120,12 +127,24 @@ function findAnswer(query) {
     '启动器': 'chert',
     'mc': 'minecraft',
     '我的世界': 'minecraft',
-    '服务器': 'granite',
-    '开服': 'granite',
-    '手机': 'pebble',
-    '移动端': 'pebble',
-    '安卓': 'pebble',
-    'android': 'pebble',
+    '服务器': 'bedrock',
+    '开服': 'bedrock',
+    '手机': 'agate',
+    '移动端': 'agate',
+    '安卓': 'agate',
+    'android': 'agate',
+    '玛瑙': 'agate',
+    '同步': 'stratic',
+    'sync': 'stratic',
+    '凭证': 'lithic',
+    '密钥': 'lithic',
+    '密码': 'lithic',
+    '媒体': 'magnetite',
+    '转码': 'magnetite',
+    '沙盒': 'rhyolite',
+    '隔离': 'rhyolite',
+    '剪贴板': 'cobble',
+    'clipboard': 'cobble',
     '浏览器': 'geode',
     '化学': 'cobalt',
     '实验': 'cobalt',
