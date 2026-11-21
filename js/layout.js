@@ -48,6 +48,7 @@
       </nav>
       <nav><b data-t="foot.c">支持</b>
         <a href="/sponsor/" data-t="foot.c1">赞赏支持</a>
+        <a href="https://afdian.com/a/BingJianREMIX" target="_blank" rel="noopener">爱发电</a>
         <a href="https://space.bilibili.com/2090624670" target="_blank" rel="noopener">Bilibili</a>
         <a href="mailto:bingjianremix@outlook.com" data-t="foot.c4">邮件联系</a>
       </nav>
